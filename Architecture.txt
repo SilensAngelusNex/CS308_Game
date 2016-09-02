@@ -1,0 +1,43 @@
+GameMap
+	Terrain
+	Parties
+		Characters
+			Attributes
+				Growths
+				Raw Attributes
+				WeaponRanks
+				Bonuses
+				currentHp
+				levelUp()
+			LevelInfo
+				Level
+				Tier
+				Experience Points
+				TotalLevel()
+			Inventory
+				WeaponsList
+					Item:Weapon
+						DamageSkill
+						MT
+						Hit
+						Crit
+						AttributeBonuses
+						Equipped?
+				OtherItems
+					Item:Other (maybe more specific subclasses)
+				EquippedList
+					Item:Weapon (Maintain at 1 unless special circumstances)
+			Skills
+				No clue how to do this yet.
+			Statuses (maybe impliment as list of where each comes from and what it is)
+				Buffs from allies
+				Debuffs from enemies
+			gainExp() (check for level ups)
+			takeDamage() (check for death)
+			Combat()
+			Equip()
+		Gold
+		ConvoyItemList
+		saveParty()
+		loadParty()
+	loadChapter()

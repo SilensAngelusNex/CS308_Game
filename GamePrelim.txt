@@ -1,0 +1,480 @@
+ - Fire Emblem-esque Turn-based Strategy Game
+
+ Character Attributes
+    Strength (STR):
+        Default damage stat for physical attacks
+    Magic (MAG):
+        Default damage stat for magical attacks
+    Skill (SKL):
+        Used to calculate hit, avoid, critical and critical dodge chances. Used
+            for damage stat for some special weapons (primarily swords).
+    Speed (SPD):
+        Used to calculate hit, avoid, and critical chances, as well as doubled
+            attacks.
+    Constitution (CON):
+        Used to calculate max HP and maybe as defense from environment (poison,
+			cold, etc.)
+    Charisma (CHA):
+        Used to enhance party buffs (rally) and makes a character more accurate
+            at landing debuffs and makes them evade enemy debuffs more easily.
+    Defence (DEF):
+        Reduces physical damage
+    Resistance (RES):
+        Reduces magical damage.
+
+Buildings - ALPHA
+    Buildings provide area of effect bonuses to the controlling army. They can
+    be captured (using CHA) or destroyed (by attacking them), as well as
+    repaired and fortified (TODO Repair and fortify mechanics).
+
+Damage Types
+    Physical:
+        Damage from mundane weapons; reduced by defense.
+    Magic:
+        Damage from magical weapons; reduced by resistance.
+    Environment:
+        Damage from exposure, poison, etc.; reduced by constitution.
+    True:
+        Damage from exceptional sources; not reduced.
+
+Combat Calculations
+    Hit = WeaponHit + 2 * SKL + SPD + other bonuses
+    Avo = 2 * SPD + SKL + other bonuses
+    Damage = WeaponDamage + attack stat - enemy defense
+        Which attributes are used for attack and defense
+        is   determined by the weapon.
+
+    Crit = WeaponCrit + SKL
+    Dodge = SPD + 1/2 * SKL
+    Critical Damage = Normal Damage + attack stat
+		(Instead of 3x, does 1x normal + 1x true damage)
+
+    Weapon Mastery
+        Mastery Bonuses			C       B       A       S
+            Sword   Crit		+2      +5      +8      +12
+            Lance   Attack  	+1      +1      +2      +3
+	            	Hit			+0      +5      +5      +10
+            Axe     Attack		+1      +2      +3      +5
+            Bow     Hit			+5      +10     +15     +25
+            Knife   Avo			+5      +10     +15     +25
+            Tome    Attack		+1      +2      +3      +5
+            Staff   Heal		+1      +2      +3      +5
+
+        Achieving Weapon Mastery
+            Battling using a weapon or using a staff grants 2 WEXP of the same
+            type as the weapon the character used.
+
+            Required cumulative WEXP
+                -       0
+                E       1       (Normally, - to E is caused by class change.)
+                D       31
+                C       71
+                B       121
+                A       181
+                S       250
+
+    Combat Triangle Bonuses
+        (-> = Beat)
+        Sword and Tomes -> Axe and Bow -> Lance and Knife -> Sword and Tomes
+        Tomes:
+            Dark -> Anima -> Light -> Dark
+            Fire -> Wind -> Lightning -> Fire
+
+        Bonuses are based on the weapon rank of the character with advantage.
+		The character without advantage receives the negative of the following
+        bonus. (For example, B rank swordsman attacks A rank axeman. The
+        swordsman gets Hit +10, Atk +1 and the axeman gets Hit -10, Atk -1)
+            E   Hit +5
+            D   Hit +5
+            C   Hit +10
+            B   Hit +10, Attack +1
+            A   Hit +15, Attack +1, Crit +5
+            S   Hit +20, Attack +2, Crit +5
+
+
+Character Leveling
+    Characters earn EXP by attacking, defending, healing, etc. Once they reach
+    100 EXP, they grow a level and reset EXP to 0. On growing a level, all of
+    their skills have a chance to grow. That chance depends on their growth rate
+    for that particular stat.
+
+    Characters have a max level of 20. Once they reach LVL 20 EXP 100, they
+    class change. They grow into a more powerful and more specialized version of
+    their current class. There are three tiers of classes.
+
+    A character will learn a class skill upon reaching T1 LVL 10 and on class
+    changing into a new class. They will upgrade the skill from the previous
+	tier on reaching level 10 in the next tier. Characters learn an additional
+    capstone skill at T3 LVL 15.
+
+Experience Calculations
+    Total Level
+        T1  level
+        T2  20 + level
+        T3  40 + level
+
+    (LD = Foe's total level - ally's total level)
+    Battling, but dealing no damage grants 1 EXP.
+    Dealing damage grants
+        10 + (LD * abs(LD))/4       (minimum 5)
+    Killing blows grant an additional
+        LD + 15 + 5 * (Tier difference) + boss EXP
+        Tier difference is enemy tier - ally tier
+        Boss EXP is 40 if the enemy was a boss, 0 otherwise
+
+Classes
+A class promotes to the classes that are indented under it. (Ex. Swordsman
+promotes into Swordsmaster or Mercenary)
+    T1  T2  T3
+    Swordsman
+        Swordsmaster
+            Dual Edge
+            Mindblade
+        Mercenary
+            Vangaurd
+            Veteran
+    Warrior
+        Wyvern Rider
+            Dragonlord
+            Wyvern Tamer
+        Barbarian
+            Berserker
+            Reaver
+    Soldier
+        Pegasus Knight
+            Falcon Knight
+            Dark Flier
+        Halberdier
+            Sentinel
+            Lancefaerie
+    Priest
+        Bishop
+            Apostate
+            Saint
+        Cleric
+            Valkyrie
+            Justiciar
+    Mage
+        Sages
+            Archsage
+            Grandmaster
+        Pact Acolyte
+            Demonbound
+            Feybound
+    Rogue
+        Assassin
+			Whisper
+			Kingslayer
+        Swashbuckler
+			Rake
+			Sparrow
+    Cavalier
+        Great Knight
+            Gold Knight
+            Bastion
+        General
+            Bastion
+            Gold Knight
+    Knight
+        General
+            Bastion
+            Gold Knight
+        Great Knight
+            Gold Knight
+            Bastion
+
+
+
+Class Skills and Weapons
+
+    Tier 1:
+        Swordsman
+            Weapons: Sword
+            Skill - Adept
+            Class Change Options:
+                Swordsmaster
+                Mercenary
+        Warrior
+            Weapons: Axe
+            Skill -
+            Class Change Options:
+                Wyvern Rider
+                Barbarian
+        Soldier
+            Weapons: Lance
+            Skill - Vantage (trigger 2 * SPD% when 50% HP or lower)
+            Class Change Options:
+                Pegasus Knight
+                Halberdier
+        Priest
+            Weapons: Staff
+            Skill - Miracle (lethal damage reduces HP to 1 if HP >= half)
+            Class Change Options:
+                Cleric
+                Bishop
+        Mage
+            Weapons: Anima Tome
+            Skill -
+            Class Change Options:
+                Sage
+                Pact Acolyte
+        Rogue
+            Weapons: Knife
+            Skill - Pass (move through enemy units)
+            Class Change Options:
+                Assassin
+                Swashbuckler
+        Knight
+            Weapons: Sword OR Axe OR Lance
+            Skill -
+            Class Change Options:
+                Great Knight
+                General
+        Cavalier
+            Weapons: Sword OR Axe OR Lance
+            Skill - Weapon EXP 2x
+            Class Change Options:
+                Great Knight
+                General
+
+    Tier 2:
+        Swordsmaster
+            Weapons: Sword
+            Skill -
+            Upgrade Skill - Adept -> Astra
+            Class Change Options:
+                Dual Edge
+                Mindblade
+        Mercenary
+            Weapons: Sword, Axe
+            Skill -
+            Upgrade Skill - Adept -> Aether (ignore 1/2 def instead of all)
+            Class Change Options:
+                Vanguard
+                Veteran
+        Wyvern Rider
+            Weapons: Axe
+            Skill -
+            Upgrade Skill -
+            Class Change Options:
+                Dragonlord
+                Wyvern Tamer
+        Barbarian
+            Weapons: Axe
+            Skill - Crit chance increased by STR/2
+            Upgrade Skill -
+            Class Change Options:
+                Berserker
+                Reaver
+        Pegasus Knight
+            Weapons: Lance
+            Skill -
+            Upgrade Skill - Vantage trigger 2 * SPD% at any HP
+            Class Change Options:
+                Dark Flier
+                Falcon Knight
+        Halberdier
+            Weapons: Lance
+            Skill - Resolve (At 30% HP 1.5 * STR and SKL)
+            Upgrade Skill - Vantage trigger always at 50% HP
+            Class Change Options:
+                Sentinel
+                Lancefaerie
+        Cleric
+            Weapons: Staff, Sword
+            Skill - Attacking heals allies within 2 spaces by 1/4 MAG
+            Upgrade Skill - Miracle (lethal damage reduces HP to 1 if HP > 1)
+            Class Change Options:
+                Valkyrie
+                Justiciar
+        Bishop
+            Weapons: Staff, Light Tome
+            Skill - Overheal by up to 1/4 MAG
+            Upgrade Skill - Miracle (allied units within 2 squares get Miracle)
+            Class Change Options:
+                Saint
+                Apostate
+        Sage
+            Weapons: Anima Tome, Staff
+            Skill -
+            Upgrade Skill -
+            Class Change Options:
+                Archsage
+                Grandmaster
+        Pact Acolyte
+            Weapons: Anima Tome, Knife
+            Skill -
+            Upgrade Skill -
+            Class Change Options:
+                Demonbound
+                Feybound
+        Assassin
+            Weapons: Knife, Bow
+            Skill - Backstab extra damage if enemy is facing away
+            Upgrade Skill - Pass go through an enemy, backstab on them does more
+            Class Change Options:
+                Whisper
+                Kingslayer
+        Swashbuckler
+            Weapons: Knife, Sword
+            Skill - Flanking if you and an ally are adj to enemy, extra damage
+            Upgrade Skill - Pass go through an enemy, allies deal more
+            Class Change Options:
+                Rake
+                Sparrow
+        Great Knight
+            Weapons: Two of Sword, Axe, Lance
+            Skill -
+            Upgrade Skill - WEXP 2x and weapon mastery bonuses doubled
+            Class Change Options:
+                Gold Knight
+                Bastion
+        General
+            Weapons: Two of Sword, Axe, Lance
+            Skill -
+            Upgrade Skill - WEXP 2x and +3 def when using a weapon you have an A
+                or S mastery level for.
+            Class Change Options:
+                Bastion
+                Gold Knight
+
+    Teir 3
+        Dual Edge
+            Weapons: Sword
+            Skill - Dual Wield (effects stack, avg might)
+            Upgrade Skill -
+            Capstone - Skill% chance to attack with both weapons (add mts, stack
+                effects)
+        Mindblade
+            Weapons: Sword
+            Skill - Instead of attacking, 3/4 DMG to +1 Range
+            Upgrade Skill -
+            Capstone - Deal 5*SKL physical damage when enemy attacks that you
+                can't counterattack
+        Vanguard
+            Weapons: Sword, Axe
+            Skill -
+            Upgrade Skill -
+            Capstone -
+        Veteran
+            Weapons: Sword, Axe, Lance, Bow
+            Skill - Double all weapon triangle bonuses (even detrimental ones)
+            Upgrade Skill -
+            Capstone -
+        Dragonlord
+            Weapons: Axe, Lance
+            Skill -
+            Upgrade Skill -
+            Capstone -
+        Wyvern Tamer
+            Weapons: Axe, Breath
+            Skill -
+            Upgrade Skill -
+            Capstone -
+        Berserker
+            Weapons: Axe, Lance
+            Skill -
+            Upgrade Skill - Crits also deal an additional 1/2 STR damage
+            Capstone -
+        Reaver
+            Weapons: Axe
+            Skill -
+            Upgrade Skill - Crits also heal for 1/4 STR
+            Capstone -
+        Dark Flier
+            Weapons: Lance, Dark Tome
+            Skill -
+            Upgrade Skill -
+            Capstone -
+        Falcon Knight
+            Weapons: Lance, Bow
+            Skill -
+            Upgrade Skill -
+            Capstone - Killing a unit refreshes movement
+        Sentinel
+            Weapons: Lance, Sword
+            Skill - with lances, deals damage with 2/3 attack to enemy one
+                square behind primary target
+            Upgrade Skill - Resolve also buffs defense
+            Capstone - Sol
+        Lancefaerie
+            Weapons: Lance
+            Skill - Killing blows restore 10% HP
+            Upgrade Skill - Resolve also buffs speed, triggers at 50% HP
+            Capstone - STR SPD SKL +2 after killing blows at <= 50% HP, max +10,
+				stays until end of level (buffed by resolve)
+        Valkyrie
+            Weapons: Staff, Sword
+            Skill - Can use remaining movement after using staff
+            Upgrade Skill - Attacking instead heals allies within 1/2/3 spaces
+				by .5/.25/.125 MAG
+            Capstone -
+        Justiciar
+            Weapons: Staff, Sword, Lance
+            Skill - Can attack after using staff (no movement)
+            Upgrade Skill - Attacking also damages other enemies within 2 spaces
+				by 1/4 MAG
+            Capstone -
+        Apostate
+            Weapons: Dark Tomes, Staff (Light WEXP -> Dark WEXP)
+            Skill -
+            Upgrade Skill -
+            Capstone -
+        Saint
+            Weapons: Light Tome, Staff
+            Skill -
+            Upgrade Skill - Additional 1/8 MAG bonus to CON
+            Capstone -
+        Archsage
+            Weapons: Any Tome, Staff
+            Skill -
+            Upgrade Skill -
+            Capstone -
+        Grandmaster
+            Weapons: Anima Tome, Staff, Sword
+            Skill -
+            Upgrade Skill -
+            Capstone -
+        Demonbound
+            Weapons: Anima Tome, Knife, Dark Tome
+            Skill - When fighting and adjacent enemy, enemy AVO -25, enemy
+                crit dodge -30
+            Upgrade Skill -
+            Capstone - Alternate Attack: Consume 50% Current HP and add it to
+                damage (multiple hits makes you lose HP multiple times)
+        Feybound
+            Weapons: Anima Tome, Knife, Light Tome
+            Skill -
+            Upgrade Skill -
+            Capstone -
+        Whisper
+            Weapons: Knife, Bow
+            Skill -
+            Upgrade Skill - Sneak Attack has SKL% to sleep target
+            Capstone -
+        Kingkiller
+            Weapons: Knife, Bow
+            Skill -
+            Upgrade Skill - Sneak Attack has extra dmg based on skill
+            Capstone -
+        Rake
+            Weapons: Knife, Sword
+            Skill - Killing an enemy grants -2 SKL SPD DEF RES to enemies within
+                two squares (decays over two turns; refreshes, doesn't stack)
+            Upgrade Skill - allies get flanking bonus when you're adj
+            Capstone -
+        Sparrow
+            Weapons: Knife, Sword
+            Skill - Lunge swap places with you and target before attack
+            Upgrade Skill - you can flank for yourself if you start turn adj
+            Capstone - Disengage move backwards 2 after attack
+        Bastion
+            Weapons: Sword, Lance, Axe
+            Skill -
+            Upgrade Skill -
+            Capstone - Smite command deals phys dmg DEF + 1/2 STR
+        Gold Knight
+            Weapons: Sword, Lance, Axe, Bow
+            Skill -
+            Upgrade Skill -
+            Capstone -
