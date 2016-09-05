@@ -6,6 +6,7 @@ public class ItemWeapon extends Item {
 	public boolean equipped;
 	
 	public ListAttribute aBonuses;
+	//TODO: Weapon Weight
 	public int wCrit;
 	public int wHit;
 	public int wMT;
@@ -24,7 +25,7 @@ public class ItemWeapon extends Item {
 	}
 	
 	public ItemWeapon(){
-		new ItemWeapon(
+		this(
 				"Bronze Sword",
 				500,
 				GameMap.WeaponType.SWORD,
@@ -41,7 +42,7 @@ public class ItemWeapon extends Item {
 	 * Makes and returns a deep copy of the weapon w.
 	 */
 	public ItemWeapon(ItemWeapon w){
-		new ItemWeapon(
+		this(
 				w.name,
 				w.maxValue,
 				w.wType,

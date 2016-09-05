@@ -104,27 +104,33 @@ public class Inventory {
 	}
 	
 	public void unEquipOnHand(){
-		//If there's an offHand weapon equipped, it rises to to the top of the weapon list
-		if (equipment.offHand != null){
-			ItemWeapon onHand = equipment.onHand;
-			weapons.remove(onHand);
-			weapons.add(1, onHand);
+		if (equipment.onHand != null){
+			//If there's an offHand weapon equipped, it rises to to the top of the weapon list
+			if (equipment.offHand != null){
+				ItemWeapon onHand = equipment.onHand;
+				weapons.remove(onHand);
+				weapons.add(1, onHand);
+			}
+			
+			//Then unequip the onHand weapon
+			equipment.onHand.equipped = false;
+			equipment.onHand = null;
 		}
-		
-		//Then unequip the onHand weapon
-		equipment.onHand.equipped = false;
-		equipment.onHand = null;
 		
 	}
 	
 	public void unEquipOffHand(){
-		equipment.offHand.equipped = false;
-		equipment.offHand = null;
+		if (equipment.offHand != null){
+			equipment.offHand.equipped = false;
+			equipment.offHand = null;
+		}
 	}
 	
 	public void unEquipArmor(){
-		equipment.armor.equipped = false;
-		equipment.armor = null;
+		if (equipment.armor != null){
+			equipment.armor.equipped = false;
+			equipment.armor = null;
+		}
 	}
 	
 }

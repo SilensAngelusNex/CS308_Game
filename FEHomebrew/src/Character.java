@@ -95,9 +95,10 @@ public class Character {
 		}
 		
 		int hit = hit() - enemy.avoid();
+		System.out.println(hit);
 		//TODO: Weapon Triangle bonuses
 		
-		if (GameMap.rand.nextInt(99) + GameMap.rand.nextInt(99) > 2 * hit){
+		if (GameMap.rand.nextInt(99) + GameMap.rand.nextInt(99) >= 2 * hit){
 			//Miss, no damage.
 			return -1;
 		}
@@ -106,7 +107,8 @@ public class Character {
 		
 		
 		int crit = crit() - enemy.dodge();
-		if (GameMap.rand.nextInt(99) > crit){
+		System.out.println(crit);
+		if (GameMap.rand.nextInt(99) < crit){
 			//Crit, deal extra damage equal to attack.
 			return enemy.damage(2 * attack() - enemy.attribs.get(inv.equipment.damageType()));
 		} else {
@@ -120,6 +122,10 @@ public class Character {
 		System.out.printf("%s\t%d\t%d/%d\n", name, level.totalLevel(), attribs.currentHp, attribs.get(GameMap.AttributeType.CON));
 		System.out.println(charClass.toString());
 		attribs.rawAttribs.printAttributes();
+	}
+	private void printCmbt(){
+		System.out.printf("Attack\tHit\tCrit\tDefense\tAvoid\tDodge\n");
+		System.out.printf("%d\t%d\t%d\t%d\t%d\t%d\n", attack(), hit(), crit(), attribs.get(GameMap.AttributeType.DEF), avoid(), dodge());
 	}
 	
 	
@@ -135,16 +141,20 @@ public class Character {
 				new Inventory()
 				);
 		
-		c.printChar();
 		
+		c.printChar();
 		c.levelUp().printAttributes();
-		
 		c.printChar();
+		System.out.println();
 		
 		Character d = new Character();
 		d.printChar();
 		
-		//TODO: Give Mia a weapon.
+		c.inv.add(new ItemWeapon());
+		c.inv.equipOnHand(0);
+		c.printCmbt();
+		d.printCmbt();
+		
 		
 		System.out.println(c.strike(d));
 		c.printChar();
