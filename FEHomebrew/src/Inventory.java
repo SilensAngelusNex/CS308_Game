@@ -43,10 +43,14 @@ public class Inventory {
 		}
 	}
 	
-	//TODO Unequip weapon from offHand
 	public void equipOnHand(int i){
 		//Unequip the current onHand weapon
 		unEquipOnHand();
+		
+		//Don't allow equipping the same weapon to both hands.
+		if (weapons.get(i).equals(equipment.offHand)){
+			unEquipOffHand();
+		}
 		
 		//Put new onHand weapon at the start of the weapons list
 		ItemWeapon onHand = weapons.get(i);
@@ -59,10 +63,14 @@ public class Inventory {
 		
 	}
 	
-	//TODO Unequip weapon from onHand
 	public void equipOffHand(int i){
 		//Unequip the current offHand weapon
 		unEquipOffHand();
+		
+		//Don't allow equipping the same weapon to both hands.
+		if (weapons.get(i).equals(equipment.onHand)){
+			unEquipOnHand();
+		}
 		
 		//Put new offHand weapon at the start of the weapons list, after the onHand weapon
 		ItemWeapon offHand = weapons.get(i);
