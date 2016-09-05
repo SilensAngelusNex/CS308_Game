@@ -44,46 +44,49 @@ public class Inventory {
 	}
 	
 	public void equipOnHand(int i){
+		ItemWeapon toEquip = weapons.get(i);
+		
 		//Unequip the current onHand weapon
 		unEquipOnHand();
 		
 		//Don't allow equipping the same weapon to both hands.
-		if (weapons.get(i).equals(equipment.offHand)){
+		if (toEquip.equals(equipment.offHand)){
 			unEquipOffHand();
 		}
 		
 		//Put new onHand weapon at the start of the weapons list
-		ItemWeapon onHand = weapons.get(i);
-		weapons.remove(i);
-		weapons.add(0, onHand);
+		weapons.remove(toEquip);
+		weapons.add(0, toEquip);
 		
 		//Equip the new onHand weapon. 
-		onHand.equipped = true;
-		equipment.onHand = onHand;
+		toEquip.equipped = true;
+		equipment.onHand = toEquip;
 		
 	}
 	
 	public void equipOffHand(int i){
+		ItemWeapon toEquip = weapons.get(i);
+		
 		//Unequip the current offHand weapon
 		unEquipOffHand();
 		
 		//Don't allow equipping the same weapon to both hands.
-		if (weapons.get(i).equals(equipment.onHand)){
+		if (toEquip.equals(equipment.onHand)){
 			unEquipOnHand();
 		}
 		
 		//Put new offHand weapon at the start of the weapons list, after the onHand weapon
-		ItemWeapon offHand = weapons.get(i);
-		weapons.remove(i);
+		
+		weapons.remove(toEquip);
 		if (weapons.get(0).equipped){
-			weapons.add(1, offHand);
+			weapons.add(1, toEquip);
 		} else {
-			weapons.add(0, offHand);
+			weapons.add(0, toEquip);
 		}
 		
 		//Equip the new offHand weapon. 
-		offHand.equipped = true;
-		equipment.offHand = offHand;
+		toEquip.equipped = true;
+		equipment.offHand = toEquip;
 	}
 	
 	public void equipArmor(int i){

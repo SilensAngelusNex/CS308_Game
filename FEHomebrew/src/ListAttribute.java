@@ -33,6 +33,17 @@ public class ListAttribute {
 			RES = i[7];
 		}
 		
+		public ListAttribute(ListAttribute l){
+			STR = l.STR;
+			MAG = l.MAG;
+			SKL = l.SKL;
+			SPD = l.SPD;
+			CHA = l.CHA;
+			CON = l.CON;
+			DEF = l.DEF;
+			RES = l.RES;
+		}
+		
 		public int get(GameMap.AttributeType a){
 			switch (a){
 				case STR:

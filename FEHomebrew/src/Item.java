@@ -1,6 +1,6 @@
 
 public class Item {
-	public static String name;
-	public static int maxValue;
+	public String name;
+	public int maxValue;
 
 }

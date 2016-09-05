@@ -48,6 +48,21 @@ public class ListWeapon {
 			BREATH = i[11];
 			}
 		
+		public ListWeapon(ListWeapon i){
+			SWORD = i.SWORD;
+			AXE = i.AXE;
+			LANCE = i.LANCE;
+			KNIFE = i.KNIFE;
+			BOW = i.BOW;
+			FIRE = i.FIRE;
+			WIND = i.WIND;
+			LIGHTNING = i.LIGHTNING;
+			LIGHT = i.LIGHT;
+			DARK = i.DARK;
+			STAFF = i.STAFF;
+			BREATH = i.BREATH;
+			}
+		
 		public ListWeapon add(ListWeapon that){
 			return new ListWeapon(
 					SWORD + that.SWORD,
