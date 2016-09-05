@@ -171,17 +171,16 @@ promotes into Swordsmaster or Mercenary)
     Cavalier
         Great Knight
             Gold Knight
-            Bastion
-        General
-            Bastion
-            Gold Knight
+
+		Paladin
+
     Knight
         General
             Bastion
-            Gold Knight
+
         Great Knight
             Gold Knight
-            Bastion
+
 
 
 
@@ -322,13 +321,19 @@ Class Skills and Weapons
             Class Change Options:
                 Rake
                 Sparrow
+		Paladin
+			Weapons: Two of Sword, Axe, Lance
+			Skill -
+			Upgrade Skill - WEXP 2x and
+			Class Change Options:
+
         Great Knight
             Weapons: Two of Sword, Axe, Lance
             Skill -
             Upgrade Skill - WEXP 2x and weapon mastery bonuses doubled
             Class Change Options:
                 Gold Knight
-                Bastion
+
         General
             Weapons: Two of Sword, Axe, Lance
             Skill -
@@ -336,7 +341,7 @@ Class Skills and Weapons
                 or S mastery level for.
             Class Change Options:
                 Bastion
-                Gold Knight
+
 
     Teir 3
         Dual Edge
@@ -478,3 +483,8 @@ Class Skills and Weapons
             Skill -
             Upgrade Skill -
             Capstone -
+
+			Weapons: Two of Sword, Axe, Lance
+			Skil
+			Upgrade Skill -
+			Capstone -

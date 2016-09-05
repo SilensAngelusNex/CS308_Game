@@ -15,6 +15,7 @@ public class LevelInfo {
 	}
 	
 	public int levelUp(){
+		exp = 0;
 		return level++;
 	}
 }
