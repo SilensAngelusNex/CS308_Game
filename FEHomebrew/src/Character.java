@@ -6,6 +6,19 @@ public class Character {
 	public Attributes attribs;
 	public LevelInfo level;
 	public Inventory inv;
+	public boolean boss;
+	
+	private class CharacterDiesException extends Exception{
+		private static final long serialVersionUID = -3374130461047276835L;
+		Character dead;
+		int finishingDmg;
+		
+		protected CharacterDiesException(Character c, int d){
+			super();
+			dead = c;
+			finishingDmg = d;
+		}
+	}
 	
 	/*
 	 * The default character constructor makes PoR Ike
@@ -30,6 +43,7 @@ public class Character {
 		attribs = a;
 		level = l;
 		inv = i;
+		boss = false;
 	}
 	
 	
@@ -87,21 +101,21 @@ public class Character {
 		System.out.printf("%s is defeated!\n", name);
 	}
 	
-	public int damage(int dmg){
+	public int damage(int dmg) throws CharacterDiesException{
 		//TODO: Check skills (Miracle, other damage reduction skills).
 		if (dmg < 0){
 			dmg = 0;
 		}
 		if (attribs.currentHp <= dmg){
 			dmg = attribs.currentHp;
-			die();
+			throw new CharacterDiesException(this, dmg);
 		}
 		attribs.currentHp -= dmg;
 		System.out.printf("%s took %d damage.\n", name, dmg);
 		return dmg;
 	}
 	
-	public int strike(Character enemy){
+	public int strike(Character enemy) throws CharacterDiesException{
 		if (attack() == 0){
 			return 0;
 		}
@@ -137,40 +151,63 @@ public class Character {
 		int mySpdAdv = attribs.get(GameMap.AttributeType.SPD) - enemy.attribs.get(GameMap.AttributeType.SPD);
 		int dmg = 0;
 		int enemyDmg = 0;
+		boolean dead = false;
+		boolean enemyDead = false;
 		
-		dmg += strike(enemy);
-		
-		if (mySpdAdv > 8){
-			 dmg += strike(enemy);
-		}
-		
-		enemyDmg += enemy.strike(this);
-		
-		if (mySpdAdv > 3){
+		try{
+			//|Speed difference| < 3 gives one strike each; 3 < x < 8 gives 2 hits to faster; > 8 gives 3.
 			dmg += strike(enemy);
-		}
-		
-		if (mySpdAdv < -3){
+			
+			if (mySpdAdv > 8){
+				 dmg += strike(enemy);
+			}
+			
 			enemyDmg += enemy.strike(this);
+			
+			if (mySpdAdv > 3){
+				dmg += strike(enemy);
+			}
+			
+			if (mySpdAdv < -3){
+				enemyDmg += enemy.strike(this);
+			}
+			
+			if (mySpdAdv < -8){
+				enemyDmg += enemy.strike(this);
+			}
+		} catch (CharacterDiesException e) {
+			//If anyone dies, stop the combat and grant kill EXP to the victor
+			if (e.dead.equals(this)){
+				enemy.killExp(this);
+				die();
+				dead = true;
+				enemyDmg += e.finishingDmg;
+			}
+			if (e.dead.equals(enemy)){
+				killExp(enemy);
+				enemyDead = true;
+				enemy.die();
+				dmg += e.finishingDmg;
+				
+			}
+		} finally {
+			//Grant experience to both units from this combat, if they're still alive.
+			if (!dead){
+				if (dmg > 0){
+					cmbtExp(enemy);
+				} else {
+					gainExp(1);
+				}
+			}
+			
+			if (!enemyDead){
+				if (enemyDmg > 0){
+					enemy.cmbtExp(this);
+				} else {
+					enemy.gainExp(1);
+				}
+			}
 		}
-		
-		if (mySpdAdv < -8){
-			enemyDmg += enemy.strike(this);
-		}
-		
-		//Grant experience to both units from this combat.
-		if (dmg > 0){
-			cmbtExp(enemy);
-		} else {
-			gainExp(1);
-		}
-		
-		if (enemyDmg > 0){
-			enemy.cmbtExp(this);
-		} else {
-			enemy.gainExp(1);
-		}
-		
 	}
 	
 	private void gainExp(int i){
@@ -193,6 +230,20 @@ public class Character {
 		int toGain = 10 - (levelDiff * ((levelDiff < 0) ? -levelDiff : levelDiff)) / 4;
 		if (toGain < 5){
 			toGain = 5;
+		}
+		
+		gainExp(toGain);
+	}
+	
+	private void killExp(Character enemy){
+		int levelDiff = level.totalLevel() - enemy.level.totalLevel();
+		int tierDiff = level.tier - enemy.level.tier;
+		int bossMod = (enemy.boss) ? 40 : 0;
+		
+		int toGain = 15 - levelDiff - 5 * tierDiff + bossMod;
+		
+		if (toGain < 5 + bossMod / 4){
+			toGain = 5 + bossMod / 4;
 		}
 		
 		gainExp(toGain);
