@@ -20,6 +20,7 @@ public class Character {
 		}
 	}
 	
+	
 	/*
 	 * The default character constructor makes PoR Ike
 	 */
@@ -108,6 +109,8 @@ public class Character {
 		}
 		if (attribs.currentHp <= dmg){
 			dmg = attribs.currentHp;
+			attribs.currentHp = 0;
+			System.out.printf("%s took %d damage.\n", name, dmg);
 			throw new CharacterDiesException(this, dmg);
 		}
 		attribs.currentHp -= dmg;
@@ -280,7 +283,7 @@ public class Character {
 		
 		
 		c.printChar();
-		c.gainExp(700);
+		c.gainExp(1000);
 		c.printChar();
 		System.out.println();
 		
@@ -299,6 +302,9 @@ public class Character {
 		
 		
 		c.combat(d);
+		System.out.println(c.level.exp);
+		System.out.println(d.level.exp);
+		d.combat(c);
 		
 		System.out.println(c.level.exp);
 		System.out.println(d.level.exp);
