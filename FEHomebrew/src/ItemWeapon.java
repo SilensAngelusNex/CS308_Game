@@ -13,8 +13,7 @@ public class ItemWeapon extends Item {
 
 	public ItemWeapon(String n, int value, GameMap.WeaponType type, GameMap.AttributeType attrib,
 			GameMap.AttributeType dmgType, ListAttribute bonus, int mt, int hit, int crit){
-		name = n;
-		maxValue = value;
+		super(n, value);
 		wType = type;
 		wAttrib = attrib;
 		wDmgType = dmgType;

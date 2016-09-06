@@ -8,12 +8,12 @@ public class Character {
 	public Inventory inv;
 	public boolean boss;
 	
-	private class CharacterDiesException extends Exception{
+	private class CharacterDeadException extends Exception{
 		private static final long serialVersionUID = -3374130461047276835L;
 		Character dead;
 		int finishingDmg;
 		
-		protected CharacterDiesException(Character c, int d){
+		protected CharacterDeadException(Character c, int d){
 			super();
 			dead = c;
 			finishingDmg = d;
@@ -102,27 +102,27 @@ public class Character {
 		System.out.printf("%s is defeated!\n", name);
 	}
 	
-	public int damage(int dmg) throws CharacterDiesException{
+	public int damage(int dmg) throws CharacterDeadException{
 		//TODO: Check skills (Miracle, other damage reduction skills).
 		if (dmg < 0){
 			dmg = 0;
 		}
 		if (attribs.currentHp <= 0){
 			System.out.printf("Stop, stop! %s's alreay dead!\n", name);
-			throw new CharacterDiesException(this, -1);
+			throw new CharacterDeadException(this, -1);
 		}
 		if (attribs.currentHp <= dmg){
 			dmg = attribs.currentHp;
 			attribs.currentHp = 0;
 			System.out.printf("%s took %d damage.\n", name, dmg);
-			throw new CharacterDiesException(this, dmg);
+			throw new CharacterDeadException(this, dmg);
 		}
 		attribs.currentHp -= dmg;
 		System.out.printf("%s took %d damage.\n", name, dmg);
 		return dmg;
 	}
 	
-	public int strike(Character enemy) throws CharacterDiesException{
+	public int strike(Character enemy) throws CharacterDeadException{
 		if (attack() == 0){
 			return 0;
 		}
@@ -187,7 +187,7 @@ public class Character {
 			if (mySpdAdv < -8){
 				enemyDmg += enemy.strike(this);
 			}
-		} catch (CharacterDiesException e) {
+		} catch (CharacterDeadException e) {
 			//If anyone dies, stop the combat and grant kill EXP to the victor
 			if (e.dead.equals(this)){
 				if (e.finishingDmg > 0){
@@ -208,8 +208,6 @@ public class Character {
 			}
 		} finally {
 			//Grant experience to both units from this combat, if they're still alive.
-			System.out.println(dmg);
-			System.out.println(enemyDmg);
 			if (!dead){
 				if (dmg > 0){
 					cmbtExp(enemy);
@@ -267,20 +265,73 @@ public class Character {
 		gainExp(toGain);
 	}
 	
+	public int heal(int amount) throws CharacterDeadException{
+		//TODO: Check healing skills.
+		if (amount < 0){
+			amount = 0;
+		}
+		
+		if (attribs.currentHp <= 0){
+			System.out.printf("%s's dead. Healers aren't gods.\n", name);
+			throw new CharacterDeadException(this, -1);
+		}
+		
+		int maxHP = attribs.get(GameMap.AttributeType.CON);
+		int curHP = attribs.currentHp;
+		
+		if (maxHP <= amount + curHP){
+			amount = maxHP - curHP;
+		}
+		
+		attribs.currentHp = curHP + amount;
+		System.out.printf("%s was healed %d points.\n", name, amount);
+		
+		return amount;
+	}
+	
+	private void staffExp(){
+		//TODO: Make this depend on staff rank.
+		gainExp(20);
+	}
+	
+	public void staffHeal(Character ally){
+		if (attribs.currentHp <= 0 || ally.attribs.currentHp <= 0){
+			System.out.println("Dead people can't heal or be healed.");
+			return;
+		}
+		
+		if(inv.equipment.offHand.wType != GameMap.WeaponType.STAFF){
+			System.out.println("You can't heal without a staff equipped.");
+			return;
+		}
+		
+		int amount = ((ItemWeaponStaff) inv.equipment.offHand).baseHeal + attribs.get(GameMap.AttributeType.MAG);
+		
+		try {
+			ally.heal(amount);
+		} catch (CharacterDeadException e) {
+			System.out.println("I told you not to try to bring back the dead, asshole.");
+			e.printStackTrace();
+		}
+		
+		((ItemWeaponStaff) inv.equipment.offHand).use();
+		staffExp();
+		
+		
+	}
+	
 	private void printChar(){
 		System.out.printf("%s\t%d\t%d/%d\n", name, level.totalLevel(), attribs.currentHp, attribs.get(GameMap.AttributeType.CON));
 		System.out.println(charClass.toString());
 		attribs.rawAttribs.printAttributes();
 	}
-	private void printCmbt(){
-		System.out.printf("Attack\tHit\tCrit\tDefense\tAvoid\tDodge\n");
-		System.out.printf("%d\t%d\t%d\t%d\t%d\t%d\n", attack(), hit(), crit(), attribs.get(GameMap.AttributeType.DEF), avoid(), dodge());
-	}
+
 	
 	private void printCmbt(Character e){
 		System.out.printf("\tAttack\tHit\tCrit\tDefense\tAvoid\tDodge\tSpeed\n");
 		System.out.printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", name, attack(), hit(), crit(), attribs.get(GameMap.AttributeType.DEF), avoid(), dodge(), attribs.get(GameMap.AttributeType.SPD));
 		System.out.printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", e.name, e.attack(), e.hit(), e.crit(), e.attribs.get(GameMap.AttributeType.DEF), e.avoid(), e.dodge(), e.attribs.get(GameMap.AttributeType.SPD));
+		System.out.printf("\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", attack()-e.attribs.get(GameMap.AttributeType.DEF), hit()-e.avoid(), crit()-e.dodge(), e.attack()-attribs.get(GameMap.AttributeType.DEF), e.hit()-avoid(), e.crit()-dodge(), attribs.get(GameMap.AttributeType.SPD)-e.attribs.get(GameMap.AttributeType.SPD));
 	}
 	
 	
@@ -296,33 +347,68 @@ public class Character {
 				new Inventory()
 				);
 		
+		c.inv.add(new ItemWeapon());
+		c.inv.equipOnHand(0);
+		
+		Character e = new Character(
+				"Mist",
+				GameMap.CharacterClasses.Priest,
+				new Attributes(15,
+						new int[] {2, 4, 5, 6, 12, 15, 2, 5},
+						new int[] {45, 20, 60, 70, 20, 50, 25, 45},
+						new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0}),
+				new LevelInfo(),
+				new Inventory()
+				);
+		
+		e.inv.add(new ItemWeaponStaff(
+					"Heal",
+					800,
+					GameMap.WeaponType.STAFF,
+					GameMap.AttributeType.STR,
+					GameMap.AttributeType.DEF,
+					new ListAttribute(0,0,0,0,0,0,0,0),
+					0,
+					70,
+					0,
+					40,
+					2
+					)
+				);
+		
+		e.inv.equipOffHand(0);
+		
 		
 		c.printChar();
-		c.gainExp(1000);
+		c.gainExp(500);
 		c.printChar();
 		System.out.println();
 		
 		Character d = new Character();
 		d.printChar();
-		
-		c.inv.add(new ItemWeapon());
-		c.inv.equipOnHand(0);
 		d.inv.add(new ItemWeapon());
 		d.inv.equipOnHand(0);
-		c.printCmbt();
-		d.printCmbt();
+		
+		e.printChar();
 		c.printCmbt(d);
-		
-
-		
 		
 		c.combat(d);
 		System.out.println(c.level.exp);
 		System.out.println(d.level.exp);
+		System.out.println(e.level.exp);
+		
+		e.staffHeal(d);
+		
+		
 		d.combat(c);
 		
 		System.out.println(c.level.exp);
 		System.out.println(d.level.exp);
+		System.out.println(e.level.exp);
+		
+		c.printChar();
+		d.printChar();
+		e.printChar();
 		
 	}
 	

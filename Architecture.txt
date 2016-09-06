@@ -2,6 +2,11 @@ Game has 2 states: menu and animation. While animation, players have no control.
 2 types of menus: 1d and 2d. 1d menus have up, down, help, select, back options,
 while 2d have the same but with left and right (normally no back?).
 
+To-do List:
+	Map / Actual working game
+	Weapon Triangle
+	Weapon Exp / Ranks
+
 GameMap
 	Terrain
 	Parties

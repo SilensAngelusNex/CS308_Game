@@ -78,7 +78,7 @@ public class Inventory {
 		//Put new offHand weapon at the start of the weapons list, after the onHand weapon
 		
 		weapons.remove(toEquip);
-		if (weapons.get(0).equipped){
+		if (weapons.size() > 1 && weapons.get(0).equipped){
 			weapons.add(1, toEquip);
 		} else {
 			weapons.add(0, toEquip);

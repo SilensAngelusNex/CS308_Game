@@ -2,7 +2,13 @@
 public class ItemOther extends Item {
 	public GameMap.ItemTypeCode code;
 	public int usesRemaining;
-	public static int maxUses;
+	public int maxUses;
+	
+	public ItemOther(String name, int value, int uses){
+		super(name, value);
+		usesRemaining = uses;
+		maxUses = uses;
+	}
 	
 	/*
 	 * Returns the current value of the item so it can be sold.
