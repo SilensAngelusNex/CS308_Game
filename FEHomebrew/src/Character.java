@@ -107,6 +107,10 @@ public class Character {
 		if (dmg < 0){
 			dmg = 0;
 		}
+		if (attribs.currentHp <= 0){
+			System.out.printf("Stop, stop! %s's alreay dead!\n", name);
+			throw new CharacterDiesException(this, -1);
+		}
 		if (attribs.currentHp <= dmg){
 			dmg = attribs.currentHp;
 			attribs.currentHp = 0;
@@ -149,6 +153,11 @@ public class Character {
 	}
 	
 	public void combat(Character enemy){
+		if (attribs.currentHp <= 0 || enemy.attribs.currentHp <= 0){
+			System.out.println("One or more combatants are dead; they cannot fight.");
+			return;
+		}
+		
 		//TODO: pre-combat skill triggers (vantage, wrath), etc.
 		
 		int mySpdAdv = attribs.get(GameMap.AttributeType.SPD) - enemy.attribs.get(GameMap.AttributeType.SPD);
@@ -181,20 +190,26 @@ public class Character {
 		} catch (CharacterDiesException e) {
 			//If anyone dies, stop the combat and grant kill EXP to the victor
 			if (e.dead.equals(this)){
-				enemy.killExp(this);
-				die();
-				dead = true;
+				if (e.finishingDmg > 0){
+					enemy.killExp(this);
+					die();
+					dead = true;
+				}
 				enemyDmg += e.finishingDmg;
 			}
 			if (e.dead.equals(enemy)){
-				killExp(enemy);
-				enemyDead = true;
-				enemy.die();
+				if (e.finishingDmg > 0){
+					killExp(enemy);
+					enemyDead = true;
+					enemy.die();
+				}
 				dmg += e.finishingDmg;
 				
 			}
 		} finally {
 			//Grant experience to both units from this combat, if they're still alive.
+			System.out.println(dmg);
+			System.out.println(enemyDmg);
 			if (!dead){
 				if (dmg > 0){
 					cmbtExp(enemy);
