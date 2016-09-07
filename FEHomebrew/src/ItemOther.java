@@ -1,6 +1,6 @@
 
 public class ItemOther extends Item {
-	public GameMap.ItemTypeCode code;
+	public Util.ItemTypeCode code;
 	public int usesRemaining;
 	public int maxUses;
 	

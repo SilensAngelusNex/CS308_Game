@@ -1,8 +1,8 @@
 
 public class ItemWeapon extends Item {
-	public GameMap.WeaponType wType;
-	public GameMap.AttributeType wAttrib;
-	public GameMap.AttributeType wDmgType;
+	public Util.WeaponType wType;
+	public Util.AttributeType wAttrib;
+	public Util.AttributeType wDmgType;
 	public boolean equipped;
 	
 	public ListAttribute aBonuses;
@@ -11,8 +11,8 @@ public class ItemWeapon extends Item {
 	public int wHit;
 	public int wMT;
 
-	public ItemWeapon(String n, int value, GameMap.WeaponType type, GameMap.AttributeType attrib,
-			GameMap.AttributeType dmgType, ListAttribute bonus, int mt, int hit, int crit){
+	public ItemWeapon(String n, int value, Util.WeaponType type, Util.AttributeType attrib,
+			Util.AttributeType dmgType, ListAttribute bonus, int mt, int hit, int crit){
 		super(n, value);
 		wType = type;
 		wAttrib = attrib;
@@ -27,9 +27,9 @@ public class ItemWeapon extends Item {
 		this(
 				"Bronze Sword",
 				500,
-				GameMap.WeaponType.SWORD,
-				GameMap.AttributeType.STR,
-				GameMap.AttributeType.DEF,
+				Util.WeaponType.SWORD,
+				Util.AttributeType.STR,
+				Util.AttributeType.DEF,
 				new ListAttribute(0,0,0,0,0,0,0,0),
 				5,
 				90,

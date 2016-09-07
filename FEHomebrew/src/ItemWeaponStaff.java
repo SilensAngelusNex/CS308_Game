@@ -4,8 +4,8 @@ public class ItemWeaponStaff extends ItemWeapon {
 	public int maxUses;
 	public int baseHeal;
 	
-	public ItemWeaponStaff(String n, int value, GameMap.WeaponType type, GameMap.AttributeType attrib,
-			GameMap.AttributeType dmgType, ListAttribute bonus, int mt, int hit, int crit, int uses, int heal){
+	public ItemWeaponStaff(String n, int value, Util.WeaponType type, Util.AttributeType attrib,
+			Util.AttributeType dmgType, ListAttribute bonus, int mt, int hit, int crit, int uses, int heal){
 		super(n, value, type, attrib, dmgType, bonus, mt, hit, crit);
 		usesRemaining = uses;
 		maxUses = uses;

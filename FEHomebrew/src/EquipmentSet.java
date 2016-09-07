@@ -66,13 +66,13 @@ public class EquipmentSet {
 		return result;
 	}
 	
-	public GameMap.AttributeType damageType(){
+	public Util.AttributeType damageType(){
 		if (onHand != null){
 			return onHand.wDmgType;
 		} else if (offHand != null){
 			return offHand.wDmgType;
 		}
-		return GameMap.AttributeType.STR;
+		return Util.AttributeType.STR;
 	}
 
 }

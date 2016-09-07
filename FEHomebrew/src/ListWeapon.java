@@ -84,7 +84,7 @@ public class ListWeapon {
 			System.out.printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\t%d\t%d\t%d\t%d\n", SWORD, AXE, LANCE, KNIFE, BOW, FIRE, WIND, LIGHTNING, LIGHT, DARK, STAFF, BREATH);
 		}
 
-		public int get(GameMap.WeaponType w){
+		public int get(Util.WeaponType w){
 			switch (w){
 				case SWORD:
 					return SWORD;
@@ -114,7 +114,7 @@ public class ListWeapon {
 					 throw new UnsupportedOperationException(w.toString());
 			}			
 		}
-		public void set(GameMap.WeaponType w, int b){
+		public void set(Util.WeaponType w, int b){
 			switch (w){
 				case SWORD:
 					SWORD = b;

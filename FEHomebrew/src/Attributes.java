@@ -20,13 +20,13 @@ public class Attributes {
 	public ListAttribute levelUp(){
 		ListAttribute increased = new ListAttribute(0,0,0,0,0,0,0,0);
 
-		for (GameMap.AttributeType i : GameMap.AttributeType.values()){
+		for (Util.AttributeType i : Util.AttributeType.values()){
 
 			int growth = growths.get(i);
 			//TODO: Make adjustment for growth > 100.
 
 			//Increment the characters attribute growth% of the time.
-			if (GameMap.rand.nextInt(99) <= growth){
+			if (Util.rand.nextInt(99) <= growth){
 				increased.set(i, 1);
 			}
 		}
@@ -34,7 +34,7 @@ public class Attributes {
 		return increased;
 	}
 
-	public int get(GameMap.AttributeType a){
+	public int get(Util.AttributeType a){
 		switch (a){
 		case STR:
 			return rawAttribs.STR + bonuses.STR;

@@ -2,7 +2,7 @@
 
 public class Character {
 	public String name;
-	public GameMap.CharacterClasses charClass;
+	public Util.CharacterClasses charClass;
 	public Attributes attribs;
 	public LevelInfo level;
 	public Inventory inv;
@@ -27,7 +27,7 @@ public class Character {
 	public Character(){
 		this(
 				"Ike",
-				GameMap.CharacterClasses.Swordsman,
+				Util.CharacterClasses.Swordsman,
 				new Attributes(19,
 						new int[] {5, 1, 6, 7, 5, 19, 5, 0},
 						new int[] {50, 20, 50, 55, 35, 75, 40, 40},
@@ -38,7 +38,7 @@ public class Character {
 	}
 		
 	
-	public Character(String n, GameMap.CharacterClasses c, Attributes a, LevelInfo l, Inventory i){
+	public Character(String n, Util.CharacterClasses c, Attributes a, LevelInfo l, Inventory i){
 		name = n;
 		charClass = c;
 		attribs = a;
@@ -60,28 +60,28 @@ public class Character {
 		int bonuses = 0;
 		//TODO: Add other bonuses
 		
-		return 2 * attribs.get(GameMap.AttributeType.SPD) + attribs.get(GameMap.AttributeType.SKL) + bonuses;
+		return 2 * attribs.get(Util.AttributeType.SPD) + attribs.get(Util.AttributeType.SKL) + bonuses;
 	}
 	
 	public int hit(){
 		int bonuses = 0;
 		//TODO: Add other bonuses
 		
-		return inv.equipment.hit() + 2 * attribs.get(GameMap.AttributeType.SKL) + attribs.get(GameMap.AttributeType.SPD) + bonuses;
+		return inv.equipment.hit() + 2 * attribs.get(Util.AttributeType.SKL) + attribs.get(Util.AttributeType.SPD) + bonuses;
 	}
 	
 	public int crit(){
 		int bonuses = 0;
 		//TODO: Add other bonuses
 		
-		return inv.equipment.crit() + attribs.get(GameMap.AttributeType.SKL) + bonuses;
+		return inv.equipment.crit() + attribs.get(Util.AttributeType.SKL) + bonuses;
 	}
 	
 	public int dodge(){
 		int bonuses = 0;
 		//TODO: Add other bonuses
 		
-		return attribs.get(GameMap.AttributeType.SPD) + attribs.get(GameMap.AttributeType.SKL) / 2 + bonuses;
+		return attribs.get(Util.AttributeType.SPD) + attribs.get(Util.AttributeType.SKL) / 2 + bonuses;
 	}
 	
 	public int attack(){
@@ -133,7 +133,7 @@ public class Character {
 		int hit = hit() - enemy.avoid();
 		//TODO: Weapon Triangle bonuses
 		
-		if (GameMap.rand.nextInt(99) + GameMap.rand.nextInt(99) >= 2 * hit){
+		if (Util.rand.nextInt(99) + Util.rand.nextInt(99) >= 2 * hit){
 			//Miss, no damage.
 			return -1;
 		}
@@ -142,7 +142,7 @@ public class Character {
 		
 		
 		int crit = crit() - enemy.dodge();
-		if (GameMap.rand.nextInt(99) < crit){
+		if (Util.rand.nextInt(99) < crit){
 			//TODO: Check crit trigger skill activations.
 			//Crit, deal extra damage equal to attack.
 			return enemy.damage(2 * attack() - enemy.attribs.get(inv.equipment.damageType()));
@@ -163,7 +163,7 @@ public class Character {
 		
 		//TODO: pre-combat skill triggers (vantage, wrath), etc.
 		
-		int mySpdAdv = attribs.get(GameMap.AttributeType.SPD) - enemy.attribs.get(GameMap.AttributeType.SPD);
+		int mySpdAdv = attribs.get(Util.AttributeType.SPD) - enemy.attribs.get(Util.AttributeType.SPD);
 		int dmg = 0;
 		int enemyDmg = 0;
 		boolean dead = false;
@@ -279,7 +279,7 @@ public class Character {
 			throw new CharacterDeadException(this, -1);
 		}
 		
-		int maxHP = attribs.get(GameMap.AttributeType.CON);
+		int maxHP = attribs.get(Util.AttributeType.CON);
 		int curHP = attribs.currentHp;
 		
 		if (maxHP <= amount + curHP){
@@ -303,12 +303,12 @@ public class Character {
 			return;
 		}
 		
-		if(inv.equipment.offHand.wType != GameMap.WeaponType.STAFF){
+		if(inv.equipment.offHand.wType != Util.WeaponType.STAFF){
 			System.out.println("You can't heal without a staff equipped.");
 			return;
 		}
 		
-		int amount = ((ItemWeaponStaff) inv.equipment.offHand).baseHeal + attribs.get(GameMap.AttributeType.MAG);
+		int amount = ((ItemWeaponStaff) inv.equipment.offHand).baseHeal + attribs.get(Util.AttributeType.MAG);
 		
 		try {
 			ally.heal(amount);
@@ -324,7 +324,7 @@ public class Character {
 	}
 	
 	private void printChar(){
-		System.out.printf("%s\t%d\t%d/%d\n", name, level.totalLevel(), attribs.currentHp, attribs.get(GameMap.AttributeType.CON));
+		System.out.printf("%s\t%d\t%d/%d\n", name, level.totalLevel(), attribs.currentHp, attribs.get(Util.AttributeType.CON));
 		System.out.println(charClass.toString());
 		attribs.rawAttribs.printAttributes();
 	}
@@ -332,16 +332,16 @@ public class Character {
 	
 	private void printCmbt(Character e){
 		System.out.printf("\tAttack\tHit\tCrit\tDefense\tAvoid\tDodge\tSpeed\n");
-		System.out.printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", name, attack(), hit(), crit(), attribs.get(GameMap.AttributeType.DEF), avoid(), dodge(), attribs.get(GameMap.AttributeType.SPD));
-		System.out.printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", e.name, e.attack(), e.hit(), e.crit(), e.attribs.get(GameMap.AttributeType.DEF), e.avoid(), e.dodge(), e.attribs.get(GameMap.AttributeType.SPD));
-		System.out.printf("\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", attack()-e.attribs.get(GameMap.AttributeType.DEF), hit()-e.avoid(), crit()-e.dodge(), e.attack()-attribs.get(GameMap.AttributeType.DEF), e.hit()-avoid(), e.crit()-dodge(), attribs.get(GameMap.AttributeType.SPD)-e.attribs.get(GameMap.AttributeType.SPD));
+		System.out.printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", name, attack(), hit(), crit(), attribs.get(Util.AttributeType.DEF), avoid(), dodge(), attribs.get(Util.AttributeType.SPD));
+		System.out.printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", e.name, e.attack(), e.hit(), e.crit(), e.attribs.get(Util.AttributeType.DEF), e.avoid(), e.dodge(), e.attribs.get(Util.AttributeType.SPD));
+		System.out.printf("\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", attack()-e.attribs.get(Util.AttributeType.DEF), hit()-e.avoid(), crit()-e.dodge(), e.attack()-attribs.get(Util.AttributeType.DEF), e.hit()-avoid(), e.crit()-dodge(), attribs.get(Util.AttributeType.SPD)-e.attribs.get(Util.AttributeType.SPD));
 	}
 	
 	
 	public static void main(String[] args){
 		Character c = new Character(
 				"Mia",
-				GameMap.CharacterClasses.Swordsman,
+				Util.CharacterClasses.Swordsman,
 				new Attributes(17,
 						new int[] {4, 1, 6, 9, 5, 17, 3, 0},
 						new int[] {45, 20, 60, 70, 20, 50, 25, 45},
@@ -355,7 +355,7 @@ public class Character {
 		
 		Character e = new Character(
 				"Mist",
-				GameMap.CharacterClasses.Priest,
+				Util.CharacterClasses.Priest,
 				new Attributes(15,
 						new int[] {2, 4, 5, 6, 12, 15, 2, 5},
 						new int[] {45, 20, 60, 70, 20, 50, 25, 45},
@@ -367,9 +367,9 @@ public class Character {
 		e.inv.add(new ItemWeaponStaff(
 					"Heal",
 					800,
-					GameMap.WeaponType.STAFF,
-					GameMap.AttributeType.STR,
-					GameMap.AttributeType.DEF,
+					Util.WeaponType.STAFF,
+					Util.AttributeType.STR,
+					Util.AttributeType.DEF,
 					new ListAttribute(0,0,0,0,0,0,0,0),
 					0,
 					70,

@@ -44,7 +44,7 @@ public class ListAttribute {
 			RES = l.RES;
 		}
 		
-		public int get(GameMap.AttributeType a){
+		public int get(Util.AttributeType a){
 			switch (a){
 				case STR:
 					return STR;
@@ -66,7 +66,7 @@ public class ListAttribute {
 					 throw new UnsupportedOperationException(a.toString());	
 			}
 		}
-		public void set(GameMap.AttributeType a, int b){
+		public void set(Util.AttributeType a, int b){
 			switch (a){
 				case STR:
 					STR = b;
