@@ -43,6 +43,14 @@ public class Inventory {
 		}
 	}
 	
+	public boolean remove(Item item){
+		if (item instanceof ItemWeapon){
+			return items.remove((ItemWeapon) item);
+		} else {
+			return items.remove(item);
+		}
+	}
+	
 	public void equipOnHand(int i){
 		ItemWeapon toEquip = weapons.get(i);
 		

@@ -47,6 +47,14 @@ public class Character {
 		boss = false;
 	}
 	
+	public void take(Item i){
+		inv.add(i);
+	}
+	
+	public boolean drop(Item i){
+		return inv.remove(i);
+	}
+	
 	
 	public int avoid(){
 		int bonuses = 0;
@@ -93,16 +101,11 @@ public class Character {
 		}
 	}
 	
-	public ListAttribute levelUp(){
-		level.levelUp();
-		return attribs.levelUp();
-	}
-	
 	private void die(){
 		System.out.printf("%s is defeated!\n", name);
 	}
 	
-	public int damage(int dmg) throws CharacterDeadException{
+	private int damage(int dmg) throws CharacterDeadException{
 		//TODO: Check skills (Miracle, other damage reduction skills).
 		if (dmg < 0){
 			dmg = 0;
@@ -122,7 +125,7 @@ public class Character {
 		return dmg;
 	}
 	
-	public int strike(Character enemy) throws CharacterDeadException{
+	private int strike(Character enemy) throws CharacterDeadException{
 		if (attack() == 0){
 			return 0;
 		}
@@ -265,7 +268,7 @@ public class Character {
 		gainExp(toGain);
 	}
 	
-	public int heal(int amount) throws CharacterDeadException{
+	private int heal(int amount) throws CharacterDeadException{
 		//TODO: Check healing skills.
 		if (amount < 0){
 			amount = 0;
