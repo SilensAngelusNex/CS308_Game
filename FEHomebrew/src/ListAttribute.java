@@ -1,12 +1,12 @@
 public class ListAttribute {
-		public int STR;
-		public int MAG;
-		public int SKL;
-		public int SPD;
-		public int CHA;
-		public int CON;
-		public int DEF;
-		public int RES;
+		private int STR;
+		private int MAG;
+		private int SKL;
+		private int SPD;
+		private int CHA;
+		private int CON;
+		private int DEF;
+		private int RES;
 		
 		public ListAttribute(int str, int mag, int skl, int spd, int cha, int con, int def, int res){
 			STR = str;

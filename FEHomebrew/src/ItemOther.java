@@ -1,8 +1,8 @@
 
 public class ItemOther extends Item {
-	public Util.ItemTypeCode code;
-	public int usesRemaining;
-	public int maxUses;
+	protected Util.ItemTypeCode code;
+	protected int usesRemaining;
+	protected int maxUses;
 	
 	public ItemOther(String name, int value, int uses){
 		super(name, value);
@@ -31,6 +31,7 @@ public class ItemOther extends Item {
 	 */
 	public void use(int x){
 		usesRemaining -= x;
-		return;
 	}
+	
+	//TODO: make it break at 0 uses left.
 }

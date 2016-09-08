@@ -1,13 +1,13 @@
 
 public class Attributes {
-	public ListAttribute rawAttribs;
-	public ListAttribute growths;
-	public ListWeapon wepMastery;
-	public int currentHp;
+	private ListAttribute rawAttribs;
+	private ListAttribute growths;
+	private ListWeapon wepMastery;
+	private int currentHp;
 	//TODO: movement
 
 	//Might not need this.
-	public ListAttribute bonuses;
+	private ListAttribute bonuses;
 
 	public Attributes(int cHp, int[] r, int[] g, int[] w){
 		currentHp = cHp;
@@ -38,24 +38,43 @@ public class Attributes {
 	public int get(Util.AttributeType a){
 		switch (a){
 		case STR:
-			return rawAttribs.STR + bonuses.STR;
+			return rawAttribs.get(Util.AttributeType.STR) + bonuses.get(Util.AttributeType.STR);
 		case MAG:
-			return rawAttribs.MAG + bonuses.MAG;
+			return rawAttribs.get(Util.AttributeType.MAG) + bonuses.get(Util.AttributeType.MAG);
 		case SKL:
-			return rawAttribs.SKL + bonuses.SKL;
+			return rawAttribs.get(Util.AttributeType.SKL) + bonuses.get(Util.AttributeType.SKL);
 		case SPD:
-			return rawAttribs.SPD + bonuses.SPD;
+			return rawAttribs.get(Util.AttributeType.SPD) + bonuses.get(Util.AttributeType.SPD);
 		case CHA:
-			return rawAttribs.CHA + bonuses.CHA;
+			return rawAttribs.get(Util.AttributeType.CHA) + bonuses.get(Util.AttributeType.CHA);
 		case CON:
-			return rawAttribs.CON + bonuses.CON;
+			return rawAttribs.get(Util.AttributeType.CON) + bonuses.get(Util.AttributeType.CON);
 		case DEF:
-			return rawAttribs.DEF + bonuses.DEF;
+			return rawAttribs.get(Util.AttributeType.DEF) + bonuses.get(Util.AttributeType.DEF);
 		case RES:
-			return rawAttribs.RES + bonuses.RES;
+			return rawAttribs.get(Util.AttributeType.RES) + bonuses.get(Util.AttributeType.RES);
 		default:
 			 throw new UnsupportedOperationException(a.toString());
+		}
 	}
+	
+	public ListAttribute getRawAttribs(){
+		return rawAttribs;
+	}
+	public ListAttribute getBonuses(){
+		return bonuses;
+	}
+	public ListWeapon getWepMastery(){
+		return wepMastery;
+	}
+	public int getCurrHP(){
+		return currentHp;
+	}
+	public void setCurrHP(int i){
+		currentHp = i;
+	}
+	public void addCurrHP(int i){
+		currentHp += i;
 	}
 
 }

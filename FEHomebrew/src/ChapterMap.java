@@ -1,15 +1,13 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.TreeMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 public class ChapterMap {
-	Vector<Party> factions;
-	Terrain[][] map;
-	int mapSize;
+	private Vector<Party> factions;
+	private Terrain[][] map;
+	private int mapSize;
 	
 	public ChapterMap(int i){
 		map = new Terrain[i][i];

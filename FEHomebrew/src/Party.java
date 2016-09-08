@@ -1,9 +1,9 @@
 import java.util.Vector;
 
 public class Party {
-	Vector<Character> chars;
-	Vector<Item> convoy;
-	int gold;
+	private Vector<Character> chars;
+	private Vector<Item> convoy;
+	private int gold;
 	
 	public void takeFromConvoy(Character c, Item i){
 		if (chars.contains(c)){

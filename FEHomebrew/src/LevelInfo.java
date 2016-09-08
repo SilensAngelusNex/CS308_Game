@@ -1,8 +1,8 @@
 
 public class LevelInfo {
-	public int tier;
-	public int level;
-	public int exp;
+	private int tier;
+	private int level;
+	private int exp;
 	
 	public LevelInfo(){
 		tier = 1;
@@ -18,4 +18,29 @@ public class LevelInfo {
 		exp = 0;
 		return level++;
 	}
+	
+	public int gainExp(int gains){
+		int levelsGained = 0;
+		
+		while (gains > 0){
+			if (gains > 100 - exp){
+				gains -= 100 - exp;
+				exp = 100;
+				levelsGained++;
+				levelUp();
+			} else {
+				exp += gains;
+				gains = 0;
+			}
+		}
+		return levelsGained;
+	}
+	
+	public int getTier(){
+		return tier;
+	}
+	public int getExp(){
+		return exp;
+	}
+	
 }

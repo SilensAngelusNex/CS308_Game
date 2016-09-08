@@ -1,8 +1,8 @@
 
 public class EquipmentSet {
-	public ItemWeapon onHand;
-	public ItemWeapon offHand;
-	public ItemArmor armor;
+	private ItemWeapon onHand;
+	private ItemWeapon offHand;
+	private ItemArmor armor;
 	
 	public EquipmentSet(){
 		onHand = null;
@@ -14,7 +14,7 @@ public class EquipmentSet {
 		return onHand.aBonuses.add(offHand.aBonuses);
 	}
 	public ListAttribute armorBonus(){
-		return armor.aBonuses;
+		return armor.getBonuses();
 	}
 	
 	public int weaponsEquipped(){
@@ -74,5 +74,33 @@ public class EquipmentSet {
 		}
 		return Util.AttributeType.STR;
 	}
+	
+	public ItemWeapon getOnHand(){
+		return onHand;
+	}
+	public ItemWeapon getOffHand(){
+		return offHand;
+	}
+	public ItemArmor getArmor(){
+		return armor;
+	}
+	
+	public void setOnHand(ItemWeapon toEquip){
+		if (toEquip != null){
+			toEquip.setEquipped(true);
+		}
+		onHand = toEquip;
+	}
+	public void setOffHand(ItemWeapon toEquip){
+		if (toEquip != null){
+			toEquip.setEquipped(true);
+		}		offHand = toEquip;
+	}
+	public void setArmor(ItemArmor toEquip){
+		if (toEquip != null){
+			toEquip.setEquipped(true);
+		}		armor = toEquip;
+	}
+	
 
 }

@@ -1,9 +1,9 @@
 import java.util.Vector;
 
 public class Inventory {
-	public Vector<ItemWeapon> weapons;
-	public Vector<Item> items;
-	public EquipmentSet equipment;
+	private Vector<ItemWeapon> weapons;
+	private Vector<Item> items;
+	private EquipmentSet equipment;
 	
 	public Inventory(){
 		weapons = new Vector<ItemWeapon>(4);
@@ -58,7 +58,7 @@ public class Inventory {
 		unEquipOnHand();
 		
 		//Don't allow equipping the same weapon to both hands.
-		if (toEquip.equals(equipment.offHand)){
+		if (toEquip.equals(equipment.getOffHand())){
 			unEquipOffHand();
 		}
 		
@@ -67,8 +67,7 @@ public class Inventory {
 		weapons.add(0, toEquip);
 		
 		//Equip the new onHand weapon. 
-		toEquip.equipped = true;
-		equipment.onHand = toEquip;
+		equipment.setOnHand(toEquip);
 		
 	}
 	
@@ -79,7 +78,7 @@ public class Inventory {
 		unEquipOffHand();
 		
 		//Don't allow equipping the same weapon to both hands.
-		if (toEquip.equals(equipment.onHand)){
+		if (toEquip.equals(equipment.getOnHand())){
 			unEquipOnHand();
 		}
 		
@@ -93,8 +92,7 @@ public class Inventory {
 		}
 		
 		//Equip the new offHand weapon. 
-		toEquip.equipped = true;
-		equipment.offHand = toEquip;
+		equipment.setOffHand(toEquip);
 	}
 	
 	public void equipArmor(int i){
@@ -107,38 +105,57 @@ public class Inventory {
 		items.add(0, (Item) armor);
 		
 		//Equip the new armor. 
-		armor.equipped = true;
-		equipment.armor = armor;
+		equipment.setArmor(armor);
 	}
 	
 	public void unEquipOnHand(){
-		if (equipment.onHand != null){
+		if (equipment.getOnHand() != null){
 			//If there's an offHand weapon equipped, it rises to to the top of the weapon list
-			if (equipment.offHand != null){
-				ItemWeapon onHand = equipment.onHand;
+			if (equipment.getOffHand()!= null){
+				ItemWeapon onHand = equipment.getOnHand();
 				weapons.remove(onHand);
 				weapons.add(1, onHand);
 			}
 			
 			//Then unequip the onHand weapon
-			equipment.onHand.equipped = false;
-			equipment.onHand = null;
+			equipment.setOnHand(null);
 		}
 		
 	}
 	
 	public void unEquipOffHand(){
-		if (equipment.offHand != null){
-			equipment.offHand.equipped = false;
-			equipment.offHand = null;
-		}
+		equipment.setOffHand(null);
+	}
+	public void unEquipArmor(){
+		equipment.setArmor(null);
 	}
 	
-	public void unEquipArmor(){
-		if (equipment.armor != null){
-			equipment.armor.equipped = false;
-			equipment.armor = null;
-		}
+	public ItemWeapon getOnHand(){
+		return equipment.getOnHand();
+	}
+	public ItemWeapon getOffHand(){
+		return equipment.getOffHand();
+	}
+	public ItemArmor getArmor(){
+		return equipment.getArmor();
+	}
+	public int getHit(){
+		return equipment.hit();
+	}
+	public int getCrit(){
+		return equipment.crit();
+	}
+	public int getMight(){
+		return equipment.might();
+	}
+	public Util.AttributeType getDamageType(){
+		return equipment.damageType();
+	}
+	public int getWeaponsEquipped(){
+		return equipment.weaponsEquipped();
+	}
+	public int getArmorEquipped(){
+		return equipment.armorEquipped();
 	}
 	
 }

@@ -1,17 +1,17 @@
 
 public class ListWeapon {
-		public int SWORD;
-		public int AXE;
-		public int LANCE;
-		public int KNIFE;
-		public int BOW;
-		public int FIRE;
-		public int WIND;
-		public int LIGHTNING;
-		public int LIGHT;
-		public int DARK;
-		public int STAFF;
-		public int BREATH;
+		private int SWORD;
+		private int AXE;
+		private int LANCE;
+		private int KNIFE;
+		private int BOW;
+		private int FIRE;
+		private int WIND;
+		private int LIGHTNING;
+		private int LIGHT;
+		private int DARK;
+		private int STAFF;
+		private int BREATH;
 		
 		public ListWeapon(	int sword, int axe, int lance, int knife, int bow,
 							int fire, int wind, int lightning, int light, int dark,

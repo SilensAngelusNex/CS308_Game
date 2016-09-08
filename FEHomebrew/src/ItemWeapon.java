@@ -1,15 +1,15 @@
 
 public class ItemWeapon extends Item {
-	public Util.WeaponType wType;
-	public Util.AttributeType wAttrib;
-	public Util.AttributeType wDmgType;
-	public boolean equipped;
+	protected Util.WeaponType wType;
+	protected Util.AttributeType wAttrib;
+	protected Util.AttributeType wDmgType;
+	protected boolean equipped;
 	
-	public ListAttribute aBonuses;
-	//TODO: Weapon Weight
-	public int wCrit;
-	public int wHit;
-	public int wMT;
+	protected ListAttribute aBonuses;
+	//TODO: Weapon Weight (attack speed)
+	protected int wCrit;
+	protected int wHit;
+	protected int wMT;
 
 	public ItemWeapon(String n, int value, Util.WeaponType type, Util.AttributeType attrib,
 			Util.AttributeType dmgType, ListAttribute bonus, int mt, int hit, int crit){
@@ -51,6 +51,10 @@ public class ItemWeapon extends Item {
 				w.wMT,
 				w.wHit,
 				w.wCrit);
+	}
+	
+	public void setEquipped(boolean b){
+		equipped = b;
 	}
 
 }

@@ -1,8 +1,8 @@
 
 public class ItemWeaponStaff extends ItemWeapon {
-	public int usesRemaining;
-	public int maxUses;
-	public int baseHeal;
+	protected int usesRemaining;
+	protected int maxUses;
+	protected int baseHeal;
 	
 	public ItemWeaponStaff(String n, int value, Util.WeaponType type, Util.AttributeType attrib,
 			Util.AttributeType dmgType, ListAttribute bonus, int mt, int hit, int crit, int uses, int heal){

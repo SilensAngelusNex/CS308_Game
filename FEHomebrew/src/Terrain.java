@@ -1,11 +1,11 @@
 
 public class Terrain {
-	String name;
-	boolean passable;
-	int movementCost;
-	int healPerTurn;
-	int avoidBoost;
-	ListAttribute aBonuses;
+	protected String name;
+	protected boolean passable;
+	protected int movementCost;
+	protected int healPerTurn;
+	protected int avoidBoost;
+	protected ListAttribute aBonuses;
 	
 	public boolean passable(){
 		return  passable;
@@ -21,5 +21,44 @@ public class Terrain {
 	
 	public String toString(){
 		return name;
+	}
+	
+	public static Terrain newForest(){
+		return new Terrain(
+				"Forest",
+				true,
+				2,
+				0,
+				10,
+				new ListAttribute(new int[] {0,0,0,0,0,0,0,0}));
+	}
+	
+	public static Terrain newPlain(){
+		return new Terrain(
+				"Plain",
+				true,
+				1,
+				0,
+				0,
+				new ListAttribute(new int[] {0,0,0,0,0,0,0,0}));
+	}
+	
+	public static Terrain newRocks(){
+		return new Terrain(
+				"Rocks",
+				false,
+				1,
+				0,
+				0,
+				new ListAttribute(new int[] {0,0,0,0,0,0,0,0}));
+	}
+
+	public Terrain(String n, boolean pass, int cost, int heal, int avo, ListAttribute bonus) {
+		name = n;
+		passable = pass;
+		movementCost = 1;
+		healPerTurn = heal;
+		avoidBoost = avo;
+		aBonuses = bonus;
 	}
 }
