@@ -1,5 +1,6 @@
 import java.util.Random;
 
+
 public class Util {
 	
 	public static Random rand = new Random();
@@ -35,6 +36,7 @@ public class Util {
 	}
 	
 	public enum CharacterClasses{
+		//TODO: Add T2 and T3 classes, possibly in different enums.
 		Swordsman,
 		Warrior,
 		Soldier,
@@ -44,5 +46,7 @@ public class Util {
 		Cavalier,
 		Knight
 	}
+	
+
 		
 }

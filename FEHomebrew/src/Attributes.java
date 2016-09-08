@@ -4,6 +4,7 @@ public class Attributes {
 	public ListAttribute growths;
 	public ListWeapon wepMastery;
 	public int currentHp;
+	//TODO: movement
 
 	//Might not need this.
 	public ListAttribute bonuses;
@@ -23,7 +24,7 @@ public class Attributes {
 		for (Util.AttributeType i : Util.AttributeType.values()){
 
 			int growth = growths.get(i);
-			//TODO: Make adjustment for growth > 100.
+			//TODO-LongTerm: Make adjustment for growth > 100.
 
 			//Increment the characters attribute growth% of the time.
 			if (Util.rand.nextInt(99) <= growth){

@@ -7,6 +7,11 @@ public class Character {
 	public LevelInfo level;
 	public Inventory inv;
 	public boolean boss;
+	//TODO: remember where unit can move
+	//TODO: add point so Character knows where it is
+	
+	
+	private static final int NO_DMG_BATTLE_EXP = 1;
 	
 	private class CharacterDeadException extends Exception{
 		private static final long serialVersionUID = -3374130461047276835L;
@@ -58,35 +63,35 @@ public class Character {
 	
 	public int avoid(){
 		int bonuses = 0;
-		//TODO: Add other bonuses
+		//TODO-LongTerm: Add other bonuses
 		
 		return 2 * attribs.get(Util.AttributeType.SPD) + attribs.get(Util.AttributeType.SKL) + bonuses;
 	}
 	
 	public int hit(){
 		int bonuses = 0;
-		//TODO: Add other bonuses
+		//TODO-LongTerm: Add other bonuses
 		
 		return inv.equipment.hit() + 2 * attribs.get(Util.AttributeType.SKL) + attribs.get(Util.AttributeType.SPD) + bonuses;
 	}
 	
 	public int crit(){
 		int bonuses = 0;
-		//TODO: Add other bonuses
+		//TODO-LongTerm: Add other bonuses
 		
 		return inv.equipment.crit() + attribs.get(Util.AttributeType.SKL) + bonuses;
 	}
 	
 	public int dodge(){
 		int bonuses = 0;
-		//TODO: Add other bonuses
+		//TODO-LongTerm: Add other bonuses
 		
 		return attribs.get(Util.AttributeType.SPD) + attribs.get(Util.AttributeType.SKL) / 2 + bonuses;
 	}
 	
 	public int attack(){
 		int bonuses = 0;
-		//TODO: Add other bonuses
+		//TODO-LongTerm: Add other bonuses
 		
 		if (inv.equipment.weaponsEquipped() == 0) {
 			return 0;
@@ -106,7 +111,7 @@ public class Character {
 	}
 	
 	private int damage(int dmg) throws CharacterDeadException{
-		//TODO: Check skills (Miracle, other damage reduction skills).
+		//TODO-LongTerm: Check skills (Miracle, other damage reduction skills).
 		if (dmg < 0){
 			dmg = 0;
 		}
@@ -138,12 +143,12 @@ public class Character {
 			return -1;
 		}
 		
-		//TODO: Check on hit skill activations.
+		//TODO-LongTerm: Check on hit skill activations.
 		
 		
 		int crit = crit() - enemy.dodge();
 		if (Util.rand.nextInt(99) < crit){
-			//TODO: Check crit trigger skill activations.
+			//TODO-LongTerm: Check crit trigger skill activations.
 			//Crit, deal extra damage equal to attack.
 			return enemy.damage(2 * attack() - enemy.attribs.get(inv.equipment.damageType()));
 		} else {
@@ -151,7 +156,7 @@ public class Character {
 			return enemy.damage(attack() - enemy.attribs.get(inv.equipment.damageType()));
 		}
 		
-		//TODO: Check after damage skill activations.
+		//TODO-LongTerm: Check after damage skill activations.
 		
 	}
 	
@@ -161,7 +166,7 @@ public class Character {
 			return;
 		}
 		
-		//TODO: pre-combat skill triggers (vantage, wrath), etc.
+		//TODO-LongTerm: pre-combat skill triggers (vantage, wrath), etc.
 		
 		int mySpdAdv = attribs.get(Util.AttributeType.SPD) - enemy.attribs.get(Util.AttributeType.SPD);
 		int dmg = 0;
@@ -170,7 +175,12 @@ public class Character {
 		boolean enemyDead = false;
 		
 		try{
-			//|Speed difference| < 3 gives one strike each; 3 < x < 8 gives 2 hits to faster; > 8 gives 3.
+			/*
+			 * |Speed difference| < 3 gives one strike each 1-1
+			 * 3 < |Speed difference| < 8 gives 2 hits to faster unit 1-1-1
+			 * |Speed difference| > 8 gives 3 hits to faster unit 2-1-1
+			 * Aggressor goes first
+			 */ 
 			dmg += strike(enemy);
 			
 			if (mySpdAdv > 8){
@@ -215,7 +225,7 @@ public class Character {
 				if (dmg > 0){
 					cmbtExp(enemy);
 				} else {
-					gainExp(1);
+					gainExp(NO_DMG_BATTLE_EXP);
 				}
 			}
 			
@@ -223,7 +233,7 @@ public class Character {
 				if (enemyDmg > 0){
 					enemy.cmbtExp(this);
 				} else {
-					enemy.gainExp(1);
+					enemy.gainExp(NO_DMG_BATTLE_EXP);
 				}
 			}
 		}
