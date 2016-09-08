@@ -2,7 +2,7 @@
 public class TerrainPlain extends Terrain{
 	
 	public TerrainPlain(){
-		name = "P";
+		name = "Plain";
 		passable = true;
 		movementCost = 1;
 		healPerTurn = 0;

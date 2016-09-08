@@ -2,7 +2,7 @@
 public class TerrainForest extends Terrain{
 	
 	public TerrainForest(){
-		name = "F";
+		name = "Forest";
 		passable = true;
 		movementCost = 2;
 		healPerTurn = 0;
