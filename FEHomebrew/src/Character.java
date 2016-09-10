@@ -1,6 +1,8 @@
 import javafx.scene.image.Image;
 
 public class Character {
+	private static final int NO_DMG_BATTLE_EXP = 1;
+	
 	public String name;
 	private Image myImage;
 	public Util.CharacterClasses charClass;
@@ -8,11 +10,12 @@ public class Character {
 	public LevelInfo level;
 	public Inventory inv;
 	public boolean boss;
+	private int myMov;
 	//TODO: remember where unit can move
 	//TODO: add point so Character knows where it is
 	
 	
-	private static final int NO_DMG_BATTLE_EXP = 1;
+	
 	
 	private class CharacterDeadException extends Exception{
 		private static final long serialVersionUID = -3374130461047276835L;
@@ -54,6 +57,7 @@ public class Character {
 		level = l;
 		inv = i;
 		boss = false;
+		myMov = 6;
 	}
 	
 	public static Character newIke(){
@@ -352,6 +356,10 @@ public class Character {
 	
 	public Image getImage(){
 		return myImage;
+	}
+	
+	public int getMov(){
+		return myMov;
 	}
 	
 	private void printChar(){

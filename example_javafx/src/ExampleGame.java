@@ -116,8 +116,10 @@ class ExampleGame {
                 myTopBlock.setY(myTopBlock.getY() + KEY_INPUT_SPEED);
                 break;
             case ENTER:
-            	if (!root.getChildren().contains(myBouncer)){
+            	if (root.getChildren().contains(myBouncer)){
             		root.getChildren().remove(myBouncer);
+            	} else {
+            		root.getChildren().add(myBouncer);
             	}
                 break;
             default:

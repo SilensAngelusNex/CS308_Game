@@ -59,7 +59,7 @@ public class Terrain {
 		name = n;
 		myImage = new Image(getClass().getClassLoader().getResourceAsStream(String.format("%s%s", name, ".png")));
 		passable = pass;
-		movementCost = 1;
+		movementCost = cost;
 		healPerTurn = heal;
 		avoidBoost = avo;
 		aBonuses = bonus;

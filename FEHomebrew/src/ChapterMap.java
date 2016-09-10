@@ -31,6 +31,10 @@ public class ChapterMap {
 		factions.add(p);
 	}
 	
+	public int size(){
+		return mapSize;
+	}
+	
 	public Terrain getTerrain(Point p){
 		if (p.getX() >= mapSize || p.getY() >= mapSize || p.getX() < 0 || p.getY() < 0){
 			return null;
@@ -49,7 +53,10 @@ public class ChapterMap {
 
 		Point[] nextSpaces = {start.up(), start.down(), start.left(), start.right()};
 		for (Point s: nextSpaces){
-			if (s != null && getTerrain(s).canMoveTo(spacesToGo)){
+			if (s != null && getTerrain(s) != null && getTerrain(s).canMoveTo(spacesToGo)){
+				if (s.equals(new Point(12, 0))){
+					System.out.println(spacesToGo);
+				}
 				//I haven't been here before, or I found a shorter path to get here.
 				if (!result.containsKey(s) || result.get(s).compareTo(spacesToGo - getSpaceMoveCost(s)) < 0){
 					result.put(s, spacesToGo - getSpaceMoveCost(s));
@@ -59,10 +66,13 @@ public class ChapterMap {
 		}
 	}
 	
-	public Map<Point, Integer> possibleMove(Point start, int spacesToGo){
+	public Map<Point, Integer> possibleMove(Point start){
 		Map<Point, Integer> result = new TreeMap<Point, Integer>();
-		result.put(start, spacesToGo);
-		possibleMove(start, spacesToGo, result);
+			if (myCharacters[start.getX()][start.getY()] != null){
+				int spacesToGo = myCharacters[start.getX()][start.getY()].getMov();
+				result.put(start, spacesToGo);
+				possibleMove(start, spacesToGo, result);
+			}
 		return result;
 	}
 	
@@ -107,6 +117,29 @@ public class ChapterMap {
 		return result;
 	}
 	
+	public Vector<ImageView> getMoveSquares(Map<Point, Integer> validMoves, int width, int height){
+		Vector<ImageView> result = new Vector<ImageView>();
+		
+		Image validSpace = new Image(getClass().getClassLoader().getResourceAsStream("MoveSquare.png"));
+		
+		for (Point p: validMoves.keySet()){
+			ImageView image = new ImageView(validSpace);
+			image.setFitHeight(height / mapSize);
+			image.setFitWidth(width / mapSize);
+			
+			image.setX(p.getX() * height / mapSize);
+			image.setY(p.getY() * width / mapSize);
+			
+			result.add(image);
+		}
+		return result;
+	}
+	
+	public void move(Point start, Point end){
+		myCharacters[end.getX()][end.getY()] = myCharacters[start.getX()][start.getY()];
+		myCharacters[start.getX()][start.getY()] = null;
+	}
+	
 	public static ChapterMap newCampaignLvl1(){
 		Terrain p = Terrain.newPlain();
 		Terrain f = Terrain.newForest();
@@ -143,37 +176,11 @@ public class ChapterMap {
 	}
 	
 	public static void main(String[] args){
-		Terrain p = Terrain.newPlain();
-		Terrain f = Terrain.newForest();
+
+		ChapterMap c = ChapterMap.newCampaignLvl1();
 		
-		Terrain[][] tMap = new Terrain[][]
-				{
-			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, f, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f},
-			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f}
-				};
-				
-		ChapterMap c = new ChapterMap(tMap);
-		
-		Point start = new Point(7, 5);
-		Map<Point, Integer> o = c.possibleMove(start, 2);
+		Point start = new Point(12, 6);
+		Map<Point, Integer> o = c.possibleMove(start);
 		ArrayList<Point> a = new ArrayList<Point>(o.keySet());
 		
 		Collections.sort(a);
@@ -181,6 +188,10 @@ public class ChapterMap {
 		System.out.println(a.size());
 				
 		
+	}
+
+	public boolean hasCharacter(Point loc) {
+		return myCharacters[loc.getX()][loc.getY()] != null;
 	}
 }
 	
