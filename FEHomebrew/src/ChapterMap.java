@@ -101,15 +101,7 @@ public class ChapterMap {
 		for (int i = 0; i < mapSize; i++){
 			for (int j = 0; j < mapSize; j++){
 				if (myCharacters[i][j] != null){
-					ImageView image = new ImageView(myCharacters[i][j].getImage());
-					
-					image.setFitHeight(height / mapSize);
-					image.setFitWidth(width / mapSize);
-					
-					image.setX(i * height / mapSize);
-					image.setY(j * width / mapSize);
-					
-					result.add(image);
+					result.add(myCharacters[i][j]);
 				}
 			}
 		}
@@ -136,8 +128,13 @@ public class ChapterMap {
 	}
 	
 	public void move(Point start, Point end){
-		myCharacters[end.getX()][end.getY()] = myCharacters[start.getX()][start.getY()];
-		myCharacters[start.getX()][start.getY()] = null;
+		if (myCharacters[start.getX()][start.getY()] != null){
+			myCharacters[start.getX()][start.getY()].moveTo(end);
+			
+			myCharacters[end.getX()][end.getY()] = myCharacters[start.getX()][start.getY()];
+			myCharacters[start.getX()][start.getY()] = null;
+		}
+		
 	}
 	
 	public static ChapterMap newCampaignLvl1(){
@@ -170,7 +167,7 @@ public class ChapterMap {
 		
 		ChapterMap result = new ChapterMap(tMap);
 		
-		result.myCharacters[12][6] = Character.newIke();
+		result.myCharacters[12][6] = Character.newIke(new Point(12, 6), 40, 40);
 		
 		return result;
 	}

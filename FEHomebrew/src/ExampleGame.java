@@ -21,20 +21,28 @@ class ExampleGame {
     public static final int KEY_INPUT_SPEED = 5;
     private static final int CURSOR_SIZE = 20;
 
-    private int myWidth;
-    private int myHeight;
-    private Scene myScene;
-    private Group myRoot;
-    private ImageView mySplash;
     private Rectangle myTopBlock;
     private Rectangle myBottomBlock;
-    private Cursor myMenuCursor;
-    private MapCursor myMapCursor;
-    private Map<Point, Integer> myValidMoves;
     
+    private Scene myScene;
+    private Group myRoot;    
     private GameState myState;
+    private int myWidth;
+    private int myHeight;
+    
+    //Used in splash state
+    private ImageView mySplash;
+	private Cursor myMenuCursor;
+	
+	//Used in MapMenu state
+	private MapCursor myMapCursor;
 	private ChapterMap myChapterMap;
+	
+    //Used in MoveMenu state
+	private Map<Point, Integer> myValidMoves;
 	private Point myMoveStart;
+	private Point myMoveEnd;
+	private Vector<ImageView> myMoveImages;
 
 
     /**
@@ -221,8 +229,13 @@ class ExampleGame {
 	        	break;
 	        case R:
 	        	if (myValidMoves.keySet().contains(myMapCursor.getLocation())){
-	        		myChapterMap.move(myMoveStart, myMapCursor.getLocation());
+	        		myMoveEnd = myMapCursor.getLocation();
+	        		myChapterMap.move(myMoveStart, myMoveEnd);
 	        	}
+	        	break;
+	        case E:
+	        	exitMoveMap();
+	        
 	            break;
 	        default:
 	            // do nothing
@@ -263,8 +276,7 @@ class ExampleGame {
     	myRoot.getChildren().addAll(imagesToAdd);
     	
     	
-    	Image cursorImage = new Image(getClass().getClassLoader().getResourceAsStream("MapCursor.png"));
-    	myMapCursor = new MapCursor(myWidth, myHeight, cMap.size(), cursorImage);
+    	myMapCursor = new MapCursor(myWidth, myHeight, cMap.size());
     	myRoot.getChildren().add(myMapCursor);
 
     }
@@ -274,9 +286,21 @@ class ExampleGame {
     	
     	myMoveStart = myMapCursor.getLocation();
     	
-    	System.out.println(myMapCursor.getLocation());
     	myValidMoves = myChapterMap.possibleMove(myMapCursor.getLocation());
-    	myRoot.getChildren().addAll(myChapterMap.getMoveSquares(myValidMoves, myWidth, myHeight));
+    	myMoveImages = myChapterMap.getMoveSquares(myValidMoves, myWidth, myHeight);
+    	myRoot.getChildren().addAll(myMoveImages);
+    }
+    
+    private void exitMoveMap(){
+    	myState = GameState.MAPMENU;
+    	
+    	myMapCursor.setLocation(myMoveStart);
+    	myRoot.getChildren().removeAll(myMoveImages);
+    	myMoveImages = null;
+    	myValidMoves = null;
+    	myMoveStart = null;
+    	myMoveEnd = null;
+    	
     }
 
     // What to do each time a key is pressed

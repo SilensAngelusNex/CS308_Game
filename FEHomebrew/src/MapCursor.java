@@ -7,8 +7,9 @@ public class MapCursor extends ImageView{
 	private int myMapWidth;
 	private int myMapHeight;
 	
-	public MapCursor(int width, int height, int mapSize, Image image){
-		super(image);
+	public MapCursor(int width, int height, int mapSize){
+		super();
+		setImage(new Image(getClass().getClassLoader().getResourceAsStream("MapCursor.png")));
 		myLocation = new Point(0, 0);
 		myMapWidth = width;
 		myMapHeight = height;
@@ -40,6 +41,11 @@ public class MapCursor extends ImageView{
 	}
 	public void down(){
 		myLocation = myLocation.up();
+		updateLoc();
+	}
+	
+	public void setLocation(Point p){
+		myLocation = p;
 		updateLoc();
 	}
 	

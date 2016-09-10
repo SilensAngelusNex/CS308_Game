@@ -1,12 +1,15 @@
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
-public class Character {
+public class Character extends ImageView{
 	private static final int NO_DMG_BATTLE_EXP = 1;
 	
 	public String name;
-	private Image myImage;
 	public Util.CharacterClasses charClass;
 	public Attributes attribs;
+	private Point myLocation;
+	private int myHeight;
+	private int myWidth;
 	public LevelInfo level;
 	public Inventory inv;
 	public boolean boss;
@@ -50,8 +53,9 @@ public class Character {
 		
 	
 	public Character(String n, Util.CharacterClasses c, Attributes a, LevelInfo l, Inventory i){
+		super();
 		name = n;
-		myImage = new Image(getClass().getClassLoader().getResourceAsStream(String.format("%s%s", name, ".png")));
+		setImage(new Image(getClass().getClassLoader().getResourceAsStream(String.format("%s%s", name, ".png"))));
 		charClass = c;
 		attribs = a;
 		level = l;
@@ -60,7 +64,7 @@ public class Character {
 		myMov = 6;
 	}
 	
-	public static Character newIke(){
+	public static Character newIke(Point p, int height, int width){
 		Character ike = new Character(
 				"Ike",
 				Util.CharacterClasses.Swordsman,
@@ -74,9 +78,22 @@ public class Character {
 		
 		ike.take(ItemWeapon.newBronzeSword());
 		ike.inv.equipOnHand(0);
+		ike.myLocation = p;
+		
+		ike.myHeight = height;
+		ike.myWidth = width;
+		
+		ike.setFitHeight(height);
+		ike.setFitWidth(width);
+		ike.moveTo(p);
 		
 		return ike;
 		
+	}
+	
+	public void moveTo(Point p){
+		setX(p.getX() * myHeight);
+		setY(p.getY() * myWidth);
 	}
 	
 	public void take(Item i){
@@ -354,10 +371,6 @@ public class Character {
 		
 	}
 	
-	public Image getImage(){
-		return myImage;
-	}
-	
 	public int getMov(){
 		return myMov;
 	}
@@ -426,7 +439,7 @@ public class Character {
 		c.printChar();
 		System.out.println();
 		
-		Character d = newIke();
+		Character d = newIke(new Point(0, 0), 50, 50);
 		d.printChar();
 		d.inv.add(ItemWeapon.newBronzeSword());
 		d.inv.equipOnHand(0);
