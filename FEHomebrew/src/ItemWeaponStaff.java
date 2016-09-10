@@ -3,13 +3,15 @@ public class ItemWeaponStaff extends ItemWeapon {
 	protected int usesRemaining;
 	protected int maxUses;
 	protected int baseHeal;
+	protected Point myRange;
 	
 	public ItemWeaponStaff(String n, int value, Util.WeaponType type, Util.AttributeType attrib,
-			Util.AttributeType dmgType, ListAttribute bonus, int mt, int hit, int crit, int uses, int heal){
-		super(n, value, type, attrib, dmgType, bonus, mt, hit, crit);
+			Util.AttributeType dmgType, ListAttribute bonus, int mt, int hit, int crit, int uses, int heal, int baseRange, int scaleRange){
+		super(n, value, type, attrib, dmgType, bonus, mt, hit, crit, 1);
 		usesRemaining = uses;
 		maxUses = uses;
 		baseHeal = heal;
+		myRange = new Point(baseRange, scaleRange);
 	}
 	
 	/*
@@ -34,5 +36,26 @@ public class ItemWeaponStaff extends ItemWeapon {
 	public void use(int x){
 		usesRemaining -= x;
 		return;
+	}
+
+	public Point staffRange() {
+		return myRange;
+	}
+
+	public static ItemWeaponStaff newHealStaff() {
+		return new ItemWeaponStaff(
+				"Heal",
+				800,
+				Util.WeaponType.STAFF,
+				Util.AttributeType.STR,
+				Util.AttributeType.DEF,
+				new ListAttribute(0,0,0,0,0,0,0,0),
+				0,
+				80,
+				0,
+				40,
+				5,
+				1,
+				0);
 	}
 }

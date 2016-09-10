@@ -101,6 +101,22 @@ public class EquipmentSet {
 			toEquip.setEquipped(true);
 		}		armor = toEquip;
 	}
+
+	public int getRange() {
+		if (onHand != null)
+			return onHand.getRange();
+		else if (offHand != null)
+			return offHand.getRange();
+		else
+			return 0;
+	}
+
+	public Point getStaffRange() {
+		if (offHand != null && offHand instanceof ItemWeaponStaff)
+			return ((ItemWeaponStaff) offHand).staffRange();
+		else 
+			return new Point(0, 0);
+	}
 	
 
 }

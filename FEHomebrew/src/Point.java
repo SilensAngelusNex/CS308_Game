@@ -57,6 +57,9 @@ public class Point implements Comparable<Point>{
 		public int sqrDist(Point p){
 			return (x - p.x) * (x - p.x) + (y - p.y) * (y - p.y);
 		}
+		public int rectDist(Point p){
+			return Math.abs((x - p.x)) + Math.abs((y - p.y));
+		}
 
 		public String toString(){
 			return String.format("(%d, %d)", x, y);

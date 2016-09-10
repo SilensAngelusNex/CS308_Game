@@ -43,6 +43,13 @@ class ExampleGame {
 	private Point myMoveStart;
 	private Point myMoveEnd;
 	private Vector<ImageView> myMoveImages;
+	
+	//Used in action menu
+	//private Character myCharacter;
+
+	
+	//Used in attack menu
+	private boolean myStaffBool;
 
 
     /**
@@ -56,6 +63,7 @@ class ExampleGame {
     	SPLASH,
     	MAPMENU,
     	MOVEMENU,
+    	ACTIONMENU,
     	ATTACKMENU,
     	ANIMATION,
     	VICTORY,
@@ -141,8 +149,12 @@ class ExampleGame {
 	        	break;
 	        case MOVEMENU:
 	        	moveMapKeyHandler(code);
+	        	break;
+	        case ACTIONMENU:
+	        	actionMenuKeyHandler(code);
+	        	break;
 	        case ATTACKMENU:
-	        	//attackMenuKeyHandler(code);
+	        	attackMenuKeyHandler(code);
 	        	break;
 	        case ANIMATION:
 	        	//Do nothing.
@@ -206,7 +218,7 @@ class ExampleGame {
 	        	break;
 	        case R:
 	        	if (myChapterMap.hasCharacter(myMapCursor.getLocation()))
-	        		enterMoveMap();
+	        		enterMoveMenu();
 	            break;
 	        default:
 	            // do nothing
@@ -229,18 +241,122 @@ class ExampleGame {
 	        	break;
 	        case R:
 	        	if (myValidMoves.keySet().contains(myMapCursor.getLocation())){
+	        		System.out.println(myMapCursor.getLocation());
 	        		myMoveEnd = myMapCursor.getLocation();
 	        		myChapterMap.move(myMoveStart, myMoveEnd);
+	        		enterActionMenu();
 	        	}
 	        	break;
 	        case E:
-	        	exitMoveMap();
-	        
+	        	myMapCursor.setLocation(myMoveStart);
+	        	exitMoveMenu();
 	            break;
 	        default:
 	            // do nothing
     	}
     }
+    
+    private void actionMenuKeyHandler(KeyCode code){
+    	switch (code){
+	        case RIGHT:
+	        	//Do nothing
+	            break;
+	        case LEFT:
+	        	//Do nothing
+	            break;
+	        case UP:
+	            myMenuCursor.moveUp(1);
+	            break;
+	        case DOWN:
+	        	myMenuCursor.moveDown(1);
+	        	break;
+	        case R:
+	        	switch (myMenuCursor.getPos()){
+	        		case 0:
+	        			//Switch to attack menu
+	        			enterAttackMenu(false);
+	        			System.out.println("Attack");
+	        			break;
+	        		case 1:
+	        			//Switch to attack? menu for staves
+	        			enterAttackMenu(true);
+	        			System.out.println("Staff");
+	        			break;
+	        		case 2:
+	        			//Switch back to map menu
+	        			System.out.println("Wait");
+	        			exitActionMenu();
+	        			exitMoveMenu();
+	        			break;
+	        		case 3:
+	        			exitActionMenu();
+	        			myChapterMap.move(myMoveEnd, myMoveStart);
+	        			myMapCursor.setLocation(myMoveStart);
+	        			exitMoveMenu();
+	        			
+	        	}
+	            break;
+	        case E:
+	        	//Go back to move menu
+	        	System.out.println("Back");
+    			exitActionMenu();
+    			myChapterMap.move(myMoveEnd, myMoveStart);
+	        default:
+	            // do nothing
+    	}
+    }
+    private void attackMenuKeyHandler(KeyCode code){
+    	switch (code){
+	        case RIGHT:
+	            myMapCursor.right();
+	            break;
+	        case LEFT:
+	        	myMapCursor.left();
+	            break;
+	        case UP:
+	        	myMapCursor.up();
+	            break;
+	        case DOWN:
+	        	myMapCursor.down();
+	        	break;
+	        case R:
+	        	if (myStaffBool){
+	        		int staffRange = myChapterMap.getCharacter(myMoveEnd).getStaffRange();
+	        		if(
+	        				staffRange > 0 &&
+	        				//TODO only heal allies
+	        				staffRange >= myMoveEnd.rectDist(myMapCursor.getLocation()) &&
+	        				myChapterMap.hasCharacter(myMapCursor.getLocation())
+	        						){
+	        			myChapterMap.getCharacter(myMoveEnd).staffHeal(myChapterMap.getCharacter(myMapCursor.getLocation()));
+	    	        	exitAttackMenu();
+	    	        	exitActionMenu();
+	    	        	exitMoveMenu();
+	        		}
+	        	} else {
+	        		int weaponRange = myChapterMap.getCharacter(myMoveEnd).getRange();
+	        		if(
+	        				weaponRange > 0 &&
+	        				//TODO only attack enemies
+	        				weaponRange >= myMoveEnd.rectDist(myMapCursor.getLocation()) &&
+	        				myChapterMap.hasCharacter(myMapCursor.getLocation())
+	        						){
+	        			myChapterMap.getCharacter(myMoveEnd).combat(myChapterMap.getCharacter(myMapCursor.getLocation()));
+			        	exitAttackMenu();
+			        	exitActionMenu();
+			        	exitMoveMenu();
+		        	}
+	        	}
+	            break;
+	        case E:
+	        	//Go back to move menu
+	        	System.out.println("Back");
+	        	exitAttackMenu();
+	        default:
+	            // do nothing
+    	}
+    }
+    
     
     private void enterSplash(){
     	myState = GameState.SPLASH;
@@ -281,7 +397,7 @@ class ExampleGame {
 
     }
     
-    private void enterMoveMap(){
+    private void enterMoveMenu(){
     	myState = GameState.MOVEMENU;
     	
     	myMoveStart = myMapCursor.getLocation();
@@ -291,10 +407,9 @@ class ExampleGame {
     	myRoot.getChildren().addAll(myMoveImages);
     }
     
-    private void exitMoveMap(){
+    private void exitMoveMenu(){
     	myState = GameState.MAPMENU;
     	
-    	myMapCursor.setLocation(myMoveStart);
     	myRoot.getChildren().removeAll(myMoveImages);
     	myMoveImages = null;
     	myValidMoves = null;
@@ -302,7 +417,33 @@ class ExampleGame {
     	myMoveEnd = null;
     	
     }
-
+    
+    private void enterActionMenu(){
+    	myState = GameState.ACTIONMENU;
+    	
+    	myMenuCursor = new Cursor(600, 100, 20, 30, 4);
+    	myRoot.getChildren().add(myMenuCursor);
+    }
+    
+    private void exitActionMenu(){
+    	myState = GameState.MOVEMENU;
+    	
+    	myRoot.getChildren().remove(myMenuCursor);
+    	myMenuCursor = null;
+    	
+    }
+    
+    private void enterAttackMenu(boolean staff){
+    	myState = GameState.ATTACKMENU;
+    	
+    	myStaffBool = staff;
+    }
+    
+    private void exitAttackMenu(){
+    	myState = GameState.ACTIONMENU;
+    	
+    }
+    
     // What to do each time a key is pressed
     /*
     private void handleMouseInput (double x, double y) {

@@ -7,12 +7,13 @@ public class ItemWeapon extends Item {
 	
 	protected ListAttribute aBonuses;
 	//TODO: Weapon Weight (attack speed)
+	protected int myRange;
 	protected int wCrit;
 	protected int wHit;
 	protected int wMT;
 
 	public ItemWeapon(String n, int value, Util.WeaponType type, Util.AttributeType attrib,
-			Util.AttributeType dmgType, ListAttribute bonus, int mt, int hit, int crit){
+			Util.AttributeType dmgType, ListAttribute bonus, int mt, int hit, int crit, int range){
 		super(n, value);
 		wType = type;
 		wAttrib = attrib;
@@ -21,6 +22,7 @@ public class ItemWeapon extends Item {
 		wCrit = crit;
 		wHit = hit;
 		wMT = mt;
+		myRange = range;
 	}
 	
 	
@@ -37,7 +39,8 @@ public class ItemWeapon extends Item {
 				new ListAttribute(w.aBonuses),
 				w.wMT,
 				w.wHit,
-				w.wCrit);
+				w.wCrit,
+				w.myRange);
 	}
 	
 	public static ItemWeapon newBronzeSword(){
@@ -50,12 +53,20 @@ public class ItemWeapon extends Item {
 				new ListAttribute(0,0,0,0,0,0,0,0),
 				5,
 				90,
-				0
+				0,
+				1
 				);
 	}
 	
 	public void setEquipped(boolean b){
 		equipped = b;
+	}
+	public boolean getEquipped(){
+		return equipped;
+	}
+	
+	public int getRange(){
+		return myRange;
 	}
 
 }

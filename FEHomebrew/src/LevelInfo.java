@@ -23,7 +23,7 @@ public class LevelInfo {
 		int levelsGained = 0;
 		
 		while (gains > 0){
-			if (gains > 100 - exp){
+			if (gains >= 100 - exp){
 				gains -= 100 - exp;
 				exp = 100;
 				levelsGained++;

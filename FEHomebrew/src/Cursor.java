@@ -19,9 +19,11 @@ public class Cursor extends Polygon {
 	}
 	
 	public void moveUp(int i){
-		while (i > 0 && myCurrPos > 0){
-			myY -= mySpacing;
+		while (i > 0){
 			myCurrPos--;
+			System.out.println(myCurrPos);
+			myCurrPos = (myCurrPos + myTotalPositions) % myTotalPositions;
+			System.out.println(myCurrPos);
 			i--;
 		}
 		remakePoly();
@@ -29,9 +31,11 @@ public class Cursor extends Polygon {
 	}
 	
 	public void moveDown(int i){
-		while (i > 0 && myCurrPos < myTotalPositions - 1){
-			myY += mySpacing;
+		while (i > 0){
 			myCurrPos++;
+			System.out.println(myCurrPos);
+			myCurrPos = (myCurrPos + myTotalPositions) % myTotalPositions;
+			System.out.println(myCurrPos);
 			i--;
 		}
 		remakePoly();
@@ -39,7 +43,8 @@ public class Cursor extends Polygon {
 	
 	public void remakePoly(){
 		super.getPoints().clear();
-		super.getPoints().addAll(myX, myY, myX, myY + mySize, myX + mySize * myWidth, myY + mySize / 2);
+		double yCurr = myY + mySpacing * myCurrPos;
+		super.getPoints().addAll(myX, yCurr, myX, yCurr + mySize, myX + mySize * myWidth, yCurr + mySize / 2);
 	}
 	
 	public int getPos(){

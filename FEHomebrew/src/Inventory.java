@@ -157,5 +157,13 @@ public class Inventory {
 	public int getArmorEquipped(){
 		return equipment.armorEquipped();
 	}
+
+	public int getRange() {
+		return equipment.getRange();
+	}
+
+	public Point getStaffRange() {
+		return equipment.getStaffRange();
+	}
 	
 }

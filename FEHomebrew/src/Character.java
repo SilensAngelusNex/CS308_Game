@@ -31,25 +31,6 @@ public class Character extends ImageView{
 			finishingDmg = d;
 		}
 	}
-	
-	
-	/**
-	 * The default character constructor makes PoR Ike
-	 */
-	/*
-	public Character(){
-		this(
-				"Ike",
-				Util.CharacterClasses.Swordsman,
-				new Attributes(19,
-						new int[] {5, 1, 6, 7, 5, 19, 5, 0},
-						new int[] {50, 20, 50, 55, 35, 75, 40, 40},
-						new int[] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
-				new LevelInfo(),
-				new Inventory()
-				);
-	}
-	*/
 		
 	
 	public Character(String n, Util.CharacterClasses c, Attributes a, LevelInfo l, Inventory i){
@@ -91,7 +72,62 @@ public class Character extends ImageView{
 		
 	}
 	
+	public static Character newMia(Point p, int height, int width){
+		Character mia = new Character(
+				"Mia",
+				Util.CharacterClasses.Swordsman,
+				new Attributes(19,
+						new int[] {5, 0, 8, 10, 4, 19, 6, 1},
+						new int[] {40, 30, 45, 60, 45, 50, 20, 25},
+						new int[] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+				new LevelInfo(),
+				new Inventory()
+				);
+		
+		mia.take(ItemWeapon.newBronzeSword());
+		mia.inv.equipOnHand(0);
+		mia.myLocation = p;
+		
+		mia.myHeight = height;
+		mia.myWidth = width;
+		
+		mia.setFitHeight(height);
+		mia.setFitWidth(width);
+		mia.moveTo(p);
+		
+		return mia;
+		
+	}
+	
+	public static Character newMist(Point p, int height, int width){
+		Character mist = new Character(
+				"Mist",
+				Util.CharacterClasses.Priest,
+				new Attributes(16,
+						new int[] {1, 4, 4, 7, 6, 16, 2, 7},
+						new int[] {35, 50, 25, 40, 60, 50, 15, 40},
+						new int[] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+				new LevelInfo(),
+				new Inventory()
+				);
+		
+		mist.take(ItemWeaponStaff.newHealStaff());
+		mist.inv.equipOffHand(0);
+		mist.myLocation = p;
+		
+		mist.myHeight = height;
+		mist.myWidth = width;
+		
+		mist.setFitHeight(height);
+		mist.setFitWidth(width);
+		mist.moveTo(p);
+		
+		return mist;
+		
+	}
+	
 	public void moveTo(Point p){
+		myLocation = p;
 		setX(p.getX() * myHeight);
 		setY(p.getY() * myWidth);
 	}
@@ -284,10 +320,11 @@ public class Character extends ImageView{
 	}
 	
 	private void gainExp(int i){
-		int levelsGained = level.gainExp(i);
+		int levelsToGain = level.gainExp(i);
 		
-		while (levelsGained > 0){
+		while (levelsToGain > 0){
 			attribs.levelUp();
+			levelsToGain--;
 		}
 	}
 	
@@ -389,6 +426,14 @@ public class Character extends ImageView{
 		System.out.printf("\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", attack()-e.attribs.get(Util.AttributeType.DEF), hit()-e.avoid(), crit()-e.dodge(), e.attack()-attribs.get(Util.AttributeType.DEF), e.hit()-avoid(), e.crit()-dodge(), attribs.get(Util.AttributeType.SPD)-e.attribs.get(Util.AttributeType.SPD));
 	}
 	
+	public String toString(){
+		return String.format("%s\t%d/%dHP\nEXP %d", name, attribs.getCurrHP(), attribs.get(Util.AttributeType.CON), level.getExp());
+	}
+	
+	public int getRange(){
+		return inv.getRange();
+	}
+	
 	
 	public static void main(String[] args){
 		Character c = new Character(
@@ -427,7 +472,9 @@ public class Character extends ImageView{
 					70,
 					0,
 					40,
-					2
+					2,
+					1,
+					0
 					)
 				);
 		
@@ -465,6 +512,18 @@ public class Character extends ImageView{
 		d.printChar();
 		e.printChar();
 		
+		System.out.println(c);
+		System.out.println(d);
+		System.out.println(e);
+		
+	}
+
+	public int getStaffRange() {
+		Point staffRange = inv.getStaffRange();
+		if (staffRange.getY() == 0){
+			return staffRange.getX();
+		}
+		return staffRange.getX() + staffRange.getY() * attribs.get(Util.AttributeType.MAG);
 	}
 	
 }

@@ -54,9 +54,6 @@ public class ChapterMap {
 		Point[] nextSpaces = {start.up(), start.down(), start.left(), start.right()};
 		for (Point s: nextSpaces){
 			if (s != null && getTerrain(s) != null && getTerrain(s).canMoveTo(spacesToGo)){
-				if (s.equals(new Point(12, 0))){
-					System.out.println(spacesToGo);
-				}
 				//I haven't been here before, or I found a shorter path to get here.
 				if (!result.containsKey(s) || result.get(s).compareTo(spacesToGo - getSpaceMoveCost(s)) < 0){
 					result.put(s, spacesToGo - getSpaceMoveCost(s));
@@ -168,6 +165,8 @@ public class ChapterMap {
 		ChapterMap result = new ChapterMap(tMap);
 		
 		result.myCharacters[12][6] = Character.newIke(new Point(12, 6), 40, 40);
+		result.myCharacters[12][8] = Character.newMist(new Point(12, 8), 40, 40);
+		result.myCharacters[9][7] = Character.newMia(new Point(9, 7), 40, 40);
 		
 		return result;
 	}
@@ -189,6 +188,10 @@ public class ChapterMap {
 
 	public boolean hasCharacter(Point loc) {
 		return myCharacters[loc.getX()][loc.getY()] != null;
+	}
+
+	public Character getCharacter(Point loc) {
+		return myCharacters[loc.getX()][loc.getY()];
 	}
 }
 	
