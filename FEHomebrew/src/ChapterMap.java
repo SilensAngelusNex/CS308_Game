@@ -8,27 +8,47 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class ChapterMap {
-	private Vector<Party> factions;
+	private Vector<Party> myFactions;
 	private Terrain[][] myTerrain;
 	private Character[][] myCharacters;
+	private int myTurnIndex;
 	private int mapSize;
 	
 	public ChapterMap(int i){
+		myTurnIndex = 0;
 		mapSize = i;
 		myTerrain = new Terrain[i][i];
 		myCharacters = new Character[i][i];
-		factions = new Vector<Party>();
+		myFactions = new Vector<Party>();
 	}
 	
 	public ChapterMap(Terrain[][] m){
+		myTurnIndex = 0;
 		myTerrain = m;
-		factions = new Vector<Party>();
+		myFactions = new Vector<Party>();
 		mapSize = myTerrain.length;
 		myCharacters = new Character[mapSize][mapSize];
 	}
+	
+	public void endTurn(){
+		//TODO: Reset moves and attacks
+		myTurnIndex = (myTurnIndex + 1) % myFactions.size();
+	}
 
 	public void addParty(Party p){
-		factions.add(p);
+		myFactions.add(p);
+	}
+	
+	public boolean canMove(Point p){
+		return hasCharacter(p) && myFactions.get(myTurnIndex).contains(getCharacter(p));
+	}
+	
+	public void addCharacter(Character toAdd, int partyIndex){
+		if (myCharacters[toAdd.getLoc().getX()][toAdd.getLoc().getY()] == null){
+			myFactions.get(partyIndex).addCharacter(toAdd);
+			myCharacters[toAdd.getLoc().getX()][toAdd.getLoc().getY()] = toAdd;
+		}
+		
 	}
 	
 	public int size(){
@@ -125,7 +145,7 @@ public class ChapterMap {
 	}
 	
 	public void move(Point start, Point end){
-		if (myCharacters[start.getX()][start.getY()] != null){
+		if (myCharacters[start.getX()][start.getY()] != null && !start.equals(end)){
 			myCharacters[start.getX()][start.getY()].moveTo(end);
 			
 			myCharacters[end.getX()][end.getY()] = myCharacters[start.getX()][start.getY()];
@@ -163,10 +183,12 @@ public class ChapterMap {
 				};
 		
 		ChapterMap result = new ChapterMap(tMap);
+		result.myFactions.add(new Party("Greil Mercenaries"));
+		result.myFactions.add(new Party("Mia's Edgelords"));
 		
-		result.myCharacters[12][6] = Character.newIke(new Point(12, 6), 40, 40);
-		result.myCharacters[12][8] = Character.newMist(new Point(12, 8), 40, 40);
-		result.myCharacters[9][7] = Character.newMia(new Point(9, 7), 40, 40);
+		result.addCharacter(Character.newIke(new Point(12, 6), 40, 40), 0);
+		result.addCharacter(Character.newMist(new Point(12, 8), 40, 40), 0);
+		result.addCharacter(Character.newMia(new Point(9, 7), 40, 40), 1);
 		
 		return result;
 	}

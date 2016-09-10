@@ -526,4 +526,8 @@ public class Character extends ImageView{
 		return staffRange.getX() + staffRange.getY() * attribs.get(Util.AttributeType.MAG);
 	}
 	
+	public Point getLoc(){
+		return myLocation;
+	}
+	
 }

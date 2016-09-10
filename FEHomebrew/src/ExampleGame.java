@@ -206,23 +206,40 @@ class ExampleGame {
     	switch (code){
 	        case RIGHT:
 	            myMapCursor.right();
+	            characterMousOver();
 	            break;
 	        case LEFT:
 	        	myMapCursor.left();
+	        	characterMousOver();
 	            break;
 	        case UP:
 	        	myMapCursor.up();
+	        	characterMousOver();
 	            break;
 	        case DOWN:
 	        	myMapCursor.down();
+	        	characterMousOver();
 	        	break;
 	        case R:
-	        	if (myChapterMap.hasCharacter(myMapCursor.getLocation()))
+	        	if (myChapterMap.canMove(myMapCursor.getLocation()))
 	        		enterMoveMenu();
 	            break;
+	        case W:
+	        	System.out.printf("Examine %s\t", myMapCursor.getLocation().toString());
+	        	System.out.println(myChapterMap.getTerrain(myMapCursor.getLocation()));
+	        	System.out.println(myChapterMap.getCharacter(myMapCursor.getLocation()));
+	        case Q:
+	        	//Enter start menu
 	        default:
 	            // do nothing
     	}
+    }
+    
+    private void characterMousOver(){
+    	//TODO: make this actually display something instead.
+        if (myChapterMap.getCharacter(myMapCursor.getLocation()) != null){
+        	System.out.println(myChapterMap.getCharacter(myMapCursor.getLocation()));
+        }
     }
     
     private void moveMapKeyHandler(KeyCode code){
@@ -240,7 +257,9 @@ class ExampleGame {
 	        	myMapCursor.down();
 	        	break;
 	        case R:
-	        	if (myValidMoves.keySet().contains(myMapCursor.getLocation())){
+	        	if (	myValidMoves.keySet().contains(myMapCursor.getLocation()) &&
+	        			(myChapterMap.getCharacter(myMapCursor.getLocation()) == null ||
+	        			myMapCursor.getLocation().equals(myMoveStart))){
 	        		System.out.println(myMapCursor.getLocation());
 	        		myMoveEnd = myMapCursor.getLocation();
 	        		myChapterMap.move(myMoveStart, myMoveEnd);
@@ -349,8 +368,6 @@ class ExampleGame {
 	        	}
 	            break;
 	        case E:
-	        	//Go back to move menu
-	        	System.out.println("Back");
 	        	exitAttackMenu();
 	        default:
 	            // do nothing

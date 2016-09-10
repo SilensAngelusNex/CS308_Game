@@ -21,9 +21,8 @@ public class Cursor extends Polygon {
 	public void moveUp(int i){
 		while (i > 0){
 			myCurrPos--;
-			System.out.println(myCurrPos);
+			//Next line is myCurrPos = myCurrPos (mod myTotalPositions). Weird adding keeps it positive.
 			myCurrPos = (myCurrPos + myTotalPositions) % myTotalPositions;
-			System.out.println(myCurrPos);
 			i--;
 		}
 		remakePoly();
@@ -33,9 +32,8 @@ public class Cursor extends Polygon {
 	public void moveDown(int i){
 		while (i > 0){
 			myCurrPos++;
-			System.out.println(myCurrPos);
+			//Next line is myCurrPos = myCurrPos (mod myTotalPositions). Weird adding keeps it positive.
 			myCurrPos = (myCurrPos + myTotalPositions) % myTotalPositions;
-			System.out.println(myCurrPos);
 			i--;
 		}
 		remakePoly();
