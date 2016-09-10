@@ -4,20 +4,27 @@ import java.util.TreeMap;
 import java.util.Map;
 import java.util.Vector;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public class ChapterMap {
 	private Vector<Party> factions;
-	private Terrain[][] map;
+	private Terrain[][] myTerrain;
+	private Character[][] myCharacters;
 	private int mapSize;
 	
 	public ChapterMap(int i){
-		map = new Terrain[i][i];
+		mapSize = i;
+		myTerrain = new Terrain[i][i];
+		myCharacters = new Character[i][i];
 		factions = new Vector<Party>();
 	}
 	
 	public ChapterMap(Terrain[][] m){
-		map = m;
+		myTerrain = m;
 		factions = new Vector<Party>();
-		mapSize = map.length;
+		mapSize = myTerrain.length;
+		myCharacters = new Character[mapSize][mapSize];
 	}
 
 	public void addParty(Party p){
@@ -28,7 +35,7 @@ public class ChapterMap {
 		if (p.getX() >= mapSize || p.getY() >= mapSize || p.getX() < 0 || p.getY() < 0){
 			return null;
 		} else {
-			return map[p.getX()][p.getY()];
+			return myTerrain[p.getX()][p.getY()];
 		}
 	}
 	
@@ -59,9 +66,85 @@ public class ChapterMap {
 		return result;
 	}
 	
+	public Vector<ImageView> getTileImages(int width, int height){
+		Vector<ImageView> result = new Vector<ImageView>();
+		
+		for (int i = 0; i < mapSize; i++){
+			for (int j = 0; j < mapSize; j++){
+				ImageView image = new ImageView(myTerrain[i][j].getImage());
+				
+				image.setFitHeight(height / mapSize - 1);
+				image.setFitWidth(width / mapSize - 1);
+				
+				image.setX(i * height / mapSize);
+				image.setY(j * width / mapSize);
+				
+				result.add(image);
+			}
+		}
+		return result;
+	}
+	
+	public Vector<ImageView> getCharacterImages(int width, int height){
+		Vector<ImageView> result = new Vector<ImageView>();
+		
+		for (int i = 0; i < mapSize; i++){
+			for (int j = 0; j < mapSize; j++){
+				if (myCharacters[i][j] != null){
+					ImageView image = new ImageView(myCharacters[i][j].getImage());
+					
+					image.setFitHeight(height / mapSize);
+					image.setFitWidth(width / mapSize);
+					
+					image.setX(i * height / mapSize);
+					image.setY(j * width / mapSize);
+					
+					result.add(image);
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	public static ChapterMap newCampaignLvl1(){
+		Terrain p = Terrain.newPlain();
+		Terrain f = Terrain.newForest();
+		
+		Terrain[][] tMap = new Terrain[][]
+				{
+			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, f, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f},
+			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f}
+				};
+		
+		ChapterMap result = new ChapterMap(tMap);
+		
+		result.myCharacters[12][6] = Character.newIke();
+		
+		return result;
+	}
+	
 	public static void main(String[] args){
-		Terrain p = new TerrainPlain();
-		Terrain f = new TerrainForest();
+		Terrain p = Terrain.newPlain();
+		Terrain f = Terrain.newForest();
 		
 		Terrain[][] tMap = new Terrain[][]
 				{

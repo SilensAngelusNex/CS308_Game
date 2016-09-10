@@ -1,6 +1,8 @@
+import javafx.scene.image.Image;
 
 public class Terrain {
 	protected String name;
+	protected Image myImage;
 	protected boolean passable;
 	protected int movementCost;
 	protected int healPerTurn;
@@ -55,10 +57,16 @@ public class Terrain {
 
 	public Terrain(String n, boolean pass, int cost, int heal, int avo, ListAttribute bonus) {
 		name = n;
+		myImage = new Image(getClass().getClassLoader().getResourceAsStream(String.format("%s%s", name, ".png")));
 		passable = pass;
 		movementCost = 1;
 		healPerTurn = heal;
 		avoidBoost = avo;
 		aBonuses = bonus;
 	}
+
+	public Image getImage() {
+		return myImage;
+	}
+
 }

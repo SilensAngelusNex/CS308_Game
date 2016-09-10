@@ -1,7 +1,8 @@
-
+import javafx.scene.image.Image;
 
 public class Character {
 	public String name;
+	private Image myImage;
 	public Util.CharacterClasses charClass;
 	public Attributes attribs;
 	public LevelInfo level;
@@ -26,9 +27,10 @@ public class Character {
 	}
 	
 	
-	/*
+	/**
 	 * The default character constructor makes PoR Ike
 	 */
+	/*
 	public Character(){
 		this(
 				"Ike",
@@ -41,15 +43,36 @@ public class Character {
 				new Inventory()
 				);
 	}
+	*/
 		
 	
 	public Character(String n, Util.CharacterClasses c, Attributes a, LevelInfo l, Inventory i){
 		name = n;
+		myImage = new Image(getClass().getClassLoader().getResourceAsStream(String.format("%s%s", name, ".png")));
 		charClass = c;
 		attribs = a;
 		level = l;
 		inv = i;
 		boss = false;
+	}
+	
+	public static Character newIke(){
+		Character ike = new Character(
+				"Ike",
+				Util.CharacterClasses.Swordsman,
+				new Attributes(19,
+						new int[] {5, 1, 6, 7, 5, 19, 5, 0},
+						new int[] {50, 20, 50, 55, 35, 75, 40, 40},
+						new int[] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+				new LevelInfo(),
+				new Inventory()
+				);
+		
+		ike.take(ItemWeapon.newBronzeSword());
+		ike.inv.equipOnHand(0);
+		
+		return ike;
+		
 	}
 	
 	public void take(Item i){
@@ -327,6 +350,10 @@ public class Character {
 		
 	}
 	
+	public Image getImage(){
+		return myImage;
+	}
+	
 	private void printChar(){
 		System.out.printf("%s\t%d\t%d/%d\n", name, level.totalLevel(), attribs.getCurrHP(), attribs.get(Util.AttributeType.CON));
 		System.out.println(charClass.toString());
@@ -354,7 +381,7 @@ public class Character {
 				new Inventory()
 				);
 		
-		c.inv.add(new ItemWeapon());
+		c.inv.add(ItemWeapon.newBronzeSword());
 		c.inv.equipOnHand(0);
 		
 		Character e = new Character(
@@ -391,9 +418,9 @@ public class Character {
 		c.printChar();
 		System.out.println();
 		
-		Character d = new Character();
+		Character d = newIke();
 		d.printChar();
-		d.inv.add(new ItemWeapon());
+		d.inv.add(ItemWeapon.newBronzeSword());
 		d.inv.equipOnHand(0);
 		
 		e.printChar();

@@ -50,3 +50,23 @@ GameMap
 		saveParty()
 		loadParty()
 	loadChapter()
+
+
+
+Events
+	Combat Window		Characters (Names at least) and stats
+	Damage				Location
+	Healing				Location
+	Deaths				Character
+	WinCon achieved		None
+	LevelUp				Character (Name at least)
+
+	Examine				Object
+	Move				Start and End Locations
+	Exp Gain			Character (Mane at least)
+
+To-do list
+	implement players
+	make menu images
+	make/find terrain images
+	make splash, victory, defeat images

@@ -22,6 +22,7 @@ class ExampleGame {
     private static final int BOUNCER_SPEED = 30;
 
     private Scene myScene;
+    private Group root;
     private ImageView myBouncer;
     private Rectangle myTopBlock;
     private Rectangle myBottomBlock;
@@ -39,24 +40,29 @@ class ExampleGame {
      */
     public Scene init (int width, int height) {
         // create a scene graph to organize the scene
-        Group root = new Group();
+        root = new Group();
         // create a place to see the shapes
         myScene = new Scene(root, width, height, Color.GREEN);
         // make some shapes and set their properties
-        Image image = new Image(getClass().getClassLoader().getResourceAsStream("duke.gif"));
-        myBouncer = new ImageView(image);
-        // x and y represent the top left corner, so center it
-        myBouncer.setX(width / 2 - myBouncer.getBoundsInLocal().getWidth() / 2);
-        myBouncer.setY(height / 2  - myBouncer.getBoundsInLocal().getHeight() / 2);
         
         myTopBlock = new Rectangle(width / 2 - 12, height / 2 - 100, 24, 100);
         myTopBlock.setFill(Color.RED);
         myBottomBlock = new Rectangle(width / 2 - 25, height / 2 + 50, 50, 50);
         myBottomBlock.setFill(Color.BISQUE);
-        // order added to the group is the order in whuch they are drawn
+        
+        Image image = new Image(getClass().getClassLoader().getResourceAsStream("giphy.gif"));
+        myBouncer = new ImageView(image);
+        // x and y represent the top left corner, so center it
+        myBouncer.setX(width / 2 - myBouncer.getBoundsInLocal().getWidth() / 2);
+        myBouncer.setY(height / 2  - myBouncer.getBoundsInLocal().getHeight() / 2);
+        
+        // order added to the group is the order in which they are drawn
+		root.getChildren().add(myTopBlock);
+		root.getChildren().add(myBottomBlock);
+
         root.getChildren().add(myBouncer);
-        root.getChildren().add(myTopBlock);
-        root.getChildren().add(myBottomBlock);
+
+        
         // respond to input
         myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         //myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
@@ -72,7 +78,6 @@ class ExampleGame {
      */
     public void step (double elapsedTime) {
         // update attributes
-        myBouncer.setX(myBouncer.getX() + BOUNCER_SPEED * elapsedTime);
         myTopBlock.setRotate(myTopBlock.getRotate() - 1);
         myBottomBlock.setRotate(myBottomBlock.getRotate() + 1);
         
@@ -86,7 +91,7 @@ class ExampleGame {
             myTopBlock.setFill(Color.RED);
         }
         // with images can only check bounding box
-        if (myBottomBlock.getBoundsInParent().intersects(myBouncer.getBoundsInParent())) {
+        if (myBouncer != null && myBottomBlock.getBoundsInParent().intersects(myBouncer.getBoundsInParent())) {
             myBottomBlock.setFill(Color.BURLYWOOD);
         }
         else {
@@ -109,6 +114,11 @@ class ExampleGame {
                 break;
             case DOWN:
                 myTopBlock.setY(myTopBlock.getY() + KEY_INPUT_SPEED);
+                break;
+            case ENTER:
+            	if (!root.getChildren().contains(myBouncer)){
+            		root.getChildren().remove(myBouncer);
+            	}
                 break;
             default:
                 // do nothing

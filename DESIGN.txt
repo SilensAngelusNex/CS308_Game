@@ -2,7 +2,7 @@ Weston Carvalho
 wac12
 
 Genre:          Turn-Based Strategy
-Name:
+Name:			Mercenary Wars
 Goal:           Defeat all enemies (campaign mode)
                 Capture enemy starting point (multiplayer)
 Mechanics:      Use arrow keys to navigate menus

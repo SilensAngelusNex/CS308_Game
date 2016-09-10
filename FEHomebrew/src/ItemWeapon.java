@@ -23,19 +23,6 @@ public class ItemWeapon extends Item {
 		wMT = mt;
 	}
 	
-	public ItemWeapon(){
-		this(
-				"Bronze Sword",
-				500,
-				Util.WeaponType.SWORD,
-				Util.AttributeType.STR,
-				Util.AttributeType.DEF,
-				new ListAttribute(0,0,0,0,0,0,0,0),
-				5,
-				90,
-				0
-				);
-	}
 	
 	/*
 	 * Makes and returns a deep copy of the weapon w.
@@ -51,6 +38,20 @@ public class ItemWeapon extends Item {
 				w.wMT,
 				w.wHit,
 				w.wCrit);
+	}
+	
+	public static ItemWeapon newBronzeSword(){
+		return new ItemWeapon(
+				"Bronze Sword",
+				500,
+				Util.WeaponType.SWORD,
+				Util.AttributeType.STR,
+				Util.AttributeType.DEF,
+				new ListAttribute(0,0,0,0,0,0,0,0),
+				5,
+				90,
+				0
+				);
 	}
 	
 	public void setEquipped(boolean b){

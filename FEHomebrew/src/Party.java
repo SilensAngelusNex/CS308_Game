@@ -5,6 +5,12 @@ public class Party {
 	private Vector<Item> convoy;
 	private int gold;
 	
+	public Party(){
+		gold = 0;
+		convoy = new Vector<Item>();
+		chars = new Vector<Character>();
+	}
+	
 	public void takeFromConvoy(Character c, Item i){
 		if (chars.contains(c)){
 			convoy.remove(i);
