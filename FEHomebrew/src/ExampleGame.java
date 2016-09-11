@@ -137,8 +137,12 @@ class ExampleGame {
         }
         
         if (myChapterMap != null){
-        	if (myChapterMap.countActionsLeft() == 0){
-        		enterTurnChangeSplash();
+        	myRoot.getChildren().removeAll(myChapterMap.bringOutYourDead());
+        	if (myState != GameState.VICTORY && myChapterMap.countActionsLeft() == 0){
+            	if (myChapterMap.getVictor() != null)
+            		enterVictorySplash(myChapterMap.getVictor());
+            	else
+            		enterTurnChangeSplash();
         	}
         }
     }
@@ -221,13 +225,16 @@ class ExampleGame {
 	            break;
 	        case DOWN:
 	        	myMenuCursor.moveDown(1);
-	        	characterMousOver();
 	        	break;
 	        case R:
 	        	switch (myMenuCursor.getPos()){
 	        		case 0:
 	        			exitStartMenu();
 	        			enterTurnChangeSplash();
+	        			break;
+	        		case 1:
+	        			exitStartMenu();
+	        			break;
 	        	}
 	        	break;
 	        case E:
@@ -460,21 +467,20 @@ class ExampleGame {
     private void enterStartMenu(){
     	myState = GameState.STARTMENU;
     	
-    	myMenuCursor = new Cursor(myWidth, myHeight, CURSOR_SIZE, 20, 1);
+    	myMenuCursor = new Cursor(myWidth / 2, myHeight / 2, 20, 30, 2);
+    	myMenuCursor.setFill(Color.GOLD);
     	myRoot.getChildren().add(myMenuCursor);
     }
     
     private void exitStartMenu(){
     	myState = GameState.MAPMENU;
     	
-    	myRoot.getChildren().remove(myMenuCursor);
-
-    	
+    	myRoot.getChildren().remove(myMenuCursor);    	
     	myMenuCursor = null;
     	
     }
     
-    private void enterTurnChangeSplash(){
+    private void enterTurnChangeSplash(){    		
     	myState = GameState.TURNCHANGE;
     	
     	myChapterMap.endTurn();
@@ -485,10 +491,12 @@ class ExampleGame {
     }
     
     private void exitTurnChangeSplash(){
-    	myState = GameState.MAPMENU;
-    	
-    	myRoot.getChildren().remove(mySplash);
-    	mySplash = null;
+
+	    	myState = GameState.MAPMENU;
+	    	
+	    	myRoot.getChildren().remove(mySplash);
+	    	mySplash = null;
+ 
     }
     
     private void enterMap(ChapterMap cMap){
@@ -534,6 +542,7 @@ class ExampleGame {
     	myState = GameState.ACTIONMENU;
     	
     	myMenuCursor = new Cursor(600, 100, 20, 30, 4);
+    	myMenuCursor.setFill(Color.GOLD);
     	myRoot.getChildren().add(myMenuCursor);
     }
     
@@ -553,6 +562,17 @@ class ExampleGame {
     
     private void exitAttackMenu(){
     	myState = GameState.ACTIONMENU;
+    	
+    }
+    
+    private void enterVictorySplash(String victor){
+    	myState = GameState.VICTORY;
+    	
+    	mySplash = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream("giphy.gif")));
+    	myRoot.getChildren().add(mySplash);
+    	
+		System.out.println("Victory:");
+		System.out.println(myChapterMap.getVictor());
     	
     }
     

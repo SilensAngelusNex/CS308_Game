@@ -13,6 +13,7 @@ public class ChapterMap {
 	private Character[][] myCharacters;
 	private int myTurnIndex;
 	private int mapSize;
+	private boolean player2AI;
 	
 	public ChapterMap(int i){
 		myTurnIndex = 0;
@@ -215,8 +216,43 @@ public class ChapterMap {
 		Collections.sort(a);
 		System.out.println(o);
 		System.out.println(a.size());
-				
+	}
+	
+	public String getVictor(){
+		if (myFactions.size() == 1){
+			return myFactions.get(0).toString();
+		}
+		//TODO: make getVictor account for number of parties != 2
 		
+		if (player2AI){
+			if (myFactions.get(0).bossDefeated())
+				return myFactions.get(1).toString();
+			else if (myFactions.get(1).routed())
+				return myFactions.get(0).toString();
+			else
+				return null;
+		} else {
+			if (myFactions.get(0).bossDefeated())
+				return myFactions.get(1).toString();
+			else if (myFactions.get(1).bossDefeated())
+				return myFactions.get(0).toString();
+			else
+				return null;
+		}
+	}
+	
+	public Vector<Character> bringOutYourDead(){
+		Vector<Character> result = new Vector<Character>();
+		
+		for (Party p : myFactions){
+			result.addAll(p.bringOutYourDead());
+		}
+		
+		for (Character c: result){
+			myCharacters[c.getLoc().getX()][c.getLoc().getY()] = null;
+		}
+		
+		return result;
 	}
 
 	public boolean hasCharacter(Point loc) {
@@ -238,6 +274,7 @@ public class ChapterMap {
 	public int countActionsLeft(){
 		return myFactions.get(myTurnIndex).countActionsLeft();
 	}
+
 }
 	
 

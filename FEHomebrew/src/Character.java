@@ -18,8 +18,7 @@ public class Character extends ImageView{
 	private int myMov;
 	private InfoTurn myTurnInfo;
 	private Map<Point, Integer> myValidMoves;
-	//TODO: remember where unit can move
-	//TODO: add point so Character knows where it is
+	private boolean isDead;
 	
 	
 	
@@ -48,6 +47,7 @@ public class Character extends ImageView{
 		boss = false;
 		myMov = 6;
 		myTurnInfo = new InfoTurn();
+		isDead = false;
 	}
 	
 	public static Character newIke(Point p, int height, int width){
@@ -61,6 +61,8 @@ public class Character extends ImageView{
 				new InfoLevel(),
 				new Inventory()
 				);
+		
+		ike.boss = true;
 		
 		ike.take(ItemWeapon.newBronzeSword());
 		ike.inv.equipOnHand(0);
@@ -88,6 +90,8 @@ public class Character extends ImageView{
 				new InfoLevel(),
 				new Inventory()
 				);
+		
+		mia.boss = true;
 		
 		mia.take(ItemWeapon.newBronzeSword());
 		mia.inv.equipOnHand(0);
@@ -192,6 +196,7 @@ public class Character extends ImageView{
 	}
 	
 	private void die(){
+		isDead = true;
 		System.out.printf("%s is defeated!\n", name);
 	}
 	
@@ -545,11 +550,11 @@ public class Character extends ImageView{
 	}
 
 	public boolean hasMove() {
-		return myTurnInfo.getMoveTaken() < myMov;
+		return !isDead && myTurnInfo.getMoveTaken() < myMov;
 	}
 	
 	public boolean hasAction(){
-		return myTurnInfo.getActionRemaining();
+		return !isDead && myTurnInfo.getActionRemaining();
 	}
 
 	public void finalizeMove(Point endSpace) {
@@ -564,6 +569,14 @@ public class Character extends ImageView{
 	
 	public void nextTurn(){
 		myTurnInfo.reset();
+	}
+
+	public boolean isBoss() {
+		return boss;
+	}
+
+	public boolean isDead() {
+		return isDead;
 	}
 	
 }

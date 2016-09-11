@@ -1,3 +1,4 @@
+import java.util.Collection;
 import java.util.Vector;
 
 public class Party {
@@ -60,6 +61,37 @@ public class Party {
 		for (Character c : myChars){
 			c.nextTurn();
 		}
+	}
+
+	public boolean bossDefeated() {
+		
+		for (Character c : myChars){
+			if (c.isBoss() && c.isDead()){
+				return true;
+			}
+		}
+		return routed();
+	}
+
+	public boolean routed() {
+		for (Character c : myChars){
+			if (!c.isDead()){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public Vector<Character> bringOutYourDead() {
+		Vector<Character> result = new Vector<Character>();
+		
+		for (Character c : myChars){
+			if (c.isDead()){
+				result.add(c);
+			}
+		}
+		
+		return result;
 	}
 	
 }
