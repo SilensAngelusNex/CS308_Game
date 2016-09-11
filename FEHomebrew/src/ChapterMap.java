@@ -32,6 +32,7 @@ public class ChapterMap {
 	
 	public void endTurn(){
 		//TODO: Reset moves and attacks
+		myFactions.get(myTurnIndex).nextTurn();
 		myTurnIndex = (myTurnIndex + 1) % myFactions.size();
 	}
 
@@ -40,7 +41,14 @@ public class ChapterMap {
 	}
 	
 	public boolean canMove(Point p){
-		return hasCharacter(p) && myFactions.get(myTurnIndex).contains(getCharacter(p));
+		return hasCharacter(p) && myFactions.get(myTurnIndex).contains(getCharacter(p)) && getCharacter(p).hasMove();
+	}
+	
+	public boolean canAct(Point p){
+		System.out.println(hasCharacter(p));
+		System.out.println(getCharacter(p));
+		System.out.println(getCharacter(p).hasAction());
+		return hasCharacter(p) && myFactions.get(myTurnIndex).contains(getCharacter(p)) && getCharacter(p).hasAction();
 	}
 	
 	public void addCharacter(Character toAdd, int partyIndex){
@@ -86,10 +94,16 @@ public class ChapterMap {
 	public Map<Point, Integer> possibleMove(Point start){
 		Map<Point, Integer> result = new TreeMap<Point, Integer>();
 			if (myCharacters[start.getX()][start.getY()] != null){
+				if (myCharacters[start.getX()][start.getY()].getValidMoves() != null)
+					return myCharacters[start.getX()][start.getY()].getValidMoves();
+				
 				int spacesToGo = myCharacters[start.getX()][start.getY()].getMov();
 				result.put(start, spacesToGo);
 				possibleMove(start, spacesToGo, result);
+				
+				myCharacters[start.getX()][start.getY()].setValidMoves(result);
 			}
+		
 		return result;
 	}
 	
@@ -214,6 +228,18 @@ public class ChapterMap {
 
 	public Character getCharacter(Point loc) {
 		return myCharacters[loc.getX()][loc.getY()];
+	}
+
+	public void finalizeMove(Point loc) {
+		myCharacters[loc.getX()][loc.getY()].finalizeMove(loc);
+	}
+	
+	public void finalizeAction(Point loc){
+		myCharacters[loc.getX()][loc.getY()].finalizeAction();
+	}
+	
+	public int countActionsLeft(){
+		return myFactions.get(myTurnIndex).countActionsLeft();
 	}
 }
 	

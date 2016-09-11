@@ -45,5 +45,21 @@ public class Party {
 	public String toString(){
 		return myName;
 	}
+
+	public int countActionsLeft() {
+		int result = 0;
+		
+		for (Character c : myChars){
+			if (c.hasMove() || c.hasAction())
+				result++;
+		}
+		return result;
+	}
+
+	public void nextTurn() {
+		for (Character c : myChars){
+			c.nextTurn();
+		}
+	}
 	
 }

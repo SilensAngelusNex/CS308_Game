@@ -1,10 +1,10 @@
 
-public class LevelInfo {
+public class InfoLevel {
 	private int tier;
 	private int level;
 	private int exp;
 	
-	public LevelInfo(){
+	public InfoLevel(){
 		tier = 1;
 		level = 1;
 		exp = 0;

@@ -1,3 +1,5 @@
+import java.util.Map;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -10,10 +12,12 @@ public class Character extends ImageView{
 	private Point myLocation;
 	private int myHeight;
 	private int myWidth;
-	public LevelInfo level;
+	public InfoLevel level;
 	public Inventory inv;
 	public boolean boss;
 	private int myMov;
+	private InfoTurn myTurnInfo;
+	private Map<Point, Integer> myValidMoves;
 	//TODO: remember where unit can move
 	//TODO: add point so Character knows where it is
 	
@@ -33,7 +37,7 @@ public class Character extends ImageView{
 	}
 		
 	
-	public Character(String n, Util.CharacterClasses c, Attributes a, LevelInfo l, Inventory i){
+	public Character(String n, Util.CharacterClasses c, Attributes a, InfoLevel l, Inventory i){
 		super();
 		name = n;
 		setImage(new Image(getClass().getClassLoader().getResourceAsStream(String.format("%s%s", name, ".png"))));
@@ -43,6 +47,7 @@ public class Character extends ImageView{
 		inv = i;
 		boss = false;
 		myMov = 6;
+		myTurnInfo = new InfoTurn();
 	}
 	
 	public static Character newIke(Point p, int height, int width){
@@ -53,7 +58,7 @@ public class Character extends ImageView{
 						new int[] {5, 1, 6, 7, 5, 19, 5, 0},
 						new int[] {50, 20, 50, 55, 35, 75, 40, 40},
 						new int[] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
-				new LevelInfo(),
+				new InfoLevel(),
 				new Inventory()
 				);
 		
@@ -80,7 +85,7 @@ public class Character extends ImageView{
 						new int[] {5, 0, 8, 10, 4, 19, 6, 1},
 						new int[] {40, 30, 45, 60, 45, 50, 20, 25},
 						new int[] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
-				new LevelInfo(),
+				new InfoLevel(),
 				new Inventory()
 				);
 		
@@ -107,7 +112,7 @@ public class Character extends ImageView{
 						new int[] {1, 4, 4, 7, 6, 16, 2, 7},
 						new int[] {35, 50, 25, 40, 60, 50, 15, 40},
 						new int[] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
-				new LevelInfo(),
+				new InfoLevel(),
 				new Inventory()
 				);
 		
@@ -409,7 +414,7 @@ public class Character extends ImageView{
 	}
 	
 	public int getMov(){
-		return myMov;
+		return myMov - myTurnInfo.getMoveTaken();
 	}
 	
 	private void printChar(){
@@ -443,7 +448,7 @@ public class Character extends ImageView{
 						new int[] {4, 1, 6, 9, 5, 17, 3, 0},
 						new int[] {45, 20, 60, 70, 20, 50, 25, 45},
 						new int[] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
-				new LevelInfo(),
+				new InfoLevel(),
 				new Inventory()
 				);
 		
@@ -457,7 +462,7 @@ public class Character extends ImageView{
 						new int[] {2, 4, 5, 6, 12, 15, 2, 5},
 						new int[] {45, 20, 60, 70, 20, 50, 25, 45},
 						new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0}),
-				new LevelInfo(),
+				new InfoLevel(),
 				new Inventory()
 				);
 		
@@ -528,6 +533,37 @@ public class Character extends ImageView{
 	
 	public Point getLoc(){
 		return myLocation;
+	}
+
+	public void setValidMoves(Map<Point, Integer> movesMap) {
+		myValidMoves = movesMap;
+		
+	}
+	
+	public Map<Point, Integer> getValidMoves(){
+		return myValidMoves;
+	}
+
+	public boolean hasMove() {
+		return myTurnInfo.getMoveTaken() < myMov;
+	}
+	
+	public boolean hasAction(){
+		return myTurnInfo.getActionRemaining();
+	}
+
+	public void finalizeMove(Point endSpace) {
+		myTurnInfo.move(myMov - myTurnInfo.getMoveTaken() - myValidMoves.get(endSpace));
+		myValidMoves = null;
+	}
+	public void finalizeAction(){
+		myTurnInfo.takeAction();
+		myTurnInfo.move(myMov - myTurnInfo.getMoveTaken());
+		myValidMoves = null;
+	}
+	
+	public void nextTurn(){
+		myTurnInfo.reset();
 	}
 	
 }

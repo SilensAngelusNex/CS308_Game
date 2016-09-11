@@ -61,6 +61,7 @@ class ExampleGame {
     
     private enum GameState{
     	SPLASH,
+    	STARTMENU,
     	MAPMENU,
     	MOVEMENU,
     	ACTIONMENU,
@@ -134,6 +135,12 @@ class ExampleGame {
         else {
             myBottomBlock.setFill(Color.BISQUE);
         }
+        
+        if (myChapterMap != null){
+        	if (myChapterMap.countActionsLeft() == 0){
+        		myChapterMap.endTurn();
+        	}
+        }
     }
 
 
@@ -143,6 +150,9 @@ class ExampleGame {
     	switch (myState){
 	        case SPLASH:
 	        	splashKeyHandler(code);
+	        	break;
+	        case STARTMENU:
+	        	startMenuHandler(code);
 	        	break;
 	        case MAPMENU:
 	        	mapMenuKeyHandler(code);
@@ -202,6 +212,31 @@ class ExampleGame {
     	}
     }
     
+    private void startMenuKeyHandler(KeyCode code){
+    	switch (code){
+	        case UP:
+	        	myMenuCursor.moveUp(1);
+	            break;
+	        case DOWN:
+	        	myMenuCursor.moveDown(1);
+	        	characterMousOver();
+	        	break;
+	        case R:
+	        	switch (myMenuCursor.getPos()){
+	        		case 0:
+	        			startMenuExit();
+	        			enterTurnChangeSplash();
+	        	}
+	        case W:
+	        	System.out.printf("Examine %s\t", myMapCursor.getLocation().toString());
+	        	System.out.println(myChapterMap.getTerrain(myMapCursor.getLocation()));
+	        	System.out.println(myChapterMap.getCharacter(myMapCursor.getLocation()));
+	        case Q:
+	        	startMenuEnter();
+	        default:
+	            // do nothing
+    }
+    
     private void mapMenuKeyHandler(KeyCode code){
     	switch (code){
 	        case RIGHT:
@@ -221,7 +256,7 @@ class ExampleGame {
 	        	characterMousOver();
 	        	break;
 	        case R:
-	        	if (myChapterMap.canMove(myMapCursor.getLocation()))
+	        	if (myChapterMap.canMove(myMapCursor.getLocation()) || myChapterMap.canAct(myMapCursor.getLocation()))
 	        		enterMoveMenu();
 	            break;
 	        case W:
@@ -293,17 +328,22 @@ class ExampleGame {
 	        	switch (myMenuCursor.getPos()){
 	        		case 0:
 	        			//Switch to attack menu
-	        			enterAttackMenu(false);
-	        			System.out.println("Attack");
+	        			if(myChapterMap.canAct(myMoveEnd)){
+		        			enterAttackMenu(false);
+		        			System.out.println("Attack");
+	        			}
 	        			break;
 	        		case 1:
 	        			//Switch to attack? menu for staves
-	        			enterAttackMenu(true);
-	        			System.out.println("Staff");
+	        			if(myChapterMap.canAct(myMoveEnd)){
+		        			enterAttackMenu(true);
+		        			System.out.println("Staff");
+	        			}
 	        			break;
 	        		case 2:
 	        			//Switch back to map menu
 	        			System.out.println("Wait");
+	        			myChapterMap.finalizeMove(myMoveEnd);
 	        			exitActionMenu();
 	        			exitMoveMenu();
 	        			break;
@@ -345,9 +385,11 @@ class ExampleGame {
 	        				staffRange > 0 &&
 	        				//TODO only heal allies
 	        				staffRange >= myMoveEnd.rectDist(myMapCursor.getLocation()) &&
-	        				myChapterMap.hasCharacter(myMapCursor.getLocation())
+	        				myChapterMap.hasCharacter(myMapCursor.getLocation()) &&
+	        				myChapterMap.canAct(myMoveEnd)
 	        						){
 	        			myChapterMap.getCharacter(myMoveEnd).staffHeal(myChapterMap.getCharacter(myMapCursor.getLocation()));
+	        			myChapterMap.finalizeAction(myMoveEnd);
 	    	        	exitAttackMenu();
 	    	        	exitActionMenu();
 	    	        	exitMoveMenu();
@@ -358,9 +400,11 @@ class ExampleGame {
 	        				weaponRange > 0 &&
 	        				//TODO only attack enemies
 	        				weaponRange >= myMoveEnd.rectDist(myMapCursor.getLocation()) &&
-	        				myChapterMap.hasCharacter(myMapCursor.getLocation())
+	        				myChapterMap.hasCharacter(myMapCursor.getLocation()) &&
+	        				myChapterMap.canAct(myMoveEnd)
 	        						){
 	        			myChapterMap.getCharacter(myMoveEnd).combat(myChapterMap.getCharacter(myMapCursor.getLocation()));
+	        			myChapterMap.finalizeAction(myMoveEnd);
 			        	exitAttackMenu();
 			        	exitActionMenu();
 			        	exitMoveMenu();
@@ -415,9 +459,11 @@ class ExampleGame {
     }
     
     private void enterMoveMenu(){
+    	System.out.println("Enter");
     	myState = GameState.MOVEMENU;
     	
     	myMoveStart = myMapCursor.getLocation();
+    	myMoveEnd = null;
     	
     	myValidMoves = myChapterMap.possibleMove(myMapCursor.getLocation());
     	myMoveImages = myChapterMap.getMoveSquares(myValidMoves, myWidth, myHeight);
@@ -425,6 +471,7 @@ class ExampleGame {
     }
     
     private void exitMoveMenu(){
+    	System.out.println("Exit");
     	myState = GameState.MAPMENU;
     	
     	myRoot.getChildren().removeAll(myMoveImages);
