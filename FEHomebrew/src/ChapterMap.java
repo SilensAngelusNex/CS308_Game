@@ -45,9 +45,6 @@ public class ChapterMap {
 	}
 	
 	public boolean canAct(Point p){
-		System.out.println(hasCharacter(p));
-		System.out.println(getCharacter(p));
-		System.out.println(getCharacter(p).hasAction());
 		return hasCharacter(p) && myFactions.get(myTurnIndex).contains(getCharacter(p)) && getCharacter(p).hasAction();
 	}
 	

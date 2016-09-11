@@ -68,9 +68,9 @@ class ExampleGame {
     	ATTACKMENU,
     	ANIMATION,
     	VICTORY,
-    	EXAMINE
-    	
-    }
+    	EXAMINE,
+    	TURNCHANGE
+    	}
 
     /**
      * Create the game's scene
@@ -138,7 +138,7 @@ class ExampleGame {
         
         if (myChapterMap != null){
         	if (myChapterMap.countActionsLeft() == 0){
-        		myChapterMap.endTurn();
+        		enterTurnChangeSplash();
         	}
         }
     }
@@ -152,7 +152,7 @@ class ExampleGame {
 	        	splashKeyHandler(code);
 	        	break;
 	        case STARTMENU:
-	        	startMenuHandler(code);
+	        	startMenuKeyHandler(code);
 	        	break;
 	        case MAPMENU:
 	        	mapMenuKeyHandler(code);
@@ -166,6 +166,8 @@ class ExampleGame {
 	        case ATTACKMENU:
 	        	attackMenuKeyHandler(code);
 	        	break;
+	        case TURNCHANGE:
+	        	turnChangeKeyHandler(code);
 	        case ANIMATION:
 	        	//Do nothing.
 	        	break;
@@ -224,17 +226,28 @@ class ExampleGame {
 	        case R:
 	        	switch (myMenuCursor.getPos()){
 	        		case 0:
-	        			startMenuExit();
+	        			exitStartMenu();
 	        			enterTurnChangeSplash();
 	        	}
-	        case W:
-	        	System.out.printf("Examine %s\t", myMapCursor.getLocation().toString());
-	        	System.out.println(myChapterMap.getTerrain(myMapCursor.getLocation()));
-	        	System.out.println(myChapterMap.getCharacter(myMapCursor.getLocation()));
+	        	break;
+	        case E:
+	        	exitStartMenu();
+	        	break;
 	        case Q:
-	        	startMenuEnter();
+	        	exitStartMenu();
+	        	break;
 	        default:
 	            // do nothing
+    	}
+    }
+    
+    private void turnChangeKeyHandler(KeyCode code){
+    	switch (code){
+	        case R:
+	        	exitTurnChangeSplash();
+	        default:
+	            // do nothing
+    	}
     }
     
     private void mapMenuKeyHandler(KeyCode code){
@@ -264,7 +277,7 @@ class ExampleGame {
 	        	System.out.println(myChapterMap.getTerrain(myMapCursor.getLocation()));
 	        	System.out.println(myChapterMap.getCharacter(myMapCursor.getLocation()));
 	        case Q:
-	        	//Enter start menu
+	        	enterStartMenu();
 	        default:
 	            // do nothing
     	}
@@ -437,10 +450,45 @@ class ExampleGame {
     }
 
     private void exitSplash(){
-    	mySplash.setImage(null);
     	myRoot.getChildren().remove(mySplash);
     	myRoot.getChildren().remove(myMenuCursor);
+    	
+    	mySplash.setImage(null);
     	myMenuCursor = null;
+    }
+    
+    private void enterStartMenu(){
+    	myState = GameState.STARTMENU;
+    	
+    	myMenuCursor = new Cursor(myWidth, myHeight, CURSOR_SIZE, 20, 1);
+    	myRoot.getChildren().add(myMenuCursor);
+    }
+    
+    private void exitStartMenu(){
+    	myState = GameState.MAPMENU;
+    	
+    	myRoot.getChildren().remove(myMenuCursor);
+
+    	
+    	myMenuCursor = null;
+    	
+    }
+    
+    private void enterTurnChangeSplash(){
+    	myState = GameState.TURNCHANGE;
+    	
+    	myChapterMap.endTurn();
+
+    	mySplash = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream("giphy.gif")));
+    	myRoot.getChildren().add(mySplash);
+
+    }
+    
+    private void exitTurnChangeSplash(){
+    	myState = GameState.MAPMENU;
+    	
+    	myRoot.getChildren().remove(mySplash);
+    	mySplash = null;
     }
     
     private void enterMap(ChapterMap cMap){
