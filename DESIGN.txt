@@ -7,19 +7,15 @@ Goal:           Defeat all enemies (campaign mode)
                 Capture enemy starting point (multiplayer)
 Mechanics:      Use arrow keys to navigate menus
                 Use Q, W, E, R
-                    Q:  Examine highlighted element
-                    W:  Bring up menu
+                    Q:  Bring up menu
+                    W:  Examine highlighted element
                     E:  Back/Cancel selection
                     R:  Select option
                 Attack enemy units with your units to destroy them.
-                See GamePrelim for a more in depth explanation of mechanics and
-                    a whole bunch of features I won't have time to implement.
+				Use your healer to keep your units alive.
 Levels/Modes:   Campaign
                     Play against (simple) AI and level up your units
-                    Primary win condition is to defeat all enemy units
-                        (More to come if I have lots of time.)
+                    Win condition is to defeat all enemy units
                 Multiplayer
                     Play against a human opponent
-                    Primary win condition is to capture the enemy starting space
-                        (Maybe defeat a leader unit or something similar. Again,
-                        More to come if I have lots of time.)
+                    Win condition is to defeat a leader unit.
