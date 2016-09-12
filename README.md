@@ -1,7 +1,8 @@
 # 308 Project 1: Game
 
-## Weston Carvalho
-#### wac12
+## Weston Carvalho - wac12
+Look in the project FEHomebrew for the game. Run Main.
+
 |Name|Mercenary Wars|
 |----|----|
 |Genre|Turn-Based Strategy|
@@ -10,14 +11,16 @@
 |Mechanics|Use arrow keys to navigate the map and menus|
 | |Use Q, W, E, R|
 | | Q:  Bring up menu (to end your turn)|
-| | W:  Bring up menu|
+| | W:  Examine a character (Prints to console)|
 | | E:  Back/Cancel selection|
 | |R:  Select option/character|
-| |Attack enemy units with your <br> units to destroy them. Heal <br> your units to keep them alive|
-|Campaign Mode|Play against (simple) AI and level up your units
+| |Attack enemy units with your units to destroy them. Heal <br> your units to keep them alive|
+|Campaign Mode| Fly Honeys vs Rude Dudes|
+| |Play against (simple) AI and level up your units|
 | |Primary win condition is to defeat all enemy units.|
-|Multiplayer Mode|Play against a human opponent
-| |Primary win condition is to defeat the enemy's leader (Either Ike or Mia)|
+|Multiplayer mode|Greil Mercenaries vs Mia's Edgelords|
+| |Play against a human opponent|
+| |Primary win condition is to defeat the enemy's leader <br> (Either Ike or Mia)|
 
 |Cheat Key|Effect|
 |-----|----|

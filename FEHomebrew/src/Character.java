@@ -607,7 +607,7 @@ public class Character extends ImageView{
 	}
 	
 	public String verboseToString(){
-		return String.format("%s\t%d\t%d/%d\n%s\n%s\n", name, level.totalLevel(), attribs.getCurrHP(), attribs.get(Util.AttributeType.CON), charClass.toString(), attribs.getRawAttribs().toString());
+		return String.format("%s\tLVL %d\t%d/%d\n%s\n%s\n", name, level.totalLevel(), attribs.getCurrHP(), attribs.get(Util.AttributeType.CON), charClass.toString(), attribs.getRawAttribs().toString());
 	}
 
 	

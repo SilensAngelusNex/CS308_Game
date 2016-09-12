@@ -156,7 +156,7 @@ public class ListAttribute {
 	 */
 	public String toString(){
 		return String.format(
-				"STR\tMAG\tSKL\tSPD\tCHA\tCON\tDEF\tRES\n%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
+				"STR\tMAG\tSKL\tSPD\tCHA\tCON\tDEF\tRES\n%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n",
 				STR, MAG,SKL, SPD, CHA, CON, DEF, RES);
 	}
 
