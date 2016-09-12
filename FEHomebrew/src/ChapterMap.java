@@ -67,26 +67,26 @@ public class ChapterMap {
 		
 		Terrain[][] tMap = new Terrain[][]
 				{
-			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, r, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, f, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{r, p, p, p, p, f, p, p, p, p, p, p, p, p, p, p, p, r, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, r, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, r, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f},
-			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f}
+			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, f, f, f, f},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, f, f, f},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, f},
+			{f, p, p, p, p, p, p, p, f, p, p, p, p, p, p, p, p, p, p, f},
+			{f, p, p, p, p, p, p, f, r, p, p, p, p, p, p, r, r, p, f, r},
+			{f, p, p, p, f, f, p, p, f, p, p, p, p, p, p, f, p, p, f, r},
+			{f, p, p, p, f, p, p, p, p, p, p, f, p, p, p, p, p, p, f, r},
+			{f, p, p, p, p, f, p, p, p, p, p, f, p, p, p, p, p, p, f, r},
+			{f, p, p, p, p, p, p, p, p, p, f, p, p, p, p, p, p, p, p, f},
+			{f, p, p, p, p, p, p, p, p, f, r, f, p, p, p, p, p, p, p, p},
+			{f, p, p, p, f, f, f, f, f, r, r, r, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, f, p, p, p, f, r, f, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, f, p, f, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, f, p, p, p, f, p, p, p, p, p, p},
+			{f, p, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f},
+			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f}
 				};
 		
 		ChapterMap result = new ChapterMap(tMap);
@@ -99,9 +99,9 @@ public class ChapterMap {
 		result.addCharacter(Character.newMist(new Point(12, 8), 40, 40), 0);
 		result.addCharacter(Character.newBoyd(new Point(14, 5), 40, 40), 0);
 		
-		result.addCharacter(Character.newMia(new Point(9, 7), 40, 40), 1);
-		result.addCharacter(Character.newDiana(new Point(8, 6), 40, 40), 1);
-		result.addCharacter(Character.newRin(new Point(9, 10), 40, 40), 1);
+		result.addCharacter(Character.newMia(new Point(4, 7), 40, 40), 1);
+		result.addCharacter(Character.newDiana(new Point(3, 6), 40, 40), 1);
+		result.addCharacter(Character.newRin(new Point(4, 10), 40, 40), 1);
 		
 		return result;
 	}
@@ -116,26 +116,26 @@ public class ChapterMap {
 		
 		Terrain[][] tMap = new Terrain[][]
 				{
-			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, f, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f},
-			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f}
+			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, f, f, f, f},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, f, f, f},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, f},
+			{f, p, p, p, p, p, p, p, f, p, p, p, p, p, p, p, p, p, p, f},
+			{f, p, p, p, p, p, p, f, r, p, p, p, p, p, p, r, r, p, f, r},
+			{f, p, p, p, f, f, p, p, f, p, p, p, p, p, p, f, p, p, f, r},
+			{f, p, p, p, f, p, p, p, p, p, p, f, p, p, p, p, p, p, f, r},
+			{f, p, p, p, p, f, p, p, p, p, p, f, p, p, p, p, p, p, f, r},
+			{f, p, p, p, p, p, p, p, p, p, f, p, p, p, p, p, p, p, p, f},
+			{f, p, p, p, p, p, p, p, p, f, r, f, p, p, p, p, p, p, p, p},
+			{f, p, p, p, f, f, f, f, f, r, r, r, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, f, p, p, p, f, r, f, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, f, p, f, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, f, p, p, p, f, p, p, p, p, p, p},
+			{f, p, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f},
+			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f}
 				};
 		
 		ChapterMap result = new ChapterMap(tMap);
