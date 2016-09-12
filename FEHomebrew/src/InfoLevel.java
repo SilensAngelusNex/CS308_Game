@@ -9,6 +9,11 @@ public class InfoLevel {
 		level = 1;
 		exp = 0;
 	}
+	public InfoLevel(int i){
+		tier = 1;
+		level = i;
+		exp = 0;
+	}
 	
 	public int totalLevel(){
 		return level + 20 * (tier - 1);

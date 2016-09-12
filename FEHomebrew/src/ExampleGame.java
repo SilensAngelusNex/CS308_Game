@@ -1,5 +1,6 @@
 import java.util.Map;
 import java.util.Vector;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -119,8 +120,12 @@ class ExampleGame {
             	else
             		enterTurnChangeSplash();
         	}
-        	if (myChapterMap.currentTurnAI() && !myChapterMap.doneAI()){
-        		myChapterMap.nextMoveAI();
+        	if (myChapterMap.currentTurnAI() && myState != GameState.TURNCHANGE){
+        		if (!myChapterMap.doneAI()){
+        			myChapterMap.nextMoveAI();
+        		} else {
+        			enterTurnChangeSplash();
+        		}
         	}
         }
     }
@@ -187,7 +192,7 @@ class ExampleGame {
 	        	} else {
 	        		exitSplash();
 	        		System.out.println("Multiplayer");
-	        		//Exit splash and init multiplayer
+	        		enterMap(ChapterMap.newMultiplayer());
 	        	}
 	            break;
 	        default:
@@ -257,14 +262,14 @@ class ExampleGame {
 	        		enterMoveMenu();
 	            break;
 	        case W:
-	        	myChapterMap.getCharacter(myMapCursor.getLocation()).verboseToString();
+	        	System.out.println(myChapterMap.getCharacter(myMapCursor.getLocation()).verboseToString());
 	        	break;
 	        case Q:
 	        	enterStartMenu();
 	        	break;
 	        case S:
 	        	if (e.isControlDown() && !myChapterMap.hasCharacter(myMapCursor.getLocation()))	
-	        		myRoot.getChildren().add(myMapCursor.spawnEnemy());
+	        		myRoot.getChildren().add(myChapterMap.spawnEnemy(myMapCursor.getLocation(), myHeight, myWidth));
 	        	break;
 	        case M:
 	        	if (	e.isControlDown() &&
@@ -277,7 +282,7 @@ class ExampleGame {
 	        	if (	e.isControlDown() &&
 	        			myChapterMap.getCharacter(myMapCursor.getLocation()) != null
 	        			)
-	        		myChapterMap.getCharacter(myMapCursor.getLocation()).heal(1000);
+						myChapterMap.getCharacter(myMapCursor.getLocation()).heal(1000);
 	        	break;
 	        case X:
 	        	if (	e.isControlDown() &&
@@ -312,8 +317,8 @@ class ExampleGame {
 	        	myMapCursor.down();
 	        	break;
 	        case R:
-	        	if (	myValidMoves.keySet().contains(myMapCursor.getLocation()) &&
-	        			(myChapterMap.getCharacter(myMapCursor.getLocation()) == null ||
+	        	if (	(myValidMoves.keySet().contains(myMapCursor.getLocation()) &&
+	        			(myChapterMap.getCharacter(myMapCursor.getLocation()) == null) ||
 	        			myMapCursor.getLocation().equals(myMoveStart))){
 	        		System.out.println(myMapCursor.getLocation());
 	        		myMoveEnd = myMapCursor.getLocation();
@@ -354,7 +359,7 @@ class ExampleGame {
 	        			}
 	        			break;
 	        		case 1:
-	        			//Switch to attack? menu for staves
+	        			//Switch to attack menu for staves
 	        			if(myChapterMap.canAct(myMoveEnd)){
 		        			enterAttackMenu(true);
 		        			System.out.println("Staff");
@@ -382,7 +387,6 @@ class ExampleGame {
 	        	System.out.println("Back");
     			exitActionMenu();
     			myChapterMap.move(myMoveEnd, myMoveStart);
-    	    	myChapterMap.getCharacter(myMoveStart).setValidMoves(null);
 	        default:
 	            // do nothing
     	}
@@ -524,11 +528,8 @@ class ExampleGame {
     	myMessage = null;
     	mySplash = null;
     	
-    	if (myChapterMap.currentTurnAI()){
-    		//Do AI shit
-    	} else {
-	    	myState = GameState.MAPMENU;
-    	}
+
+	    myState = GameState.MAPMENU;
     }
     
     private void enterMap(ChapterMap cMap){

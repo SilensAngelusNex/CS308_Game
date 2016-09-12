@@ -79,6 +79,32 @@ public class Character extends ImageView{
 		
 	}
 	
+	public static Character newBoyd(Point p, int height, int width){
+		Character boyd = new Character(
+				"Boyd",
+				Util.CharacterClasses.Warrior,
+				new Attributes(20,
+						new int[] {6, 0, 9, 6, 4, 20, 3, 1},
+						new int[] {60, 5, 50, 45, 35, 75, 25, 25},
+						new int[] {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+				new InfoLevel(),
+				new Inventory()
+				);
+		
+		boyd.take(ItemWeapon.newBronzeAxe());
+		boyd.inv.equipOnHand(0);
+		boyd.myLocation = p;
+		
+		boyd.myHeight = height;
+		boyd.myWidth = width;
+		
+		boyd.setFitHeight(height);
+		boyd.setFitWidth(width);
+		boyd.moveTo(p);
+		
+		return boyd;
+		}
+	
 	public static Character newMia(Point p, int height, int width){
 		Character mia = new Character(
 				"Mia",
@@ -139,10 +165,10 @@ public class Character extends ImageView{
 	
 	public static Character newRin(Point p, int height, int width){
 		Character rin = new Character(
-				"rin",
+				"Rin",
 				Util.CharacterClasses.Priest,
 				new Attributes(12,
-						new int[] {4, 6, 4, 7, 6, 16, 2, 7},
+						new int[] {4, 6, 4, 7, 6, 12, 2, 7},
 						new int[] {40, 50, 60, 45, 25, 40, 20, 45},
 						new int[] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
 				new InfoLevel(),
@@ -161,7 +187,113 @@ public class Character extends ImageView{
 		rin.moveTo(p);
 		
 		return rin;
+	}
+	
+	public static Character newRuddy(Point p, int height, int width){
+		Character ruddy = new Character(
+				"Ruddy",
+				Util.CharacterClasses.Knight,
+				new Attributes(25,
+						new int[] {7, 1, 8, 3, 7, 25, 5, 1},
+						new int[] {0, 0, 0, 0, 0, 0, 0, 0},
+						new int[] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+				new InfoLevel(3),
+				new Inventory()
+				);
 		
+		ruddy.boss = true;
+		
+		ruddy.take(ItemWeapon.newBronzeSword());
+		ruddy.inv.equipOnHand(0);
+		ruddy.myLocation = p;
+		
+		ruddy.myHeight = height;
+		ruddy.myWidth = width;
+		
+		ruddy.setFitHeight(height);
+		ruddy.setFitWidth(width);
+		ruddy.moveTo(p);
+		
+		return ruddy;
+		
+	}
+	
+	public static Character newSwordMook(Point p, int height, int width){
+		Character mook = new Character(
+				"Swordsman",
+				Util.CharacterClasses.Swordsman,
+				new Attributes(15,
+						new int[] {3, 0, 10, 8, 4, 15, 4, 0},
+						new int[] {0, 0, 0, 0, 0, 0, 0, 0},
+						new int[] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+				new InfoLevel(),
+				new Inventory()
+				);
+		
+		mook.take(ItemWeapon.newBronzeSword());
+		mook.inv.equipOnHand(0);
+		mook.myLocation = p;
+		
+		mook.myHeight = height;
+		mook.myWidth = width;
+		
+		mook.setFitHeight(height);
+		mook.setFitWidth(width);
+		mook.moveTo(p);
+		
+		return mook;
+	}
+	
+	public static Character newLanceMook(Point p, int height, int width){
+		Character mook = new Character(
+				"Soldier",
+				Util.CharacterClasses.Soldier,
+				new Attributes(18,
+						new int[] {5, 0, 6, 6, 4, 18, 5, 3},
+						new int[] {0, 0, 0, 0, 0, 0, 0, 0},
+						new int[] {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+				new InfoLevel(),
+				new Inventory()
+				);
+		
+		mook.take(ItemWeapon.newBronzeLance());
+		mook.inv.equipOnHand(0);
+		mook.myLocation = p;
+		
+		mook.myHeight = height;
+		mook.myWidth = width;
+		
+		mook.setFitHeight(height);
+		mook.setFitWidth(width);
+		mook.moveTo(p);
+		
+		return mook;
+	}
+	
+	public static Character newAxeMook(Point p, int height, int width){
+		Character mook = new Character(
+				"Warrior",
+				Util.CharacterClasses.Warrior,
+				new Attributes(22,
+						new int[] {7, 0, 4, 7, 4, 22, 4, 1},
+						new int[] {0, 0, 0, 0, 0, 0, 0, 0},
+						new int[] {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+				new InfoLevel(),
+				new Inventory()
+				);
+		
+		mook.take(ItemWeapon.newBronzeAxe());
+		mook.inv.equipOnHand(0);
+		mook.myLocation = p;
+		
+		mook.myHeight = height;
+		mook.myWidth = width;
+		
+		mook.setFitHeight(height);
+		mook.setFitWidth(width);
+		mook.moveTo(p);
+		
+		return mook;
 	}
 	
 	public static Character newMist(Point p, int height, int width){
@@ -253,6 +385,7 @@ public class Character extends ImageView{
 	
 	private void die(){
 		isDead = true;
+
 		System.out.printf("%s is defeated!\n", name);
 	}
 	
@@ -419,7 +552,7 @@ public class Character extends ImageView{
 		gainExp(toGain);
 	}
 	
-	public int heal(int amount) throws CharacterDeadException{
+	public int heal(int amount){
 		//TODO: Check healing skills.
 		if (amount < 0){
 			amount = 0;
@@ -427,7 +560,7 @@ public class Character extends ImageView{
 		
 		if (attribs.getCurrHP() <= 0){
 			System.out.printf("%s's dead. Healers aren't gods.\n", name);
-			throw new CharacterDeadException(this, -1);
+			return -1;
 		}
 		
 		int maxHP = attribs.get(Util.AttributeType.CON);
@@ -461,12 +594,7 @@ public class Character extends ImageView{
 		
 		int amount = ((ItemWeaponStaff) inv.getOffHand()).baseHeal + attribs.get(Util.AttributeType.MAG);
 		
-		try {
-			ally.heal(amount);
-		} catch (CharacterDeadException e) {
-			System.out.println("I told you not to try to bring back the dead, asshole.");
-			e.printStackTrace();
-		}
+		ally.heal(amount);
 		
 		((ItemWeaponStaff) inv.getOffHand()).use();
 		staffExp();
@@ -491,7 +619,7 @@ public class Character extends ImageView{
 	}
 	
 	public String toString(){
-		return String.format("%s\t%d/%dHP\nEXP %d", name, attribs.getCurrHP(), attribs.get(Util.AttributeType.CON), level.getExp());
+		return String.format("%s\t%d/%dHP\nEXP %d\tLVL %d", name, attribs.getCurrHP(), attribs.get(Util.AttributeType.CON), level.getExp(), level.totalLevel());
 	}
 	
 	
@@ -637,5 +765,6 @@ public class Character extends ImageView{
 		else
 			return 1 * dmg;
 	}
+
 	
 }

@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 
@@ -41,13 +42,19 @@ public class ChapterMap {
 	}
 	
 	public void endTurn(){
-		//TODO: Reset moves and attacks
+		if (player2AI)
+			resetAI();
 		myFactions.get(myTurnIndex).nextTurn();
 		myTurnIndex = (myTurnIndex + 1) % myFactions.size();
 	}
 
 	public void addParty(Party p){
 		myFactions.add(p);
+	}
+	
+	private void resetAI(){
+		doneAI = false;
+		indexAI = 0;
 	}
 	
 	public boolean canMove(Point p){
@@ -115,6 +122,7 @@ public class ChapterMap {
                 iter.remove();
             }
         }
+        toMove.setValidMoves(result);
 		return result;
 	}
 	
@@ -148,6 +156,7 @@ public class ChapterMap {
 				indexAI++;
 			}
 			makeBestAttackAI(nextToAct);
+			indexAI++;
 		}
 		
 	}
@@ -265,12 +274,18 @@ public class ChapterMap {
 				};
 		
 		ChapterMap result = new ChapterMap(tMap);
-		result.myFactions.add(new Party("Fly Honeys"));
-		result.myFactions.add(new Party("Rude Dudes"));
 		
+		result.myFactions.add(new Party("Greil Mercenaries (P1)"));
+		result.myFactions.add(new Party("Mia's Edgelords (P2)"));
+
+
 		result.addCharacter(Character.newIke(new Point(12, 6), 40, 40), 0);
 		result.addCharacter(Character.newMist(new Point(12, 8), 40, 40), 0);
+		result.addCharacter(Character.newBoyd(new Point(14, 5), 40, 40), 0);
 		
+		result.addCharacter(Character.newMia(new Point(9, 7), 40, 40), 1);
+		result.addCharacter(Character.newDiana(new Point(8, 6), 40, 40), 1);
+		result.addCharacter(Character.newRin(new Point(9, 10), 40, 40), 1);
 		
 		return result;
 	}
@@ -304,12 +319,21 @@ public class ChapterMap {
 				};
 		
 		ChapterMap result = new ChapterMap(tMap);
-		result.myFactions.add(new Party("Greil Mercenaries"));
-		result.myFactions.add(new Party("Mia's Edgelords"));
+		result.player2AI = true;
+		result.myFactions.add(new Party("Fly Honeys"));
+		result.myFactions.add(new Party("Rude Dudes"));
 		
-		result.addCharacter(Character.newIke(new Point(12, 6), 40, 40), 0);
-		result.addCharacter(Character.newMist(new Point(12, 8), 40, 40), 0);
-		result.addCharacter(Character.newMia(new Point(9, 7), 40, 40), 1);
+		result.addCharacter(Character.newMia(new Point(18, 7), 40, 40), 0);
+		result.addCharacter(Character.newDiana(new Point(17, 6), 40, 40), 0);
+		result.addCharacter(Character.newRin(new Point(19, 5), 40, 40), 0);
+		
+		result.addCharacter(Character.newRuddy(new Point(0, 19), 40, 40), 1);
+		result.addCharacter(Character.newAxeMook(new Point(4, 17), 40, 40), 1);
+		result.addCharacter(Character.newSwordMook(new Point(2, 16), 40, 40), 1);
+		result.addCharacter(Character.newLanceMook(new Point(1, 12), 40, 40), 1);
+
+		
+		
 		
 		return result;
 	}
@@ -346,7 +370,9 @@ public class ChapterMap {
 		}
 		
 		for (Character c: result){
-			myCharacters[c.getLoc().getX()][c.getLoc().getY()] = null;
+			if (getTerrain(c.getLoc()) != null)
+				myCharacters[c.getLoc().getX()][c.getLoc().getY()] = null;
+				c.moveTo(new Point(-1, -1));
 		}
 		
 		return result;
@@ -401,7 +427,7 @@ public class ChapterMap {
 	}
 	
 	private int getFaction(Character c){
-		int index = 1;
+		int index = 0;
 		
 		for (Party p : myFactions){
 			if (p.contains(c)){
@@ -441,22 +467,44 @@ public class ChapterMap {
 	}
 
 	public boolean currentTurnAI() {
-		return player2AI && myTurnIndex == 2;
+		return player2AI && myTurnIndex == 1;
 	}
 	
 	public boolean doneAI(){
 		return doneAI;
 	}
+	
+	public Character spawnEnemy(Point p, int height, int width){
+		Character spawned = null;
+		
+		Random r = new Random();
+		int code = r.nextInt(3);
+		switch (code){
+			case 0:
+				spawned = Character.newSwordMook(p, height/mapSize, width/mapSize);
+				break;
+			case 1:
+				spawned = Character.newAxeMook(p, height/mapSize, width/mapSize);
+				break;
+			case 2:
+				spawned = Character.newLanceMook(p, height/mapSize, width/mapSize);
+				break;
+				/*
+			default:
+	
+				spawned = Character.newSwordMook(p, height/mapSize, width/mapSize);
+				break;
+				*/
+		}
+		System.out.println(code);
+		myCharacters[p.getX()][p.getY()] = spawned;
+		int spawnedsFaction = (myTurnIndex + 1) % myFactions.size();
+		myFactions.get(spawnedsFaction).addCharacter(spawned);
+		return spawned;
+		
+	}
 
 	
-	public static void main(String[] args){
-
-		ChapterMap c = ChapterMap.newCampaignLvl1();
-		
-		c.makeBestAttackAI(c.getCharacter(new Point(9, 7)));
-		
-		System.out.println(c.myFactions.get(1).getCharacter(0).getLoc());
-	}
 }
 	
 
