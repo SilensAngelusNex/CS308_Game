@@ -1,4 +1,5 @@
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import javafx.scene.Group;
@@ -48,6 +49,7 @@ class MercenaryWars {
 	private static final double EXAMINE_OFFSET = 100;
 	
 	private static final int FONT_SIZE = 30;
+	private static final int VICTORY_MESSAGE_HEIGHT = 475;
 
 	
     
@@ -69,6 +71,7 @@ class MercenaryWars {
 	
     //Used in MoveMenu state
 	private Map<Point, Integer> myValidMoves;
+	private Set<Point> myValidAttacks;
 	private Point myMoveStart;
 	private Point myMoveEnd;
 	private Vector<ImageView> myMoveImages;
@@ -310,9 +313,11 @@ class MercenaryWars {
     
     private void characterMousOver(){
     	//TODO: make this actually display something instead.
+    	/*
         if (myChapterMap.getCharacter(myMapCursor.getLocation()) != null){
         	System.out.println(myChapterMap.getCharacter(myMapCursor.getLocation()));
         }
+        */
     }
     
     private void moveMapKeyHandler(KeyCode code){
@@ -540,7 +545,7 @@ class MercenaryWars {
     	myMessage.setFill(Color.RED);
     	
     	myMessage.setX(myWidth / 2 - myMessage.getBoundsInLocal().getWidth() / 2);
-    	myMessage.setY(475);
+    	myMessage.setY(VICTORY_MESSAGE_HEIGHT);
     	
     	myRoot.getChildren().add(myMessage);
 
@@ -578,7 +583,8 @@ class MercenaryWars {
     	myMoveEnd = null;
     	
     	myValidMoves = myChapterMap.possibleMove(myMapCursor.getLocation());
-    	myMoveImages = myChapterMap.getMoveSquares(myValidMoves, myWidth, myHeight);
+    	myValidAttacks = myChapterMap.possibleAttack(myMapCursor.getLocation(), myValidMoves);
+    	myMoveImages = myChapterMap.getMoveSquares(myValidMoves, myValidAttacks, myWidth, myHeight);
     	myRoot.getChildren().addAll(myMoveImages);
     }
     
@@ -588,6 +594,7 @@ class MercenaryWars {
     	myRoot.getChildren().removeAll(myMoveImages);
     	myMoveImages = null;
     	myValidMoves = null;
+    	myValidAttacks = null;
     	myMoveStart = null;
     	myMoveEnd = null;
     	
@@ -668,7 +675,7 @@ class MercenaryWars {
     	myMessage.setFill(Color.RED);
     	
     	myMessage.setX(myWidth / 2 - myMessage.getBoundsInLocal().getWidth() / 2);
-    	myMessage.setY(475);
+    	myMessage.setY(VICTORY_MESSAGE_HEIGHT);
     	
     	myRoot.getChildren().add(myMessage);
     	

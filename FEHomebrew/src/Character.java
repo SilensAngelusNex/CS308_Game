@@ -493,7 +493,7 @@ public class Character extends ImageView{
 	 */
 	public void combat(Character enemy){
 		if (myAttribs.getCurrHP() <= 0 || enemy.myAttribs.getCurrHP() <= 0){
-			System.out.println("One or more combatants are dead; they cannot fight.");
+			//System.out.println("One or more combatants are dead; they cannot fight.");
 			return;
 		}
 		
@@ -611,7 +611,7 @@ public class Character extends ImageView{
 		}
 		
 		if (myAttribs.getCurrHP() <= 0){
-			System.out.printf("%s's dead. Healers aren't gods.\n", myName);
+			//System.out.printf("%s's dead. Healers aren't gods.\n", myName);
 			return -1;
 		}
 		
@@ -623,7 +623,7 @@ public class Character extends ImageView{
 		}
 		
 		myAttribs.setCurrHP(curHP + amount);
-		System.out.printf("%s was healed %d points.\n", myName, amount);
+		//System.out.printf("%s was healed %d points.\n", myName, amount);
 		
 		return amount;
 	}
@@ -635,12 +635,12 @@ public class Character extends ImageView{
 	
 	public void staffHeal(Character ally){
 		if (myAttribs.getCurrHP() <= 0 || ally.myAttribs.getCurrHP() <= 0){
-			System.out.println("Dead people can't heal or be healed.");
+			//System.out.println("Dead people can't heal or be healed.");
 			return;
 		}
 		
 		if(myInventory.getOffHand().wType != Util.WeaponType.STAFF){
-			System.out.println("You can't heal without a staff equipped.");
+			//System.out.println("You can't heal without a staff equipped.");
 			return;
 		}
 		
@@ -663,16 +663,11 @@ public class Character extends ImageView{
 		String line2 = String.format("%s\n%s\n", myClass.toString(), myAttribs.getRawAttribs().toString());
 		String line3 = "Attack\tHit\tCrit\tDefense\tAvoid\tDodge\tSpeed\n";
 		String line4 = String.format("%d\t\t%d\t%d\t%d\t\t%d     \t%d\t\t%d\n", attack(), hit(), crit(), myAttribs.get(Util.AttributeType.DEF), avoid(), dodge(), myAttribs.get(Util.AttributeType.SPD));
-		return String.format("%s%s%s%s", line1, line2, line3, line4);
+		String line5 = String.format("OnHand:\t%s\nOffHand:\t%s\n", myInventory.getOnHand(), myInventory.getOffHand());
+		return String.format("%s%s%s%s\n%s", line1, line2, line3, line4, line5);
 	}
 
-	
-	private void printCmbt(Character e){
-		System.out.printf("\tAttack\tHit\tCrit\tDefense\tAvoid\tDodge\tSpeed\n");
-		System.out.printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", myName, attack(), hit(), crit(), myAttribs.get(Util.AttributeType.DEF), avoid(), dodge(), myAttribs.get(Util.AttributeType.SPD));
-		System.out.printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", e.myName, e.attack(), e.hit(), e.crit(), e.myAttribs.get(Util.AttributeType.DEF), e.avoid(), e.dodge(), e.myAttribs.get(Util.AttributeType.SPD));
-		System.out.printf("\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", attack()-e.myAttribs.get(Util.AttributeType.DEF), hit()-e.avoid(), crit()-e.dodge(), e.attack()-myAttribs.get(Util.AttributeType.DEF), e.hit()-avoid(), e.crit()-dodge(), myAttribs.get(Util.AttributeType.SPD)-e.myAttribs.get(Util.AttributeType.SPD));
-	}
+
 	
 	/**
 	 * Return name, hp, class, exp and level
@@ -742,9 +737,7 @@ public class Character extends ImageView{
 		Character d = newIke(new Point(0, 0), 50, 50);
 		d.myInventory.add(ItemWeapon.newBronzeSword());
 		d.myInventory.equipOnHand(0);
-		
-		c.printCmbt(d);
-		
+
 		c.combat(d);
 		System.out.println(c.myLevel.getExp());
 		System.out.println(d.myLevel.getExp());
@@ -882,7 +875,7 @@ public class Character extends ImageView{
 	 */
 	private void die(){
 		isDead = true;
-		System.out.printf("%s is defeated!\n", myName);
+		//System.out.printf("%s is defeated!\n", myName);
 	}
 	
 	/**
@@ -897,17 +890,17 @@ public class Character extends ImageView{
 			dmg = 0;
 		}
 		if (myAttribs.getCurrHP() <= 0){
-			System.out.printf("Stop, stop! %s's alreay dead!\n", myName);
+			//System.out.printf("Stop, stop! %s's alreay dead!\n", myName);
 			throw new CharacterDeadException(this, -1);
 		}
 		if (myAttribs.getCurrHP() <= dmg){
 			dmg = myAttribs.getCurrHP();
 			myAttribs.setCurrHP(0);
-			System.out.printf("%s took %d damage.\n", myName, dmg);
+			//System.out.printf("%s took %d damage.\n", myName, dmg);
 			throw new CharacterDeadException(this, dmg);
 		}
 		myAttribs.addCurrHP(-dmg);
-		System.out.printf("%s took %d damage.\n", myName, dmg);
+		//System.out.printf("%s took %d damage.\n", myName, dmg);
 		return dmg;
 	}
 	

@@ -283,13 +283,20 @@ public class ChapterMap {
 	 * @param height
 	 * @return
 	 */
-	public Vector<ImageView> getMoveSquares(Map<Point, Integer> validMoves, int width, int height){
+	public Vector<ImageView> getMoveSquares(Map<Point, Integer> validMoves, Set<Point> validAttacks, int width, int height){
 		Vector<ImageView> result = new Vector<ImageView>();
 		
-		Image validSpace = new Image(getClass().getClassLoader().getResourceAsStream("MoveSquare.png"));
+		Image validMove = new Image(getClass().getClassLoader().getResourceAsStream("MoveSquare.png"));
+		Image validAttack = new Image(getClass().getClassLoader().getResourceAsStream("AttackSquare.png"));
 		
-		for (Point p: validMoves.keySet()){
-			ImageView image = new ImageView(validSpace);
+		validAttacks.addAll(validMoves.keySet());
+		ImageView image;
+		for (Point p: validAttacks){
+			if (validMoves.keySet().contains(p)){
+				image = new ImageView(validMove);
+			} else {
+				image = new ImageView(validAttack);
+			}
 			image.setFitHeight(height / mapSize);
 			image.setFitWidth(width / mapSize);
 			
@@ -536,9 +543,7 @@ public class ChapterMap {
 			//Find spaces we could move to and attack from.
 			Character toAttack = options.get(option);
 			Set<Point> inRange = pointsInRectDist(toAttack.getLoc(), attacking.getRange()).keySet();
-			System.out.println(inRange);
 			inRange.retainAll(moves.keySet());
-			System.out.println(inRange);
 			
 			//Randomly pick a legal space within range that we can move to
 			Vector<Point> moveList = new Vector<Point>(inRange);
@@ -679,6 +684,17 @@ public class ChapterMap {
 	private void resetAI(){
 		doneAI = false;
 		indexAI = 0;
+	}
+
+	public Set<Point> possibleAttack(Point location, Map<Point, Integer> myValidMoves) {
+		Set<Point> result = new TreeSet<Point>();
+		int range = getCharacter(location).getRange();
+		
+		for (Point p: myValidMoves.keySet()){
+			result.addAll(pointsInRectDist(p, range).keySet());
+		}
+		
+		return result;
 	}
 	
 }
