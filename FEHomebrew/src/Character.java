@@ -5,16 +5,17 @@ import javafx.scene.image.ImageView;
 
 public class Character extends ImageView{
 	private static final int NO_DMG_BATTLE_EXP = 1;
+	private static final int DEFAULT_MOV = 6;
 	
-	public String name;
-	public Util.CharacterClasses charClass;
-	public Attributes attribs;
+	private String myName;
+	private Util.CharacterClasses myClass;
+	private Attributes myAttribs;
 	private Point myLocation;
 	private int myHeight;
 	private int myWidth;
-	public InfoLevel level;
-	public Inventory inv;
-	public boolean boss;
+	private InfoLevel myLevel;
+	private Inventory myInventory;
+	private boolean isBoss;
 	private int myMov;
 	private InfoTurn myTurnInfo;
 	private Map<Point, Integer> myValidMoves;
@@ -22,7 +23,11 @@ public class Character extends ImageView{
 	
 	
 	
-	
+	/**
+	 * Used when characters die in the middle of combat to stop the combat.
+	 * @author Weston
+	 *
+	 */
 	private class CharacterDeadException extends Exception{
 		private static final long serialVersionUID = -3374130461047276835L;
 		Character dead;
@@ -35,21 +40,34 @@ public class Character extends ImageView{
 		}
 	}
 		
-	
-	public Character(String n, Util.CharacterClasses c, Attributes a, InfoLevel l, Inventory i){
+	/**
+	 * Construct a character from the required fields.
+	 * @param name
+	 * @param charClass
+	 * @param attribs
+	 * @param level
+	 * @param inv
+	 */
+	public Character(String name, Util.CharacterClasses charClass, Attributes attribs, InfoLevel level, Inventory inv){
 		super();
-		name = n;
-		setImage(new Image(getClass().getClassLoader().getResourceAsStream(String.format("%s%s", name, ".png"))));
-		charClass = c;
-		attribs = a;
-		level = l;
-		inv = i;
-		boss = false;
-		myMov = 6;
+		myName = name;
+		setImage(new Image(getClass().getClassLoader().getResourceAsStream(String.format("%s%s", myName, ".png"))));
+		myClass = charClass;
+		myAttribs = attribs;
+		myLevel = level;
+		myInventory = inv;
+		isBoss = false;
+		myMov = DEFAULT_MOV;
 		myTurnInfo = new InfoTurn();
 		isDead = false;
 	}
 	
+	/**
+	 * @param p
+	 * @param height
+	 * @param width
+	 * @return new correctly sized Ike
+	 */
 	public static Character newIke(Point p, int height, int width){
 		Character ike = new Character(
 				"Ike",
@@ -62,10 +80,10 @@ public class Character extends ImageView{
 				new Inventory()
 				);
 		
-		ike.boss = true;
+		ike.isBoss = true;
 		
 		ike.take(ItemWeapon.newBronzeSword());
-		ike.inv.equipOnHand(0);
+		ike.myInventory.equipOnHand(0);
 		ike.myLocation = p;
 		
 		ike.myHeight = height;
@@ -79,6 +97,12 @@ public class Character extends ImageView{
 		
 	}
 	
+	/**
+	 * @param p
+	 * @param height
+	 * @param width
+	 * @return new correctly sized Boyd
+	 */
 	public static Character newBoyd(Point p, int height, int width){
 		Character boyd = new Character(
 				"Boyd",
@@ -92,7 +116,7 @@ public class Character extends ImageView{
 				);
 		
 		boyd.take(ItemWeapon.newBronzeAxe());
-		boyd.inv.equipOnHand(0);
+		boyd.myInventory.equipOnHand(0);
 		boyd.myLocation = p;
 		
 		boyd.myHeight = height;
@@ -105,6 +129,12 @@ public class Character extends ImageView{
 		return boyd;
 		}
 	
+	/**
+	 * @param p
+	 * @param height
+	 * @param width
+	 * @return new correctly sized Mia
+	 */
 	public static Character newMia(Point p, int height, int width){
 		Character mia = new Character(
 				"Mia",
@@ -117,10 +147,10 @@ public class Character extends ImageView{
 				new Inventory()
 				);
 		
-		mia.boss = true;
+		mia.isBoss = true;
 		
 		mia.take(ItemWeapon.newBronzeSword());
-		mia.inv.equipOnHand(0);
+		mia.myInventory.equipOnHand(0);
 		mia.myLocation = p;
 		
 		mia.myHeight = height;
@@ -134,6 +164,12 @@ public class Character extends ImageView{
 		
 	}
 	
+	/**
+	 * @param p
+	 * @param height
+	 * @param width
+	 * @return new correctly sized Diana
+	 */
 	public static Character newDiana(Point p, int height, int width){
 		Character diana = new Character(
 				"Diana",
@@ -146,10 +182,10 @@ public class Character extends ImageView{
 				new Inventory()
 				);
 		
-		diana.boss = true;
+		diana.isBoss = true;
 		
 		diana.take(ItemWeapon.newBronzeLance());
-		diana.inv.equipOnHand(0);
+		diana.myInventory.equipOnHand(0);
 		diana.myLocation = p;
 		
 		diana.myHeight = height;
@@ -163,6 +199,12 @@ public class Character extends ImageView{
 		
 	}
 	
+	/**
+	 * @param p
+	 * @param height
+	 * @param width
+	 * @return new correctly sized Rin
+	 */
 	public static Character newRin(Point p, int height, int width){
 		Character rin = new Character(
 				"Rin",
@@ -176,7 +218,7 @@ public class Character extends ImageView{
 				);
 		
 		rin.take(ItemWeaponStaff.newHealStaff());
-		rin.inv.equipOffHand(0);
+		rin.myInventory.equipOffHand(0);
 		rin.myLocation = p;
 		
 		rin.myHeight = height;
@@ -189,6 +231,12 @@ public class Character extends ImageView{
 		return rin;
 	}
 	
+	/**
+	 * @param p
+	 * @param height
+	 * @param width
+	 * @return new correctly sized Ruddy
+	 */
 	public static Character newRuddy(Point p, int height, int width){
 		Character ruddy = new Character(
 				"Ruddy",
@@ -201,10 +249,10 @@ public class Character extends ImageView{
 				new Inventory()
 				);
 		
-		ruddy.boss = true;
+		ruddy.isBoss = true;
 		
 		ruddy.take(ItemWeapon.newBronzeSword());
-		ruddy.inv.equipOnHand(0);
+		ruddy.myInventory.equipOnHand(0);
 		ruddy.myLocation = p;
 		
 		ruddy.myHeight = height;
@@ -218,6 +266,12 @@ public class Character extends ImageView{
 		
 	}
 	
+	/**
+	 * @param p
+	 * @param height
+	 * @param width
+	 * @return new correctly sized Sword Mook
+	 */
 	public static Character newSwordMook(Point p, int height, int width){
 		Character mook = new Character(
 				"Swordsman",
@@ -231,7 +285,7 @@ public class Character extends ImageView{
 				);
 		
 		mook.take(ItemWeapon.newBronzeSword());
-		mook.inv.equipOnHand(0);
+		mook.myInventory.equipOnHand(0);
 		mook.myLocation = p;
 		
 		mook.myHeight = height;
@@ -244,6 +298,12 @@ public class Character extends ImageView{
 		return mook;
 	}
 	
+	/**
+	 * @param p
+	 * @param height
+	 * @param width
+	 * @return new correctly sized Lance Mook
+	 */
 	public static Character newLanceMook(Point p, int height, int width){
 		Character mook = new Character(
 				"Soldier",
@@ -257,7 +317,7 @@ public class Character extends ImageView{
 				);
 		
 		mook.take(ItemWeapon.newBronzeLance());
-		mook.inv.equipOnHand(0);
+		mook.myInventory.equipOnHand(0);
 		mook.myLocation = p;
 		
 		mook.myHeight = height;
@@ -270,6 +330,12 @@ public class Character extends ImageView{
 		return mook;
 	}
 	
+	/**
+	 * @param p
+	 * @param height
+	 * @param width
+	 * @return new correctly sized Axe Mook
+	 */
 	public static Character newAxeMook(Point p, int height, int width){
 		Character mook = new Character(
 				"Warrior",
@@ -283,7 +349,7 @@ public class Character extends ImageView{
 				);
 		
 		mook.take(ItemWeapon.newBronzeAxe());
-		mook.inv.equipOnHand(0);
+		mook.myInventory.equipOnHand(0);
 		mook.myLocation = p;
 		
 		mook.myHeight = height;
@@ -296,6 +362,12 @@ public class Character extends ImageView{
 		return mook;
 	}
 	
+	/**
+	 * @param p
+	 * @param height
+	 * @param width
+	 * @return new correctly sized Mist
+	 */
 	public static Character newMist(Point p, int height, int width){
 		Character mist = new Character(
 				"Mist",
@@ -309,7 +381,7 @@ public class Character extends ImageView{
 				);
 		
 		mist.take(ItemWeaponStaff.newHealStaff());
-		mist.inv.equipOffHand(0);
+		mist.myInventory.equipOffHand(0);
 		mist.myLocation = p;
 		
 		mist.myHeight = height;
@@ -323,131 +395,111 @@ public class Character extends ImageView{
 		
 	}
 	
+	/**
+	 * move (temporarily) to Point p
+	 * @param p
+	 */
 	public void moveTo(Point p){
 		myLocation = p;
 		setX(p.getX() * myHeight);
 		setY(p.getY() * myWidth);
 	}
 	
+	/**
+	 * Put i into the inventory
+	 * @param i
+	 */
 	public void take(Item i){
-		inv.add(i);
+		myInventory.add(i);
 	}
 	
+	/**
+	 * Remove i from the inventory
+	 * @param i
+	 */
 	public boolean drop(Item i){
-		return inv.remove(i);
+		return myInventory.remove(i);
 	}
 	
-	
+	/**
+	 * 
+	 * @return Avoid with bonuses
+	 */
 	public int avoid(){
 		int bonuses = 0;
 		//TODO-LongTerm: Add other bonuses
 		
-		return 2 * attribs.get(Util.AttributeType.SPD) + attribs.get(Util.AttributeType.SKL) + bonuses;
+		return 2 * myAttribs.get(Util.AttributeType.SPD) + myAttribs.get(Util.AttributeType.SKL) + bonuses;
 	}
 	
+	/**
+	 * 
+	 * @return Hit with bonuses
+	 */
 	public int hit(){
 		int bonuses = 0;
 		//TODO-LongTerm: Add other bonuses
 		
-		return inv.getHit() + 2 * attribs.get(Util.AttributeType.SKL) + attribs.get(Util.AttributeType.SPD) + bonuses;
+		return myInventory.getHit() + 2 * myAttribs.get(Util.AttributeType.SKL) + myAttribs.get(Util.AttributeType.SPD) + bonuses;
 	}
 	
+	/**
+	 * 
+	 * @return Crit with bonuses
+	 */
 	public int crit(){
 		int bonuses = 0;
 		//TODO-LongTerm: Add other bonuses
 		
-		return inv.getCrit() + attribs.get(Util.AttributeType.SKL) + bonuses;
+		return myInventory.getCrit() + myAttribs.get(Util.AttributeType.SKL) + bonuses;
 	}
 	
+	/**
+	 * 
+	 * @return Dodge with bonuses
+	 */
 	public int dodge(){
 		int bonuses = 0;
 		//TODO-LongTerm: Add other bonuses
 		
-		return attribs.get(Util.AttributeType.SPD) + attribs.get(Util.AttributeType.SKL) / 2 + bonuses;
+		return myAttribs.get(Util.AttributeType.SPD) + myAttribs.get(Util.AttributeType.SKL) / 2 + bonuses;
 	}
 	
+	/**
+	 * 
+	 * @return Attack with bonuses
+	 */
 	public int attack(){
 		int bonuses = 0;
 		//TODO-LongTerm: Add other bonuses
 		
-		if (inv.getWeaponsEquipped() == 0) {
+		if (myInventory.getWeaponsEquipped() == 0) {
 			return 0;
-		} else if (inv.getWeaponsEquipped() == 2){
-			return (inv.getMight() + attribs.get(inv.getOnHand().wDmgBonusAttrib) + attribs.get(inv.getOffHand().wDmgBonusAttrib)) / 2 + bonuses;
+		} else if (myInventory.getWeaponsEquipped() == 2){
+			return (myInventory.getMight() + myAttribs.get(myInventory.getOnHand().wDmgBonusAttrib) + myAttribs.get(myInventory.getOffHand().wDmgBonusAttrib)) / 2 + bonuses;
 		} else {
-			if (inv.getOnHand() != null){
-				return inv.getMight() + attribs.get(inv.getOnHand().wDmgBonusAttrib) + bonuses;
+			if (myInventory.getOnHand() != null){
+				return myInventory.getMight() + myAttribs.get(myInventory.getOnHand().wDmgBonusAttrib) + bonuses;
 			} else {
-				return inv.getMight() + attribs.get(inv.getOffHand().wDmgBonusAttrib) + bonuses;
+				return myInventory.getMight() + myAttribs.get(myInventory.getOffHand().wDmgBonusAttrib) + bonuses;
 			}
 		}
 	}
-	
-	private void die(){
-		isDead = true;
 
-		System.out.printf("%s is defeated!\n", name);
-	}
 	
-	private int damage(int dmg) throws CharacterDeadException{
-		//TODO-LongTerm: Check skills (Miracle, other damage reduction skills).
-		if (dmg < 0){
-			dmg = 0;
-		}
-		if (attribs.getCurrHP() <= 0){
-			System.out.printf("Stop, stop! %s's alreay dead!\n", name);
-			throw new CharacterDeadException(this, -1);
-		}
-		if (attribs.getCurrHP() <= dmg){
-			dmg = attribs.getCurrHP();
-			attribs.setCurrHP(0);
-			System.out.printf("%s took %d damage.\n", name, dmg);
-			throw new CharacterDeadException(this, dmg);
-		}
-		attribs.addCurrHP(-dmg);
-		System.out.printf("%s took %d damage.\n", name, dmg);
-		return dmg;
-	}
-	
-	private int strike(Character enemy) throws CharacterDeadException{
-		if (attack() == 0){
-			return 0;
-		}
-		
-		int hit = hit() - enemy.avoid();
-		//TODO: Weapon Triangle bonuses
-		
-		if (Util.random.nextInt(99) + Util.random.nextInt(99) >= 2 * hit){
-			//Miss, no damage.
-			return -1;
-		}
-		
-		//TODO-LongTerm: Check on hit skill activations.
-		
-		
-		int crit = crit() - enemy.dodge();
-		if (Util.random.nextInt(99) < crit){
-			//TODO-LongTerm: Check crit trigger skill activations.
-			//Crit, deal extra damage equal to attack.
-			return enemy.damage(2 * attack() - enemy.attribs.get(inv.getDamageType()));
-		} else {
-			//Normal attack
-			return enemy.damage(attack() - enemy.attribs.get(inv.getDamageType()));
-		}
-		
-		//TODO-LongTerm: Check after damage skill activations.
-		
-	}
-	
+	/**
+	 * Full combat with enemy
+	 * @param enemy
+	 */
 	public void combat(Character enemy){
-		if (attribs.getCurrHP() <= 0 || enemy.attribs.getCurrHP() <= 0){
+		if (myAttribs.getCurrHP() <= 0 || enemy.myAttribs.getCurrHP() <= 0){
 			System.out.println("One or more combatants are dead; they cannot fight.");
 			return;
 		}
 		
 		//TODO-LongTerm: pre-combat skill triggers (vantage, wrath), etc.
 		
-		int mySpdAdv = attribs.get(Util.AttributeType.SPD) - enemy.attribs.get(Util.AttributeType.SPD);
+		int mySpdAdv = myAttribs.get(Util.AttributeType.SPD) - enemy.myAttribs.get(Util.AttributeType.SPD);
 		int dmg = 0;
 		int enemyDmg = 0;
 		boolean dead = false;
@@ -519,16 +571,16 @@ public class Character extends ImageView{
 	}
 	
 	public void gainExp(int i){
-		int levelsToGain = level.gainExp(i);
+		int levelsToGain = myLevel.gainExp(i);
 		
 		while (levelsToGain > 0){
-			attribs.levelUp();
+			myAttribs.levelUp();
 			levelsToGain--;
 		}
 	}
 	
 	private void cmbtExp(Character enemy){
-		int levelDiff = level.totalLevel() - enemy.level.totalLevel();
+		int levelDiff = myLevel.totalLevel() - enemy.myLevel.totalLevel();
 		//10 + (LD * abs(LD)) / 4
 		int toGain = 10 - (levelDiff * ((levelDiff < 0) ? -levelDiff : levelDiff)) / 4;
 		if (toGain < 5){
@@ -539,9 +591,9 @@ public class Character extends ImageView{
 	}
 	
 	private void killExp(Character enemy){
-		int levelDiff = level.totalLevel() - enemy.level.totalLevel();
-		int tierDiff = level.getTier() - enemy.level.getTier();
-		int bossMod = (enemy.boss) ? 40 : 0;
+		int levelDiff = myLevel.totalLevel() - enemy.myLevel.totalLevel();
+		int tierDiff = myLevel.getTier() - enemy.myLevel.getTier();
+		int bossMod = (enemy.isBoss) ? 40 : 0;
 		
 		int toGain = 15 - levelDiff - 5 * tierDiff + bossMod;
 		
@@ -558,20 +610,20 @@ public class Character extends ImageView{
 			amount = 0;
 		}
 		
-		if (attribs.getCurrHP() <= 0){
-			System.out.printf("%s's dead. Healers aren't gods.\n", name);
+		if (myAttribs.getCurrHP() <= 0){
+			System.out.printf("%s's dead. Healers aren't gods.\n", myName);
 			return -1;
 		}
 		
-		int maxHP = attribs.get(Util.AttributeType.CON);
-		int curHP = attribs.getCurrHP();
+		int maxHP = myAttribs.get(Util.AttributeType.CON);
+		int curHP = myAttribs.getCurrHP();
 		
 		if (maxHP <= amount + curHP){
 			amount = maxHP - curHP;
 		}
 		
-		attribs.setCurrHP(curHP + amount);
-		System.out.printf("%s was healed %d points.\n", name, amount);
+		myAttribs.setCurrHP(curHP + amount);
+		System.out.printf("%s was healed %d points.\n", myName, amount);
 		
 		return amount;
 	}
@@ -582,21 +634,21 @@ public class Character extends ImageView{
 	}
 	
 	public void staffHeal(Character ally){
-		if (attribs.getCurrHP() <= 0 || ally.attribs.getCurrHP() <= 0){
+		if (myAttribs.getCurrHP() <= 0 || ally.myAttribs.getCurrHP() <= 0){
 			System.out.println("Dead people can't heal or be healed.");
 			return;
 		}
 		
-		if(inv.getOffHand().wType != Util.WeaponType.STAFF){
+		if(myInventory.getOffHand().wType != Util.WeaponType.STAFF){
 			System.out.println("You can't heal without a staff equipped.");
 			return;
 		}
 		
-		int amount = ((ItemWeaponStaff) inv.getOffHand()).baseHeal + attribs.get(Util.AttributeType.MAG);
+		int amount = ((ItemWeaponStaff) myInventory.getOffHand()).baseHeal + myAttribs.get(Util.AttributeType.MAG);
 		
 		ally.heal(amount);
 		
-		((ItemWeaponStaff) inv.getOffHand()).use();
+		((ItemWeaponStaff) myInventory.getOffHand()).use();
 		staffExp();
 		
 		
@@ -607,24 +659,24 @@ public class Character extends ImageView{
 	}
 	
 	public String verboseToString(){
-		return String.format("%s\tLVL %d\t%d/%d\n%s\n%s\n", name, level.totalLevel(), attribs.getCurrHP(), attribs.get(Util.AttributeType.CON), charClass.toString(), attribs.getRawAttribs().toString());
+		return String.format("%s\tLVL %d\t%d/%d\n%s\n%s\n", myName, myLevel.totalLevel(), myAttribs.getCurrHP(), myAttribs.get(Util.AttributeType.CON), myClass.toString(), myAttribs.getRawAttribs().toString());
 	}
 
 	
 	private void printCmbt(Character e){
 		System.out.printf("\tAttack\tHit\tCrit\tDefense\tAvoid\tDodge\tSpeed\n");
-		System.out.printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", name, attack(), hit(), crit(), attribs.get(Util.AttributeType.DEF), avoid(), dodge(), attribs.get(Util.AttributeType.SPD));
-		System.out.printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", e.name, e.attack(), e.hit(), e.crit(), e.attribs.get(Util.AttributeType.DEF), e.avoid(), e.dodge(), e.attribs.get(Util.AttributeType.SPD));
-		System.out.printf("\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", attack()-e.attribs.get(Util.AttributeType.DEF), hit()-e.avoid(), crit()-e.dodge(), e.attack()-attribs.get(Util.AttributeType.DEF), e.hit()-avoid(), e.crit()-dodge(), attribs.get(Util.AttributeType.SPD)-e.attribs.get(Util.AttributeType.SPD));
+		System.out.printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", myName, attack(), hit(), crit(), myAttribs.get(Util.AttributeType.DEF), avoid(), dodge(), myAttribs.get(Util.AttributeType.SPD));
+		System.out.printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", e.myName, e.attack(), e.hit(), e.crit(), e.myAttribs.get(Util.AttributeType.DEF), e.avoid(), e.dodge(), e.myAttribs.get(Util.AttributeType.SPD));
+		System.out.printf("\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", attack()-e.myAttribs.get(Util.AttributeType.DEF), hit()-e.avoid(), crit()-e.dodge(), e.attack()-myAttribs.get(Util.AttributeType.DEF), e.hit()-avoid(), e.crit()-dodge(), myAttribs.get(Util.AttributeType.SPD)-e.myAttribs.get(Util.AttributeType.SPD));
 	}
 	
 	public String toString(){
-		return String.format("%s\t%d/%dHP\nEXP %d\tLVL %d", name, attribs.getCurrHP(), attribs.get(Util.AttributeType.CON), level.getExp(), level.totalLevel());
+		return String.format("%s\t%d/%dHP\nEXP %d\tLVL %d", myName, myAttribs.getCurrHP(), myAttribs.get(Util.AttributeType.CON), myLevel.getExp(), myLevel.totalLevel());
 	}
 	
 	
 	public int getRange(){
-		return inv.getRange();
+		return myInventory.getRange();
 	}
 	
 	
@@ -640,8 +692,8 @@ public class Character extends ImageView{
 				new Inventory()
 				);
 		
-		c.inv.add(ItemWeapon.newBronzeSword());
-		c.inv.equipOnHand(0);
+		c.myInventory.add(ItemWeapon.newBronzeSword());
+		c.myInventory.equipOnHand(0);
 		
 		Character e = new Character(
 				"Mist",
@@ -654,7 +706,7 @@ public class Character extends ImageView{
 				new Inventory()
 				);
 		
-		e.inv.add(new ItemWeaponStaff(
+		e.myInventory.add(new ItemWeaponStaff(
 					"Heal",
 					800,
 					Util.WeaponType.STAFF,
@@ -671,31 +723,31 @@ public class Character extends ImageView{
 					)
 				);
 		
-		e.inv.equipOffHand(0);
+		e.myInventory.equipOffHand(0);
 		
 		
 		c.gainExp(500);
 		System.out.println();
 		
 		Character d = newIke(new Point(0, 0), 50, 50);
-		d.inv.add(ItemWeapon.newBronzeSword());
-		d.inv.equipOnHand(0);
+		d.myInventory.add(ItemWeapon.newBronzeSword());
+		d.myInventory.equipOnHand(0);
 		
 		c.printCmbt(d);
 		
 		c.combat(d);
-		System.out.println(c.level.getExp());
-		System.out.println(d.level.getExp());
-		System.out.println(e.level.getExp());
+		System.out.println(c.myLevel.getExp());
+		System.out.println(d.myLevel.getExp());
+		System.out.println(e.myLevel.getExp());
 		
 		e.staffHeal(d);
 		
 		
 		d.combat(c);
 		
-		System.out.println(c.level.getExp());
-		System.out.println(d.level.getExp());
-		System.out.println(e.level.getExp());
+		System.out.println(c.myLevel.getExp());
+		System.out.println(d.myLevel.getExp());
+		System.out.println(e.myLevel.getExp());
 		
 		System.out.println(c);
 		System.out.println(d);
@@ -703,60 +755,108 @@ public class Character extends ImageView{
 		
 	}
 
+	/**
+	 * 
+	 * @return staff range
+	 */
 	public int getStaffRange() {
-		Point staffRange = inv.getStaffRange();
+		Point staffRange = myInventory.getStaffRange();
 		if (staffRange.getY() == 0){
 			return staffRange.getX();
 		}
-		return staffRange.getX() + staffRange.getY() * attribs.get(Util.AttributeType.MAG);
+		return staffRange.getX() + staffRange.getY() * myAttribs.get(Util.AttributeType.MAG);
 	}
 	
+	/**
+	 * 
+	 * @return character current grid location
+	 */
 	public Point getLoc(){
 		return myLocation;
 	}
 
+	/**
+	 * set myValidMoves so it doesn't have to be recalculated if we can help it.
+	 * @param movesMap
+	 */
 	public void setValidMoves(Map<Point, Integer> movesMap) {
 		myValidMoves = movesMap;
 		
 	}
 	
+	/**
+	 * 
+	 * @return valid moves
+	 */
 	public Map<Point, Integer> getValidMoves(){
 		return myValidMoves;
 	}
 
+	/**
+	 * 
+	 * @return true iff character can still move this turn
+	 */
 	public boolean hasMove() {
 		return !isDead && myTurnInfo.getMoveTaken() < myMov;
 	}
 	
+	/**
+	 * 
+	 * @return true iff character can still act this turn
+	 */
 	public boolean hasAction(){
 		return !isDead &&  myTurnInfo.getActionRemaining();
 	}
 
+	/**
+	 * Permanently (for the turn) move to endSpace
+	 * @param endSpace
+	 */
 	public void finalizeMove(Point endSpace) {
 		myTurnInfo.move(myMov - myTurnInfo.getMoveTaken() - myValidMoves.get(endSpace));
 		myValidMoves = null;
 	}
+	
+	/**
+	 * Character has done all it can for the turn. Don't let it do anything else.
+	 */
 	public void finalizeAction(){
 		myTurnInfo.takeAction();
 		myTurnInfo.move(myMov - myTurnInfo.getMoveTaken());
 		myValidMoves = null;
 	}
 	
+	/**
+	 * Turn is over, reset turn info
+	 */
 	public void nextTurn(){
 		myTurnInfo.reset();
 	}
 
+	/**
+	 * 
+	 * @return isBoss
+	 */
 	public boolean isBoss() {
-		return boss;
+		return isBoss;
 	}
 
+	/**
+	 * 
+	 * @return isDead
+	 */
 	public boolean isDead() {
 		return isDead;
 	}
 
+	/**
+	 * 
+	 * @param enemy
+	 * @return the % of enemy's HP this would deal in a combat (that this fully survived)
+	 */
 	public Double percentDamage(Character enemy) {
-		int spdAdv = attribs.get(Util.AttributeType.SPD) - enemy.attribs.get(Util.AttributeType.SPD);
-		double dmg = ((double) (attack() - enemy.attribs.get(inv.getDamageType()))) / ((double) enemy.attribs.get(Util.AttributeType.CON));
+		int spdAdv = myAttribs.get(Util.AttributeType.SPD) - enemy.myAttribs.get(Util.AttributeType.SPD);
+		double dmg = ((double) (attack() - enemy.myAttribs.get(myInventory.getDamageType()))) / ((double) enemy.myAttribs.get(Util.AttributeType.CON));
 		
 		if (spdAdv > 8)
 			return 3 * dmg;
@@ -767,4 +867,73 @@ public class Character extends ImageView{
 	}
 
 	
+	/**
+	 * Set the character to be "ded. Leik so ded."
+	 */
+	private void die(){
+		isDead = true;
+		System.out.printf("%s is defeated!\n", myName);
+	}
+	
+	/**
+	 * Reduce Characters HP by up to dmg
+	 * @param dmg
+	 * @return amount of dmg taken
+	 * @throws CharacterDeadException
+	 */
+	private int damage(int dmg) throws CharacterDeadException{
+		//TODO-LongTerm: Check skills (Miracle, other damage reduction skills).
+		if (dmg < 0){
+			dmg = 0;
+		}
+		if (myAttribs.getCurrHP() <= 0){
+			System.out.printf("Stop, stop! %s's alreay dead!\n", myName);
+			throw new CharacterDeadException(this, -1);
+		}
+		if (myAttribs.getCurrHP() <= dmg){
+			dmg = myAttribs.getCurrHP();
+			myAttribs.setCurrHP(0);
+			System.out.printf("%s took %d damage.\n", myName, dmg);
+			throw new CharacterDeadException(this, dmg);
+		}
+		myAttribs.addCurrHP(-dmg);
+		System.out.printf("%s took %d damage.\n", myName, dmg);
+		return dmg;
+	}
+	
+	/**
+	 * One strike of combat
+	 * @param enemy
+	 * @return dmg done
+	 * @throws CharacterDeadException
+	 */
+	private int strike(Character enemy) throws CharacterDeadException{
+		if (attack() == 0){
+			return 0;
+		}
+		
+		int hit = hit() - enemy.avoid();
+		//TODO: Weapon Triangle bonuses
+		
+		if (Util.random.nextInt(99) + Util.random.nextInt(99) >= 2 * hit){
+			//Miss, no damage.
+			return -1;
+		}
+		
+		//TODO-LongTerm: Check on hit skill activations.
+		
+		
+		int crit = crit() - enemy.dodge();
+		if (Util.random.nextInt(99) < crit){
+			//TODO-LongTerm: Check crit trigger skill activations.
+			//Crit, deal extra damage equal to attack.
+			return enemy.damage(2 * attack() - enemy.myAttribs.get(myInventory.getDamageType()));
+		} else {
+			//Normal attack
+			return enemy.damage(attack() - enemy.myAttribs.get(myInventory.getDamageType()));
+		}
+		
+		//TODO-LongTerm: Check after damage skill activations.
+		
+	}
 }

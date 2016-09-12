@@ -7,20 +7,19 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 
 /**
  * Separate the monstrosity that is the UI from the boilerplate Main code and the game's back end.
+ * I feel like there should be a way to separate the different "States" out into different classes, each with there own
+ * keyHandler, but I don't see a clear way to do it.
  * 
  * @author Weston Carvalho building on code by Robert Duvall
  */
-class ExampleGame {
+class MercenaryWars {
     public static final String TITLE = "Example JavaFX";
     public static final int KEY_INPUT_SPEED = 5;
     private static final int CURSOR_SIZE = 20;

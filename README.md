@@ -14,7 +14,7 @@ Look in the project FEHomebrew for the game. Run Main.
 | | W:  Examine a character (Prints to console)|
 | | E:  Back/Cancel selection|
 | |R:  Select option/character|
-| |Attack enemy units with your units to destroy them. Heal <br> your units to keep them alive|
+| |Attack enemy units with your units to destroy them. Heal <br> your units to keep them alive. Rin and Mist can both use <br> the staff command to heal allies. They both are also pretty <br> terrible at attacking.|
 |Campaign Mode| Fly Honeys vs Rude Dudes|
 | |Play against (simple) AI and level up your units|
 | |Primary win condition is to defeat all enemy units.|
