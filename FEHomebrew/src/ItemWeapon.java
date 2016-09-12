@@ -58,6 +58,36 @@ public class ItemWeapon extends Item {
 				);
 	}
 	
+	public static ItemWeapon newBronzeLance(){
+		return new ItemWeapon(
+				"Bronze Lance",
+				500,
+				Util.WeaponType.LANCE,
+				Util.AttributeType.STR,
+				Util.AttributeType.DEF,
+				new ListAttribute(0,0,0,0,0,0,0,0),
+				6,
+				85,
+				0,
+				1
+				);
+	}
+	
+	public static ItemWeapon newBronzeAxe(){
+		return new ItemWeapon(
+				"Bronze Axe",
+				500,
+				Util.WeaponType.LANCE,
+				Util.AttributeType.STR,
+				Util.AttributeType.DEF,
+				new ListAttribute(0,0,0,0,0,0,0,0),
+				7,
+				75,
+				5,
+				1
+				);
+	}
+	
 	public void setEquipped(boolean b){
 		equipped = b;
 	}

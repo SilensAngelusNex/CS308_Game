@@ -110,9 +110,8 @@ public class ListAttribute {
 					RES + that.RES);
 		}
 		
-		public void printAttributes(){
-			System.out.print("STR\tMAG\tSKL\tSPD\tCHA\tCON\tDEF\tRES\n");
-		System.out.printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", STR, MAG, SKL, SPD, CHA, CON, DEF, RES);
+		public String toString(){
+			return String.format("STR\tMAG\tSKL\tSPD\tCHA\tCON\tDEF\tRES\n%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", STR, MAG, SKL, SPD, CHA, CON, DEF, RES);
 	}
 
 }

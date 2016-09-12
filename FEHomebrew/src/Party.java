@@ -94,4 +94,12 @@ public class Party {
 		return result;
 	}
 	
+	public int size(){
+		return myChars.size();
+	}
+
+	public Character getCharacter(int index) {
+		return myChars.get(index);
+	}
+	
 }

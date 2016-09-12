@@ -108,6 +108,62 @@ public class Character extends ImageView{
 		
 	}
 	
+	public static Character newDiana(Point p, int height, int width){
+		Character diana = new Character(
+				"Diana",
+				Util.CharacterClasses.Soldier,
+				new Attributes(19,
+						new int[] {6, 4, 7, 8, 5, 19, 7, 2},
+						new int[] {45, 30, 60, 55, 75, 55, 30, 25},
+						new int[] {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+				new InfoLevel(),
+				new Inventory()
+				);
+		
+		diana.boss = true;
+		
+		diana.take(ItemWeapon.newBronzeLance());
+		diana.inv.equipOnHand(0);
+		diana.myLocation = p;
+		
+		diana.myHeight = height;
+		diana.myWidth = width;
+		
+		diana.setFitHeight(height);
+		diana.setFitWidth(width);
+		diana.moveTo(p);
+		
+		return diana;
+		
+	}
+	
+	public static Character newRin(Point p, int height, int width){
+		Character rin = new Character(
+				"rin",
+				Util.CharacterClasses.Priest,
+				new Attributes(12,
+						new int[] {4, 6, 4, 7, 6, 16, 2, 7},
+						new int[] {40, 50, 60, 45, 25, 40, 20, 45},
+						new int[] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+				new InfoLevel(),
+				new Inventory()
+				);
+		
+		rin.take(ItemWeaponStaff.newHealStaff());
+		rin.inv.equipOffHand(0);
+		rin.myLocation = p;
+		
+		rin.myHeight = height;
+		rin.myWidth = width;
+		
+		rin.setFitHeight(height);
+		rin.setFitWidth(width);
+		rin.moveTo(p);
+		
+		return rin;
+		
+	}
+	
 	public static Character newMist(Point p, int height, int width){
 		Character mist = new Character(
 				"Mist",
@@ -329,7 +385,7 @@ public class Character extends ImageView{
 		}
 	}
 	
-	private void gainExp(int i){
+	public void gainExp(int i){
 		int levelsToGain = level.gainExp(i);
 		
 		while (levelsToGain > 0){
@@ -363,7 +419,7 @@ public class Character extends ImageView{
 		gainExp(toGain);
 	}
 	
-	private int heal(int amount) throws CharacterDeadException{
+	public int heal(int amount) throws CharacterDeadException{
 		//TODO: Check healing skills.
 		if (amount < 0){
 			amount = 0;
@@ -422,10 +478,8 @@ public class Character extends ImageView{
 		return myMov - myTurnInfo.getMoveTaken();
 	}
 	
-	private void printChar(){
-		System.out.printf("%s\t%d\t%d/%d\n", name, level.totalLevel(), attribs.getCurrHP(), attribs.get(Util.AttributeType.CON));
-		System.out.println(charClass.toString());
-		attribs.getRawAttribs().printAttributes();
+	public String verboseToString(){
+		return String.format("%s\t%d\t%d/%d\n%s\n%s\n", name, level.totalLevel(), attribs.getCurrHP(), attribs.get(Util.AttributeType.CON), charClass.toString(), attribs.getRawAttribs().toString());
 	}
 
 	
@@ -439,6 +493,7 @@ public class Character extends ImageView{
 	public String toString(){
 		return String.format("%s\t%d/%dHP\nEXP %d", name, attribs.getCurrHP(), attribs.get(Util.AttributeType.CON), level.getExp());
 	}
+	
 	
 	public int getRange(){
 		return inv.getRange();
@@ -491,17 +546,13 @@ public class Character extends ImageView{
 		e.inv.equipOffHand(0);
 		
 		
-		c.printChar();
 		c.gainExp(500);
-		c.printChar();
 		System.out.println();
 		
 		Character d = newIke(new Point(0, 0), 50, 50);
-		d.printChar();
 		d.inv.add(ItemWeapon.newBronzeSword());
 		d.inv.equipOnHand(0);
 		
-		e.printChar();
 		c.printCmbt(d);
 		
 		c.combat(d);
@@ -517,10 +568,6 @@ public class Character extends ImageView{
 		System.out.println(c.level.getExp());
 		System.out.println(d.level.getExp());
 		System.out.println(e.level.getExp());
-		
-		c.printChar();
-		d.printChar();
-		e.printChar();
 		
 		System.out.println(c);
 		System.out.println(d);
@@ -554,7 +601,7 @@ public class Character extends ImageView{
 	}
 	
 	public boolean hasAction(){
-		return !isDead && myTurnInfo.getActionRemaining();
+		return !isDead &&  myTurnInfo.getActionRemaining();
 	}
 
 	public void finalizeMove(Point endSpace) {
@@ -577,6 +624,18 @@ public class Character extends ImageView{
 
 	public boolean isDead() {
 		return isDead;
+	}
+
+	public Double percentDamage(Character enemy) {
+		int spdAdv = attribs.get(Util.AttributeType.SPD) - enemy.attribs.get(Util.AttributeType.SPD);
+		double dmg = ((double) (attack() - enemy.attribs.get(inv.getDamageType()))) / ((double) enemy.attribs.get(Util.AttributeType.CON));
+		
+		if (spdAdv > 8)
+			return 3 * dmg;
+		else if (spdAdv > 3)
+			return 2 * dmg;
+		else
+			return 1 * dmg;
 	}
 	
 }

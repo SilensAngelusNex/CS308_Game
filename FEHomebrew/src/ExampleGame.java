@@ -5,24 +5,39 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 
 /**
- * Separate the game code from some of the boilerplate code.
+ * Separate the monstrosity that is the UI from the boilerplate Main code and the game's back end.
  * 
- * @author Robert C. Duvall
+ * @author Weston Carvalho building on code by Robert Duvall
  */
 class ExampleGame {
     public static final String TITLE = "Example JavaFX";
     public static final int KEY_INPUT_SPEED = 5;
     private static final int CURSOR_SIZE = 20;
-
-    private Rectangle myTopBlock;
-    private Rectangle myBottomBlock;
+    private static final int CURSOR_SPACING = 35;
+    
+    private static final int SPLASH_CURSOR_X = 350;
+    private static final int SPLASH_CURSOR_Y = 600;
+    
+    private static final int ACTION_CURSOR_X = 660;
+    private static final int ACTION_CURSOR_Y = 70;
+    private static final int ACTION_MENU_X = 650;
+    private static final int ACTION_MENU_Y = 50;
+    
+    private static final int START_CURSOR_X = 360;
+    private static final int START_CURSOR_Y = 380;
+    private static final int START_MENU_X = 350;
+    private static final int START_MENU_Y = 360;
+    
     
     private Scene myScene;
     private Group myRoot;    
@@ -30,9 +45,10 @@ class ExampleGame {
     private int myWidth;
     private int myHeight;
     
-    //Used in splash state
+    //Used in splash menu states (splash, turnChange, actionMenu, startMenu)
     private ImageView mySplash;
 	private Cursor myMenuCursor;
+	private Text myMessage;
 	
 	//Used in MapMenu state
 	private MapCursor myMapCursor;
@@ -43,9 +59,6 @@ class ExampleGame {
 	private Point myMoveStart;
 	private Point myMoveEnd;
 	private Vector<ImageView> myMoveImages;
-	
-	//Used in action menu
-	//private Character myCharacter;
 
 	
 	//Used in attack menu
@@ -82,29 +95,11 @@ class ExampleGame {
         myRoot = new Group();
         // create a place to see the shapes
         myScene = new Scene(myRoot, width, height, Color.BLACK);
-        // make some shapes and set their properties
-
-        
-        
-        myTopBlock = new Rectangle(width / 2 - 12, height / 2 - 100, 24, 100);
-        myTopBlock.setFill(Color.RED);
-        myBottomBlock = new Rectangle(width / 2 - 25, height / 2 + 50, 50, 50);
-        myBottomBlock.setFill(Color.BISQUE);
-
-        // x and y represent the top left corner, so center it
-
-        
-        // order added to the group is the order in which they are drawn
-        
-		myRoot.getChildren().add(myTopBlock);
-		myRoot.getChildren().add(myBottomBlock);
 		
 		enterSplash();
         
         // respond to input
-        myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-        //myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
-        myScene.setOnMouseClicked(e -> handleMouseInput((MouseEvent) e));
+        myScene.setOnKeyPressed(e -> handleKeyInput(e));
         return myScene;
     }
 
@@ -115,26 +110,6 @@ class ExampleGame {
      * but these simple ways work too.
      */
     public void step (double elapsedTime) {
-        // update attributes
-        myTopBlock.setRotate(myTopBlock.getRotate() - 1);
-        myBottomBlock.setRotate(myBottomBlock.getRotate() + 1);
-        
-        // check for collisions
-        // with shapes, can check precisely
-        Shape intersect = Shape.intersect(myTopBlock, myBottomBlock);
-        if (intersect.getBoundsInLocal().getWidth() != -1) {
-            myTopBlock.setFill(Color.MAROON);
-        }
-        else {
-            myTopBlock.setFill(Color.RED);
-        }
-        // with images can only check bounding box
-        if (mySplash != null && myBottomBlock.getBoundsInParent().intersects(mySplash.getBoundsInParent())) {
-            myBottomBlock.setFill(Color.BURLYWOOD);
-        }
-        else {
-            myBottomBlock.setFill(Color.BISQUE);
-        }
         
         if (myChapterMap != null){
         	myRoot.getChildren().removeAll(myChapterMap.bringOutYourDead());
@@ -144,42 +119,46 @@ class ExampleGame {
             	else
             		enterTurnChangeSplash();
         	}
+        	if (myChapterMap.currentTurnAI() && !myChapterMap.doneAI()){
+        		myChapterMap.nextMoveAI();
+        	}
         }
     }
 
 
 
     // What to do each time a key is pressed
-    private void handleKeyInput (KeyCode code) {
+    private void handleKeyInput (KeyEvent e) {
     	switch (myState){
 	        case SPLASH:
-	        	splashKeyHandler(code);
+	        	splashKeyHandler(e.getCode());
 	        	break;
 	        case STARTMENU:
-	        	startMenuKeyHandler(code);
+	        	startMenuKeyHandler(e.getCode());
 	        	break;
 	        case MAPMENU:
-	        	mapMenuKeyHandler(code);
+	        	mapMenuKeyHandler(e);
 	        	break;
 	        case MOVEMENU:
-	        	moveMapKeyHandler(code);
+	        	moveMapKeyHandler(e.getCode());
 	        	break;
 	        case ACTIONMENU:
-	        	actionMenuKeyHandler(code);
+	        	actionMenuKeyHandler(e.getCode());
 	        	break;
 	        case ATTACKMENU:
-	        	attackMenuKeyHandler(code);
+	        	attackMenuKeyHandler(e.getCode());
 	        	break;
 	        case TURNCHANGE:
-	        	turnChangeKeyHandler(code);
+	        	turnChangeKeyHandler(e.getCode());
 	        case ANIMATION:
 	        	//Do nothing.
 	        	break;
 	        case VICTORY:
-	        	//victoryKeyHandler(code);
+	        	//Do nothing.
 	        	break;
 	        case EXAMINE:
-	        	//examineKeyHandler(code);
+	        	//TODO: implement examine
+	        	//examineKeyHandler(e.getCode());
 	        	break;
 	        default:
 	        	break;
@@ -190,11 +169,9 @@ class ExampleGame {
     	switch (code){
 	        case RIGHT:
 	        	//Do nothing
-	            myTopBlock.setX(myTopBlock.getX() + KEY_INPUT_SPEED);
 	            break;
 	        case LEFT:
 	        	//Do nothing
-	            myTopBlock.setX(myTopBlock.getX() - KEY_INPUT_SPEED);
 	            break;
 	        case UP:
 	            myMenuCursor.moveUp(1);
@@ -257,8 +234,8 @@ class ExampleGame {
     	}
     }
     
-    private void mapMenuKeyHandler(KeyCode code){
-    	switch (code){
+    private void mapMenuKeyHandler(KeyEvent e){
+    	switch (e.getCode()){
 	        case RIGHT:
 	            myMapCursor.right();
 	            characterMousOver();
@@ -280,11 +257,34 @@ class ExampleGame {
 	        		enterMoveMenu();
 	            break;
 	        case W:
-	        	System.out.printf("Examine %s\t", myMapCursor.getLocation().toString());
-	        	System.out.println(myChapterMap.getTerrain(myMapCursor.getLocation()));
-	        	System.out.println(myChapterMap.getCharacter(myMapCursor.getLocation()));
+	        	myChapterMap.getCharacter(myMapCursor.getLocation()).verboseToString();
+	        	break;
 	        case Q:
 	        	enterStartMenu();
+	        	break;
+	        case S:
+	        	if (e.isControlDown() && !myChapterMap.hasCharacter(myMapCursor.getLocation()))	
+	        		myRoot.getChildren().add(myMapCursor.spawnEnemy());
+	        	break;
+	        case M:
+	        	if (	e.isControlDown() &&
+	        			myChapterMap.getCharacter(myMapCursor.getLocation()) != null &&
+	        			myChapterMap.isOnOwnTurn(myMapCursor.getLocation())
+	        			)
+	        		myChapterMap.getCharacter(myMapCursor.getLocation()).nextTurn();
+	        	break;
+	        case H:
+	        	if (	e.isControlDown() &&
+	        			myChapterMap.getCharacter(myMapCursor.getLocation()) != null
+	        			)
+	        		myChapterMap.getCharacter(myMapCursor.getLocation()).heal(1000);
+	        	break;
+	        case X:
+	        	if (	e.isControlDown() &&
+	        			myChapterMap.getCharacter(myMapCursor.getLocation()) != null
+	        			)
+	        		myChapterMap.getCharacter(myMapCursor.getLocation()).gainExp(100);
+	        	break;
 	        default:
 	            // do nothing
     	}
@@ -370,7 +370,9 @@ class ExampleGame {
 	        		case 3:
 	        			exitActionMenu();
 	        			myChapterMap.move(myMoveEnd, myMoveStart);
+	        			
 	        			myMapCursor.setLocation(myMoveStart);
+	        	    	myChapterMap.getCharacter(myMoveStart).setValidMoves(null);
 	        			exitMoveMenu();
 	        			
 	        	}
@@ -380,6 +382,7 @@ class ExampleGame {
 	        	System.out.println("Back");
     			exitActionMenu();
     			myChapterMap.move(myMoveEnd, myMoveStart);
+    	    	myChapterMap.getCharacter(myMoveStart).setValidMoves(null);
 	        default:
 	            // do nothing
     	}
@@ -447,11 +450,14 @@ class ExampleGame {
     	mySplash = new ImageView(splashImage);
     	myRoot.getChildren().add(mySplash);
     	
+    	mySplash.setFitHeight(myHeight);
+    	mySplash.setFitWidth(myWidth);
+    	
         mySplash.setX(myWidth / 2 - mySplash.getBoundsInLocal().getWidth() / 2);
         mySplash.setY(myHeight / 2  - mySplash.getBoundsInLocal().getHeight() / 2);
         
     	
-    	myMenuCursor = new Cursor(400, 600, CURSOR_SIZE, 100, 2);
+    	myMenuCursor = new Cursor(SPLASH_CURSOR_X, SPLASH_CURSOR_Y, CURSOR_SIZE, CURSOR_SPACING, 2);
         myMenuCursor.setFill(Color.RED);
     	myRoot.getChildren().add(myMenuCursor);	
     }
@@ -467,7 +473,12 @@ class ExampleGame {
     private void enterStartMenu(){
     	myState = GameState.STARTMENU;
     	
-    	myMenuCursor = new Cursor(myWidth / 2, myHeight / 2, 20, 30, 2);
+    	mySplash = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream("StartMenu.png")));
+    	mySplash.setX(START_MENU_X);
+    	mySplash.setY(START_MENU_Y);
+    	myRoot.getChildren().add(mySplash);
+    	
+    	myMenuCursor = new Cursor(START_CURSOR_X, START_CURSOR_Y, CURSOR_SIZE, CURSOR_SPACING, 2);
     	myMenuCursor.setFill(Color.GOLD);
     	myRoot.getChildren().add(myMenuCursor);
     }
@@ -475,9 +486,10 @@ class ExampleGame {
     private void exitStartMenu(){
     	myState = GameState.MAPMENU;
     	
-    	myRoot.getChildren().remove(myMenuCursor);    	
+    	myRoot.getChildren().remove(myMenuCursor);  
+    	myRoot.getChildren().remove(mySplash);
     	myMenuCursor = null;
-    	
+    	mySplash = null;
     }
     
     private void enterTurnChangeSplash(){    		
@@ -485,18 +497,38 @@ class ExampleGame {
     	
     	myChapterMap.endTurn();
 
-    	mySplash = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream("giphy.gif")));
+    	mySplash = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream("TurnChangeSplash.png")));
+    	
+    	mySplash.setFitHeight(myHeight);
+    	mySplash.setFitWidth(myWidth);
+    	
+        mySplash.setX(myWidth / 2 - mySplash.getBoundsInLocal().getWidth() / 2);
+        mySplash.setY(myHeight / 2  - mySplash.getBoundsInLocal().getHeight() / 2);
+    	
     	myRoot.getChildren().add(mySplash);
+    	
+    	myMessage = new Text(String.format("%s' Turn", myChapterMap.currentTurn()));
+    	myMessage.setFont(Font.font("Copperplate", 40));
+    	myMessage.setFill(Color.RED);
+    	
+    	myMessage.setX(myWidth / 2 - myMessage.getBoundsInLocal().getWidth() / 2);
+    	myMessage.setY(475);
+    	
+    	myRoot.getChildren().add(myMessage);
 
     }
     
     private void exitTurnChangeSplash(){
-
+    	myRoot.getChildren().remove(myMessage);
+    	myRoot.getChildren().remove(mySplash);
+    	myMessage = null;
+    	mySplash = null;
+    	
+    	if (myChapterMap.currentTurnAI()){
+    		//Do AI shit
+    	} else {
 	    	myState = GameState.MAPMENU;
-	    	
-	    	myRoot.getChildren().remove(mySplash);
-	    	mySplash = null;
- 
+    	}
     }
     
     private void enterMap(ChapterMap cMap){
@@ -527,7 +559,6 @@ class ExampleGame {
     }
     
     private void exitMoveMenu(){
-    	System.out.println("Exit");
     	myState = GameState.MAPMENU;
     	
     	myRoot.getChildren().removeAll(myMoveImages);
@@ -541,7 +572,12 @@ class ExampleGame {
     private void enterActionMenu(){
     	myState = GameState.ACTIONMENU;
     	
-    	myMenuCursor = new Cursor(600, 100, 20, 30, 4);
+    	mySplash = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream("ActionMenu.png")));
+    	mySplash.setX(ACTION_MENU_X);
+    	mySplash.setY(ACTION_MENU_Y);
+    	myRoot.getChildren().add(mySplash);
+    	
+    	myMenuCursor = new Cursor(ACTION_CURSOR_X, ACTION_CURSOR_Y, CURSOR_SIZE, CURSOR_SPACING, 4);
     	myMenuCursor.setFill(Color.GOLD);
     	myRoot.getChildren().add(myMenuCursor);
     }
@@ -550,7 +586,9 @@ class ExampleGame {
     	myState = GameState.MOVEMENU;
     	
     	myRoot.getChildren().remove(myMenuCursor);
+    	myRoot.getChildren().remove(mySplash);
     	myMenuCursor = null;
+    	mySplash = null;
     	
     }
     
@@ -568,24 +606,17 @@ class ExampleGame {
     private void enterVictorySplash(String victor){
     	myState = GameState.VICTORY;
     	
-    	mySplash = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream("giphy.gif")));
+    	mySplash = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream("VictorySplash.png")));
     	myRoot.getChildren().add(mySplash);
     	
-		System.out.println("Victory:");
-		System.out.println(myChapterMap.getVictor());
+    	Text myMessage = new Text(String.format("%s are victorious!", victor));
+    	myMessage.setFont(Font.font("Copperplate", 30));
+    	myMessage.setFill(Color.RED);
     	
-    }
-    
-    // What to do each time a key is pressed
-    /*
-    private void handleMouseInput (double x, double y) {
-        if (myBottomBlock.contains(x, y)) {
-            myBottomBlock.setScaleX(myBottomBlock.getScaleX() * GROWTH_RATE);
-            myBottomBlock.setScaleY(myBottomBlock.getScaleY() * GROWTH_RATE);
-        }
-    }
-    */
-    private void handleMouseInput(MouseEvent e){
-    	//Ignore mouse inputs
+    	myMessage.setX(myWidth / 2 - myMessage.getBoundsInLocal().getWidth() / 2);
+    	myMessage.setY(475);
+    	
+    	myRoot.getChildren().add(myMessage);
+    	
     }
 }

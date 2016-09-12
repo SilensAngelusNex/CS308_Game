@@ -66,9 +66,5 @@ Events
 	Exp Gain			Character (Mane at least)
 
 To-do list
-	check character deaths, victory and defeat
-	implement ai player
-	make menu images
 	cheat keys
-	make splash, victory, defeat images
 	level design
