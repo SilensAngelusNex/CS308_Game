@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -39,6 +40,17 @@ class MercenaryWars {
     private static final int START_MENU_X = 350;
     private static final int START_MENU_Y = 360;
     
+	private static final double EXAMINE_X = 200;
+	private static final double EXAMINE_Y = 200;
+	private static final double EXAMINE_WIDTH = 400;
+	private static final double EXAMINE_HEIGHT = 400;
+	private static final int EXAMINE_FONT_SIZE = 12;
+	private static final double EXAMINE_OFFSET = 100;
+	
+	private static final int FONT_SIZE = 30;
+
+	
+    
     
     private Scene myScene;
     private Group myRoot;    
@@ -64,6 +76,9 @@ class MercenaryWars {
 	
 	//Used in attack menu
 	private boolean myStaffBool;
+	
+	//Used in Examine
+	private Rectangle myBackground;
 
 
     /**
@@ -162,8 +177,7 @@ class MercenaryWars {
 	        	//Do nothing.
 	        	break;
 	        case EXAMINE:
-	        	//TODO: implement examine
-	        	//examineKeyHandler(e.getCode());
+	        	examineKeyHandler(e.getCode());
 	        	break;
 	        default:
 	        	break;
@@ -187,11 +201,9 @@ class MercenaryWars {
 	        case R:
 	        	if (myMenuCursor.getPos() == 0){
 	        		exitSplash();
-	        		System.out.println("Campaign");
 		        	enterMap(ChapterMap.newCampaignLvl1());
 	        	} else {
 	        		exitSplash();
-	        		System.out.println("Multiplayer");
 	        		enterMap(ChapterMap.newMultiplayer());
 	        	}
 	            break;
@@ -262,7 +274,8 @@ class MercenaryWars {
 	        		enterMoveMenu();
 	            break;
 	        case W:
-	        	System.out.println(myChapterMap.getCharacter(myMapCursor.getLocation()).verboseToString());
+	        	if (myChapterMap.hasCharacter(myMapCursor.getLocation()))
+	        		enterExamine(myChapterMap.getCharacter(myMapCursor.getLocation()).verboseToString());
 	        	break;
 	        case Q:
 	        	enterStartMenu();
@@ -320,7 +333,6 @@ class MercenaryWars {
 	        	if (	(myValidMoves.keySet().contains(myMapCursor.getLocation()) &&
 	        			(myChapterMap.getCharacter(myMapCursor.getLocation()) == null) ||
 	        			myMapCursor.getLocation().equals(myMoveStart))){
-	        		System.out.println(myMapCursor.getLocation());
 	        		myMoveEnd = myMapCursor.getLocation();
 	        		myChapterMap.move(myMoveStart, myMoveEnd);
 	        		enterActionMenu();
@@ -355,19 +367,16 @@ class MercenaryWars {
 	        			//Switch to attack menu
 	        			if(myChapterMap.canAct(myMoveEnd)){
 		        			enterAttackMenu(false);
-		        			System.out.println("Attack");
 	        			}
 	        			break;
 	        		case 1:
 	        			//Switch to attack menu for staves
 	        			if(myChapterMap.canAct(myMoveEnd)){
 		        			enterAttackMenu(true);
-		        			System.out.println("Staff");
 	        			}
 	        			break;
 	        		case 2:
 	        			//Switch back to map menu
-	        			System.out.println("Wait");
 	        			myChapterMap.finalizeMove(myMoveEnd);
 	        			exitActionMenu();
 	        			exitMoveMenu();
@@ -384,7 +393,6 @@ class MercenaryWars {
 	            break;
 	        case E:
 	        	//Go back to move menu
-	        	System.out.println("Back");
     			exitActionMenu();
     			myChapterMap.move(myMoveEnd, myMoveStart);
 	        default:
@@ -442,6 +450,22 @@ class MercenaryWars {
 	        	exitAttackMenu();
 	        default:
 	            // do nothing
+    	}
+    }
+    
+    private void examineKeyHandler(KeyCode code){
+    	switch (code){
+    		case R:
+    			exitExamine();
+    			break;
+    		case E:
+    			exitExamine();
+    			break;
+    		case W:
+    			exitExamine();
+    			break;
+    		default:
+    			//Do nothing
     	}
     }
     
@@ -548,7 +572,6 @@ class MercenaryWars {
     }
     
     private void enterMoveMenu(){
-    	System.out.println("Enter");
     	myState = GameState.MOVEMENU;
     	
     	myMoveStart = myMapCursor.getLocation();
@@ -604,6 +627,36 @@ class MercenaryWars {
     	
     }
     
+    private void enterExamine(String message){
+    	myState = GameState.EXAMINE;
+    	
+    	myBackground = new Rectangle(EXAMINE_X, EXAMINE_Y, EXAMINE_WIDTH, EXAMINE_HEIGHT);
+    	myBackground.setFill(Color.NAVY);
+    	myRoot.getChildren().add(myBackground);
+    	
+    	myMessage = new Text(message);
+    	myMessage.setFont(Font.font("Copperplate", EXAMINE_FONT_SIZE));
+    	myMessage.setFill(Color.GOLD);
+    	
+    	myMessage.setX(EXAMINE_X);
+    	myMessage.setY(EXAMINE_Y + EXAMINE_OFFSET);
+
+    	myRoot.getChildren().add(myMessage);
+    	
+    	
+    }
+    
+    private void exitExamine(){
+    	myState = GameState.MAPMENU;
+    	
+    	myRoot.getChildren().remove(myBackground);
+    	myRoot.getChildren().remove(myMessage);
+
+    	myBackground = null;
+    	myMessage = null;
+    	
+    }
+    
     private void enterVictorySplash(String victor){
     	myState = GameState.VICTORY;
     	
@@ -611,7 +664,7 @@ class MercenaryWars {
     	myRoot.getChildren().add(mySplash);
     	
     	Text myMessage = new Text(String.format("%s are victorious!", victor));
-    	myMessage.setFont(Font.font("Copperplate", 30));
+    	myMessage.setFont(Font.font("Copperplate", FONT_SIZE));
     	myMessage.setFill(Color.RED);
     	
     	myMessage.setX(myWidth / 2 - myMessage.getBoundsInLocal().getWidth() / 2);

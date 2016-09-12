@@ -659,7 +659,11 @@ public class Character extends ImageView{
 	}
 	
 	public String verboseToString(){
-		return String.format("%s\tLVL %d\t%d/%d\n%s\n%s\n", myName, myLevel.totalLevel(), myAttribs.getCurrHP(), myAttribs.get(Util.AttributeType.CON), myClass.toString(), myAttribs.getRawAttribs().toString());
+		String line1 = String.format("%s\tLVL %d\t%d/%d\n", myName, myLevel.totalLevel(), myAttribs.getCurrHP(), myAttribs.get(Util.AttributeType.CON));
+		String line2 = String.format("%s\n%s\n", myClass.toString(), myAttribs.getRawAttribs().toString());
+		String line3 = "Attack\tHit\tCrit\tDefense\tAvoid\tDodge\tSpeed\n";
+		String line4 = String.format("%d\t\t%d\t%d\t%d\t\t%d     \t%d\t\t%d\n", attack(), hit(), crit(), myAttribs.get(Util.AttributeType.DEF), avoid(), dodge(), myAttribs.get(Util.AttributeType.SPD));
+		return String.format("%s%s%s%s", line1, line2, line3, line4);
 	}
 
 	
@@ -670,11 +674,17 @@ public class Character extends ImageView{
 		System.out.printf("\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", attack()-e.myAttribs.get(Util.AttributeType.DEF), hit()-e.avoid(), crit()-e.dodge(), e.attack()-myAttribs.get(Util.AttributeType.DEF), e.hit()-avoid(), e.crit()-dodge(), myAttribs.get(Util.AttributeType.SPD)-e.myAttribs.get(Util.AttributeType.SPD));
 	}
 	
+	/**
+	 * Return name, hp, class, exp and level
+	 */
 	public String toString(){
 		return String.format("%s\t%d/%dHP\nEXP %d\tLVL %d", myName, myAttribs.getCurrHP(), myAttribs.get(Util.AttributeType.CON), myLevel.getExp(), myLevel.totalLevel());
 	}
 	
-	
+	/**
+	 * 
+	 * @return attack range
+	 */
 	public int getRange(){
 		return myInventory.getRange();
 	}
