@@ -1,80 +1,121 @@
-
+/**
+ * Attributes say everything about a character's inherent skills and abilities, including their raw Attributes,
+ * attribute growth rates, and weapon mastery.
+ * @author Weston
+ *
+ */
 public class Attributes {
-	private ListAttribute rawAttribs;
-	private ListAttribute growths;
-	private ListWeapon wepMastery;
-	private int currentHp;
-	//TODO: movement
+	private ListAttribute myRawAttribs;
+	private ListAttribute myGrowths;
+	private ListWeapon myWeaponMastery;
+	private int myCurrentHp;
+	//TODO: add movement
 
-	//Might not need this.
+	//Might not need this. Never, used it, but it works if I want it.
 	private ListAttribute bonuses;
 
-	public Attributes(int cHp, int[] r, int[] g, int[] w){
-		currentHp = cHp;
-		rawAttribs = new ListAttribute(r);
-		growths = new ListAttribute(g);
-		wepMastery = new ListWeapon(w);
+	/**
+	 * Constructs Attributes from currentHp, raw attibutes, growths, and weapon mastery.
+	 * @param currentHp
+	 * @param rawAttributes
+	 * @param growths
+	 * @param weaponMastery
+	 */
+	public Attributes(int currentHp, int[] rawAttributes, int[] growths, int[] weaponMastery){
+		myCurrentHp = currentHp;
+		myRawAttribs = new ListAttribute(rawAttributes);
+		myGrowths = new ListAttribute(growths);
+		myWeaponMastery = new ListWeapon(weaponMastery);
 		bonuses = new ListAttribute(0,0,0,0,0,0,0,0);
 		
 	}
 
+	/**
+	 * Levels up, giving each raw attribute that attribute's growth rate % chance to increase by 1.
+	 * @return a ListAttribute of the increased attributes
+	 */
 	public ListAttribute levelUp(){
 		ListAttribute increased = new ListAttribute(0,0,0,0,0,0,0,0);
 
 		for (Util.AttributeType i : Util.AttributeType.values()){
 
-			int growth = growths.get(i);
+			int growth = myGrowths.get(i);
 			//TODO-LongTerm: Make adjustment for growth > 100.
 
 			//Increment the characters attribute growth% of the time.
-			if (Util.rand.nextInt(99) <= growth){
+			if (Util.random.nextInt(99) <= growth){
 				increased.set(i, 1);
 			}
 		}
-		rawAttribs = rawAttribs.add(increased);
+		myRawAttribs = myRawAttribs.add(increased);
 		return increased;
 	}
-
+	
+	/**
+	 * Given an AttributeType, returns that raw attribute plus that attribute's bonus.
+	 * @param a
+	 * @return
+	 */
 	public int get(Util.AttributeType a){
 		switch (a){
 		case STR:
-			return rawAttribs.get(Util.AttributeType.STR) + bonuses.get(Util.AttributeType.STR);
+			return myRawAttribs.get(Util.AttributeType.STR) + bonuses.get(Util.AttributeType.STR);
 		case MAG:
-			return rawAttribs.get(Util.AttributeType.MAG) + bonuses.get(Util.AttributeType.MAG);
+			return myRawAttribs.get(Util.AttributeType.MAG) + bonuses.get(Util.AttributeType.MAG);
 		case SKL:
-			return rawAttribs.get(Util.AttributeType.SKL) + bonuses.get(Util.AttributeType.SKL);
+			return myRawAttribs.get(Util.AttributeType.SKL) + bonuses.get(Util.AttributeType.SKL);
 		case SPD:
-			return rawAttribs.get(Util.AttributeType.SPD) + bonuses.get(Util.AttributeType.SPD);
+			return myRawAttribs.get(Util.AttributeType.SPD) + bonuses.get(Util.AttributeType.SPD);
 		case CHA:
-			return rawAttribs.get(Util.AttributeType.CHA) + bonuses.get(Util.AttributeType.CHA);
+			return myRawAttribs.get(Util.AttributeType.CHA) + bonuses.get(Util.AttributeType.CHA);
 		case CON:
-			return rawAttribs.get(Util.AttributeType.CON) + bonuses.get(Util.AttributeType.CON);
+			return myRawAttribs.get(Util.AttributeType.CON) + bonuses.get(Util.AttributeType.CON);
 		case DEF:
-			return rawAttribs.get(Util.AttributeType.DEF) + bonuses.get(Util.AttributeType.DEF);
+			return myRawAttribs.get(Util.AttributeType.DEF) + bonuses.get(Util.AttributeType.DEF);
 		case RES:
-			return rawAttribs.get(Util.AttributeType.RES) + bonuses.get(Util.AttributeType.RES);
+			return myRawAttribs.get(Util.AttributeType.RES) + bonuses.get(Util.AttributeType.RES);
 		default:
 			 throw new UnsupportedOperationException(a.toString());
 		}
 	}
 	
+	/**
+	 * @return raw Attributes
+	 */
 	public ListAttribute getRawAttribs(){
-		return rawAttribs;
+		return myRawAttribs;
 	}
+	/**
+	 * @return Attribute bonuses
+	 */
 	public ListAttribute getBonuses(){
 		return bonuses;
 	}
+	/**
+	 * @return weapon mastery values
+	 */
 	public ListWeapon getWepMastery(){
-		return wepMastery;
+		return myWeaponMastery;
 	}
+	/**
+	 * @return current HP
+	 */
 	public int getCurrHP(){
-		return currentHp;
+		return myCurrentHp;
 	}
+	/**
+	 * Sets current HP to i.
+	 * @param i
+	 */
 	public void setCurrHP(int i){
-		currentHp = i;
+		myCurrentHp = i;
 	}
+	/**
+	 * Adds i to current HP.
+	 * @param i
+	 */
 	public void addCurrHP(int i){
-		currentHp += i;
+		myCurrentHp += i;
 	}
 
 }

@@ -1,5 +1,11 @@
 import java.util.Vector;
 
+/**
+ * This class is how characters store Items. There are two Vectors, one for weapons, and one for not weapons. Inventory
+ * also keeps track of which weapons a character has equipped.
+ * @author Weston
+ *
+ */
 public class Inventory {
 	private Vector<ItemWeapon> weapons;
 	private Vector<Item> items;
@@ -85,7 +91,7 @@ public class Inventory {
 		//Put new offHand weapon at the start of the weapons list, after the onHand weapon
 		
 		weapons.remove(toEquip);
-		if (weapons.size() > 1 && weapons.get(0).equipped){
+		if (weapons.size() > 1 && weapons.get(0).isEquipped){
 			weapons.add(1, toEquip);
 		} else {
 			weapons.add(0, toEquip);

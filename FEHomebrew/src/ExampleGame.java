@@ -48,7 +48,7 @@ class ExampleGame {
     
     //Used in splash menu states (splash, turnChange, actionMenu, startMenu)
     private ImageView mySplash;
-	private Cursor myMenuCursor;
+	private MenuCursor myMenuCursor;
 	private Text myMessage;
 	
 	//Used in MapMenu state
@@ -461,7 +461,7 @@ class ExampleGame {
         mySplash.setY(myHeight / 2  - mySplash.getBoundsInLocal().getHeight() / 2);
         
     	
-    	myMenuCursor = new Cursor(SPLASH_CURSOR_X, SPLASH_CURSOR_Y, CURSOR_SIZE, CURSOR_SPACING, 2);
+    	myMenuCursor = new MenuCursor(SPLASH_CURSOR_X, SPLASH_CURSOR_Y, CURSOR_SIZE, CURSOR_SPACING, 2);
         myMenuCursor.setFill(Color.RED);
     	myRoot.getChildren().add(myMenuCursor);	
     }
@@ -482,7 +482,7 @@ class ExampleGame {
     	mySplash.setY(START_MENU_Y);
     	myRoot.getChildren().add(mySplash);
     	
-    	myMenuCursor = new Cursor(START_CURSOR_X, START_CURSOR_Y, CURSOR_SIZE, CURSOR_SPACING, 2);
+    	myMenuCursor = new MenuCursor(START_CURSOR_X, START_CURSOR_Y, CURSOR_SIZE, CURSOR_SPACING, 2);
     	myMenuCursor.setFill(Color.GOLD);
     	myRoot.getChildren().add(myMenuCursor);
     }
@@ -578,7 +578,7 @@ class ExampleGame {
     	mySplash.setY(ACTION_MENU_Y);
     	myRoot.getChildren().add(mySplash);
     	
-    	myMenuCursor = new Cursor(ACTION_CURSOR_X, ACTION_CURSOR_Y, CURSOR_SIZE, CURSOR_SPACING, 4);
+    	myMenuCursor = new MenuCursor(ACTION_CURSOR_X, ACTION_CURSOR_Y, CURSOR_SIZE, CURSOR_SPACING, 4);
     	myMenuCursor.setFill(Color.GOLD);
     	myRoot.getChildren().add(myMenuCursor);
     }

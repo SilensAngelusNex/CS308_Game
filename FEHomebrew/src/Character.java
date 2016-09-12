@@ -373,12 +373,12 @@ public class Character extends ImageView{
 		if (inv.getWeaponsEquipped() == 0) {
 			return 0;
 		} else if (inv.getWeaponsEquipped() == 2){
-			return (inv.getMight() + attribs.get(inv.getOnHand().wAttrib) + attribs.get(inv.getOffHand().wAttrib)) / 2 + bonuses;
+			return (inv.getMight() + attribs.get(inv.getOnHand().wDmgBonusAttrib) + attribs.get(inv.getOffHand().wDmgBonusAttrib)) / 2 + bonuses;
 		} else {
 			if (inv.getOnHand() != null){
-				return inv.getMight() + attribs.get(inv.getOnHand().wAttrib) + bonuses;
+				return inv.getMight() + attribs.get(inv.getOnHand().wDmgBonusAttrib) + bonuses;
 			} else {
-				return inv.getMight() + attribs.get(inv.getOffHand().wAttrib) + bonuses;
+				return inv.getMight() + attribs.get(inv.getOffHand().wDmgBonusAttrib) + bonuses;
 			}
 		}
 	}
@@ -417,7 +417,7 @@ public class Character extends ImageView{
 		int hit = hit() - enemy.avoid();
 		//TODO: Weapon Triangle bonuses
 		
-		if (Util.rand.nextInt(99) + Util.rand.nextInt(99) >= 2 * hit){
+		if (Util.random.nextInt(99) + Util.random.nextInt(99) >= 2 * hit){
 			//Miss, no damage.
 			return -1;
 		}
@@ -426,7 +426,7 @@ public class Character extends ImageView{
 		
 		
 		int crit = crit() - enemy.dodge();
-		if (Util.rand.nextInt(99) < crit){
+		if (Util.random.nextInt(99) < crit){
 			//TODO-LongTerm: Check crit trigger skill activations.
 			//Crit, deal extra damage equal to attack.
 			return enemy.damage(2 * attack() - enemy.attribs.get(inv.getDamageType()));

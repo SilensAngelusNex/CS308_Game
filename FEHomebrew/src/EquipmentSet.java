@@ -11,7 +11,7 @@ public class EquipmentSet {
 	}
 	
 	public ListAttribute weaponBonus(){
-		return onHand.aBonuses.add(offHand.aBonuses);
+		return onHand.attributeBonuses.add(offHand.attributeBonuses);
 	}
 	public ListAttribute armorBonus(){
 		return armor.getBonuses();
@@ -68,9 +68,9 @@ public class EquipmentSet {
 	
 	public Util.AttributeType damageType(){
 		if (onHand != null){
-			return onHand.wDmgType;
+			return onHand.wDmgMitigationType;
 		} else if (offHand != null){
-			return offHand.wDmgType;
+			return offHand.wDmgMitigationType;
 		}
 		return Util.AttributeType.STR;
 	}

@@ -66,5 +66,7 @@ Events
 	Exp Gain			Character (Mane at least)
 
 To-do list
-	cheat keys
+	Da Rulez
+	examine
+	canAttack is orange
 	level design
