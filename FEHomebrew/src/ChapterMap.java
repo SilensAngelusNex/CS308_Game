@@ -63,26 +63,27 @@ public class ChapterMap {
 	public static ChapterMap newMultiplayer(){
 		Terrain p = Terrain.newPlain();
 		Terrain f = Terrain.newForest();
+		Terrain r = Terrain.newRocks();
 		
 		Terrain[][] tMap = new Terrain[][]
 				{
 			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f},
 			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
 			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, p, p, r, p, p, p, p, p, p, p, p, p},
 			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
 			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
 			{f, p, p, p, f, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
 			{f, p, p, p, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{r, p, p, p, p, f, p, p, p, p, p, p, p, p, p, p, p, r, p, p, p, p},
 			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
 			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
 			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, p, p, p, p, p, r, p, p, p, p, p, p, p, p, p, p, p},
 			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
 			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
 			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
-			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
+			{f, p, p, p, p, r, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
 			{f, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p, p},
 			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f},
 			{f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f}
@@ -111,6 +112,7 @@ public class ChapterMap {
 	public static ChapterMap newCampaignLvl1(){
 		Terrain p = Terrain.newPlain();
 		Terrain f = Terrain.newForest();
+		Terrain r = Terrain.newRocks();
 		
 		Terrain[][] tMap = new Terrain[][]
 				{

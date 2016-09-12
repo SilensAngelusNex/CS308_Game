@@ -20,13 +20,14 @@ import javafx.scene.text.Text;
  * @author Weston Carvalho building on code by Robert Duvall
  */
 class MercenaryWars {
-    public static final String TITLE = "Example JavaFX";
+    public static final String TITLE = "Mercenary Wars";
     public static final int KEY_INPUT_SPEED = 5;
     private static final int CURSOR_SIZE = 20;
     private static final int CURSOR_SPACING = 35;
     
-    private static final int SPLASH_CURSOR_X = 350;
-    private static final int SPLASH_CURSOR_Y = 600;
+    private static final int SPLASH_CURSOR_X = 190;
+    private static final int SPLASH_CURSOR_Y = 625;
+    private static final int SPLASH_CURSOR_SPACING = 75;
     
     private static final int ACTION_CURSOR_X = 660;
     private static final int ACTION_CURSOR_Y = 70;
@@ -449,7 +450,7 @@ class MercenaryWars {
     	myState = GameState.SPLASH;
     	
     	
-    	Image splashImage = new Image(getClass().getClassLoader().getResourceAsStream("giphy.gif"));
+    	Image splashImage = new Image(getClass().getClassLoader().getResourceAsStream("Splash.png"));
     	mySplash = new ImageView(splashImage);
     	myRoot.getChildren().add(mySplash);
     	
@@ -460,7 +461,7 @@ class MercenaryWars {
         mySplash.setY(myHeight / 2  - mySplash.getBoundsInLocal().getHeight() / 2);
         
     	
-    	myMenuCursor = new MenuCursor(SPLASH_CURSOR_X, SPLASH_CURSOR_Y, CURSOR_SIZE, CURSOR_SPACING, 2);
+    	myMenuCursor = new MenuCursor(SPLASH_CURSOR_X, SPLASH_CURSOR_Y, CURSOR_SIZE, SPLASH_CURSOR_SPACING, 2);
         myMenuCursor.setFill(Color.RED);
     	myRoot.getChildren().add(myMenuCursor);	
     }

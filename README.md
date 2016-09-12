@@ -17,10 +17,10 @@ Look in the project FEHomebrew for the game. Run Main.
 | |Attack enemy units with your units to destroy them. Heal <br> your units to keep them alive. Rin and Mist can both use <br> the staff command to heal allies. They both are also pretty <br> terrible at attacking.|
 |Campaign Mode| Fly Honeys vs Rude Dudes|
 | |Play against (simple) AI and level up your units|
-| |Primary win condition is to defeat all enemy units.|
+| |Win condition is to defeat all enemy units.|
 |Multiplayer mode|Greil Mercenaries vs Mia's Edgelords|
 | |Play against a human opponent|
-| |Primary win condition is to defeat the enemy's leader <br> (Either Ike or Mia)|
+| |Win condition is to defeat the enemy's leader <br> (Either Ike or Mia)|
 
 |Cheat Key|Effect|
 |-----|----|
