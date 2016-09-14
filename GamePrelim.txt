@@ -288,7 +288,7 @@ Class Skills and Weapons
                 Justiciar
         Bishop
             Weapons: Staff, Light Tome
-            Skill - Overheal by up to 1/4 MAG
+            Skill - Overheal by up to 1/4 MAG (decays 1/turn)
             Upgrade Skill - Miracle (allied units within 2 squares get Miracle)
             Class Change Options:
                 Saint
@@ -324,21 +324,21 @@ Class Skills and Weapons
 		Paladin
 			Weapons: Two of Sword, Axe, Lance
 			Skill -
-			Upgrade Skill - WEXP 2x and
+			Upgrade Skill - WEXP 2k,x and weapon mastery bonuses doubled
 			Class Change Options:
 
         Great Knight
             Weapons: Two of Sword, Axe, Lance
             Skill -
-            Upgrade Skill - WEXP 2x and weapon mastery bonuses doubled
+            Upgrade Skill - WEXP 2x and +3 def when using a weapon you have an A
+                or S mastery level for.
             Class Change Options:
                 Gold Knight
 
         General
             Weapons: Two of Sword, Axe, Lance
             Skill -
-            Upgrade Skill - WEXP 2x and +3 def when using a weapon you have an A
-                or S mastery level for.
+            Upgrade Skill -
             Class Change Options:
                 Bastion
 
@@ -464,7 +464,7 @@ Class Skills and Weapons
             Capstone -
         Rake
             Weapons: Knife, Sword
-            Skill - Killing an enemy grants -2 SKL SPD DEF RES to enemies within
+            Skill - Killing an enemy grants -3 SKL SPD DEF RES to enemies within
                 two squares (decays over two turns; refreshes, doesn't stack)
             Upgrade Skill - allies get flanking bonus when you're adj
             Capstone -

@@ -1,3 +1,5 @@
+// This entire file is part of my masterpiece.
+// WESTON CARVALHO
 
 public class EquipmentSet {
 	private ItemWeapon onHand;
