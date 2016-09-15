@@ -25,7 +25,7 @@
 #### Conclusions
 ***
 * ***Size Estimate:*** I absolutely underestimated the project size. I should allow more time to work on the UI in the future.
-* ***Editing:*** The UI required the most editing because there were so many little errors to make and gotchasmto remember. The rest of the code was much more simple.
+* ***Editing:*** The UI required the most editing because there were so many little errors to make and gotchas to remember. The rest of the code was much more simple.
 * ***Self Improvement:*** To be a better designer, I should work on adding documentation as I go.
 * ***Project Improvement:*** My MercenaryWars class is an unholy mess. It really needs to be separated into multiple subclasses, one for each "state." I also probably overused the key handler when I should have been relying on the step function.
 
