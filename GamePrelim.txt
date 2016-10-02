@@ -58,7 +58,7 @@ Combat Calculations
             Bow     Hit			+5      +10     +15     +25
             Knife   Avo			+5      +10     +15     +25
             Tome    Attack		+1      +2      +3      +5
-            Staff   Heal		+1      +2      +3      +5
+            Staff   Staff+		+1      +2      +3      +5
 
         Achieving Weapon Mastery
             Battling using a weapon or using a staff grants 2 WEXP of the same
@@ -324,7 +324,7 @@ Class Skills and Weapons
 		Paladin
 			Weapons: Two of Sword, Axe, Lance
 			Skill -
-			Upgrade Skill - WEXP 2k,x and weapon mastery bonuses doubled
+			Upgrade Skill - WEXP 2x and weapon mastery bonuses doubled
 			Class Change Options:
 
         Great Knight
@@ -455,12 +455,12 @@ Class Skills and Weapons
         Whisper
             Weapons: Knife, Bow
             Skill -
-            Upgrade Skill - Sneak Attack has SKL% to sleep target
+            Upgrade Skill - Backstab has SKL% to sleep target
             Capstone -
         Kingkiller
             Weapons: Knife, Bow
             Skill -
-            Upgrade Skill - Sneak Attack has extra dmg based on skill
+            Upgrade Skill - Backstab has extra dmg based on skill
             Capstone -
         Rake
             Weapons: Knife, Sword
